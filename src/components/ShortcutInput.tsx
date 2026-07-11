@@ -120,7 +120,7 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
           padding: '2px 8px',
           fontSize: '11px',
           background: listening ? 'var(--color-primary)' : undefined,
-          color: listening ? '#fff' : undefined,
+          color: listening ? 'var(--color-on-primary)' : undefined,
           minWidth: 60,
         }}
         id={id ? `${id}-listen` : undefined}

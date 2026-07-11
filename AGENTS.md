@@ -4,6 +4,12 @@
 
 **oTranscribe** is a free, open-source web application for transcription. It allows users to load audio/video files (local, YouTube, Vimeo) and transcribe them with a rich text editor that supports inline timestamps. The app runs as a PWA with offline support and includes a lightweight Express server for SSO/Vimeo proxying.
 
+## GitHub Repository
+
+- **URL**: https://github.com/amrutadotorg/otranscribe
+- **Default branch**: `main`
+- **Clone**: `git clone git@github.com:amrutadotorg/otranscribe.git`
+
 ## Tech Stack
 
 | Category | Technology |
@@ -62,6 +68,31 @@ npm run test:e2e     # 4. E2E tests — all must pass (if changed UI or player l
 ```
 
 If any step fails, fix the issue before proceeding. Never commit code that doesn't compile or fails lint.
+
+## Git Workflow
+
+After completing a task and passing all verification steps, commit and push the changes:
+
+```bash
+git add -A
+git commit -m "<type>: <short description>"
+git push
+```
+
+**Commit message format** (Conventional Commits):
+- `feat:` — new feature or functionality
+- `fix:` — bug fix
+- `refactor:` — code restructuring without behavior change
+- `docs:` — documentation only
+- `style:` — formatting, whitespace, no logic change
+- `test:` — adding or updating tests
+- `chore:` — build, config, dependencies, tooling
+
+**Examples:**
+- `feat: add dark mode toggle to settings panel`
+- `fix: resolve timestamp parsing for legacy .otr files`
+- `refactor: extract player driver creation into helper`
+- `chore: update Vite to v8.1.0`
 
 ## Environment Variables
 

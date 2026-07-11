@@ -242,7 +242,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
                   aria-pressed={settings.theme === value}
                   style={{
                     background: settings.theme === value ? 'var(--color-accent)' : 'var(--color-surface-2)',
-                    color: settings.theme === value ? '#fff' : 'var(--color-text)',
+                    color: settings.theme === value ? 'var(--color-on-accent)' : 'var(--color-text)',
                     border: 'none',
                     borderRight: value !== 'dark' ? '1px solid var(--color-border)' : 'none',
                     padding: '4px 9px',
@@ -308,7 +308,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
                   onClick={handleAutosaveRestore}
                   style={{
                     background: 'var(--color-accent)',
-                    color: '#fff',
+                    color: 'var(--color-on-accent)',
                     border: 'none',
                     borderRadius: 'var(--radius-sm)',
                     padding: '6px 14px',
