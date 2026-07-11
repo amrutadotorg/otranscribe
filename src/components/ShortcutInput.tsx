@@ -87,7 +87,7 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
             alignItems: 'center',
             gap: 2,
             padding: '2px 6px',
-            fontSize: '11px',
+            fontSize: 'var(--font-size-xs)',
             fontFamily: 'var(--font-mono)',
             borderRadius: 'var(--radius-sm)',
             border: '1px solid var(--color-border)',
@@ -118,7 +118,7 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
         onClick={() => setListening((l) => !l)}
         style={{
           padding: '2px 8px',
-          fontSize: '11px',
+          fontSize: 'var(--font-size-xs)',
           background: listening ? 'var(--color-primary)' : undefined,
           color: listening ? 'var(--color-on-primary)' : undefined,
           minWidth: 60,

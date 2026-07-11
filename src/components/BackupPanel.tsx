@@ -111,7 +111,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                     <div style={{ display: 'flex', gap: 'var(--space-1)' }}>
                       <button
                         className="btn btn-primary"
-                        style={{ padding: '4px 10px', fontSize: '12px' }}
+                        style={{ padding: '4px 10px', fontSize: 'var(--font-size-xs)' }}
                         onClick={(e) => { e.stopPropagation(); handleRestore(key); }}
                         id={`restore-backup-${key.slice(-8)}`}
                       >
@@ -119,7 +119,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                       </button>
                       <button
                         className="btn"
-                        style={{ padding: '4px 8px', fontSize: '12px', color: 'var(--color-danger)' }}
+                        style={{ padding: '4px 8px', fontSize: 'var(--font-size-xs)', color: 'var(--color-danger)' }}
                         onClick={(e) => { e.stopPropagation(); handleDelete(key); }}
                         aria-label={t('aria-delete-backup')}
                       >

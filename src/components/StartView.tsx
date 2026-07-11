@@ -287,7 +287,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
             role="alert"
             id="autosave-recovery-banner"
             style={{
-              background: 'var(--color-accent-subtle, rgba(59,130,246,0.08))',
+              background: 'var(--color-accent-subtle)',
               border: '1px solid var(--color-accent)',
               borderRadius: 'var(--radius-md)',
               padding: 'var(--space-3) var(--space-4)',
@@ -346,7 +346,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
         {loadError && (
           <div
             style={{
-              background: 'var(--color-danger-light, #fff0f0)',
+              background: 'var(--color-danger-light)',
               border: '1px solid var(--color-danger)',
               borderRadius: 'var(--radius-md)',
               padding: 'var(--space-3)',
@@ -465,7 +465,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
                     animation: vimeoProgress.total === 0 ? 'indeterminate-bar 1.5s ease-in-out infinite' : 'none',
                   }} />
                 </div>
-                <div style={{ marginTop: 'var(--space-1)', fontSize: '11px', opacity: 0.7 }}>{t('start-press-esc')}</div>
+                <div style={{ marginTop: 'var(--space-1)', fontSize: 'var(--font-size-xs)', opacity: 0.7 }}>{t('start-press-esc')}</div>
               </div>
             ) : (
               <>

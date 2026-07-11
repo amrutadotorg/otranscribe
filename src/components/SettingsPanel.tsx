@@ -197,7 +197,7 @@ export default function SettingsPanel({ open, onClose, settings, onUpdate, onRes
         <Section title={t('keyboard-shortcuts')}>
           {tHtml('shortcuts-instrux') && (
             <p
-              style={{ fontSize: '11px', color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}
+              style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-2)' }}
               dangerouslySetInnerHTML={{ __html: tHtml('shortcuts-instrux')! }}
             />
           )}
@@ -224,7 +224,7 @@ export default function SettingsPanel({ open, onClose, settings, onUpdate, onRes
           {t('restore-shortcuts')}
         </button>
 
-        <div style={{ marginTop: 'var(--space-3)', fontSize: '11px', color: 'var(--color-text-muted)', textAlign: 'center' }}>
+        <div style={{ marginTop: 'var(--space-3)', fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', textAlign: 'center' }}>
           {t('settings-default-shortcuts')}{Object.values(DEFAULT_SETTINGS.keyboardShortcuts.shortcuts).flat().join(' · ')}
         </div>
       </div>

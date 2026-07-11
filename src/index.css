@@ -21,6 +21,8 @@
   --color-primary-light: rgba(41, 103, 161, 0.15);
   --color-accent: #e87722;
   --color-danger: #dc3545;
+  --color-danger-light: #fff0f0;
+  --color-accent-subtle: rgba(59, 130, 246, 0.08);
   --color-success: #198754;
 
   /* Text color on colored button backgrounds (primary, accent, danger) */
@@ -44,6 +46,7 @@
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  --font-size-xs: 11px;
   --font-size-sm: 13px;
   --font-size-base: 15px;
   --font-size-md: 16px;
@@ -82,6 +85,8 @@
   --color-primary-light: rgba(77, 171, 247, 0.15);
   --color-accent: #ff9f43;
   --color-danger: #ff6b6b;
+  --color-danger-light: #3d1f23;
+  --color-accent-subtle: rgba(77, 171, 247, 0.10);
   --color-success: #69db7c;
 
   /* Dark text on colored button backgrounds in dark mode */
@@ -520,32 +525,6 @@ a:hover {
   background: var(--color-timestamp-hover);
   border-color: var(--color-timestamp);
   transform: scale(1.03);
-}
-
-/* ─── Message panel ───────────────────────────────────────── */
-
-.message-panel {
-  position: fixed;
-  top: calc(var(--topbar-height) + var(--space-3));
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-5);
-  box-shadow: var(--shadow-md);
-  font-size: var(--font-size-sm);
-  z-index: 200;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
-  max-width: 90vw;
-}
-
-.message-panel.visible {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
 }
 
 /* ─── Slide-in panels ─────────────────────────────────────── */
