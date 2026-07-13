@@ -18,7 +18,11 @@ import SettingsPanel from './SettingsPanel';
 import BackupPanel from './BackupPanel';
 import HelpPanel from './HelpPanel';
 import { usePlayer } from '../modules/audio-engine/PlayerContext';
-import { saveBackup, startPeriodicBackup, stopPeriodicBackup } from '../modules/storage/backupManager';
+import {
+  saveBackup,
+  startPeriodicBackup,
+  stopPeriodicBackup,
+} from '../modules/storage/backupManager';
 import type { MediaDetails, OtrDocument } from '../types/otr';
 import {
   exportToMarkdown,
@@ -38,7 +42,14 @@ interface Props {
   onOtrConsumed?: () => void;
 }
 
-export default function TranscribeView({ settings, updateSettings, resetSettings, onNavigate, pendingOtrDoc, onOtrConsumed }: Props) {
+export default function TranscribeView({
+  settings,
+  updateSettings,
+  resetSettings,
+  onNavigate,
+  pendingOtrDoc,
+  onOtrConsumed,
+}: Props) {
   const { t } = useTranslation();
   const [settingsPanelOpen, setSettingsPanelOpen] = useState(false);
   const [backupPanelOpen, setBackupPanelOpen] = useState(false);
@@ -46,8 +57,11 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
   const [exportMenuOpen, setExportMenuOpen] = useState(false);
   const [editorHtml, setEditorHtml] = useState('');
   const [initialHtml, setInitialHtml] = useState('');
-  const [activeFormats, setActiveFormats] = useState<Set<ActiveFormat>>(new Set());
-  const { playerState, play, pause, skip, skipTo, speedUp, speedDown } = usePlayer();
+  const [activeFormats, setActiveFormats] = useState<Set<ActiveFormat>>(
+    new Set(),
+  );
+  const { playerState, play, pause, skip, skipTo, speedUp, speedDown } =
+    usePlayer();
   const editorHtmlRef = useRef('');
   const exportMenuRef = useRef<HTMLDivElement>(null);
 
@@ -57,9 +71,12 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
     playerState.driverType === 'HTML5_VIDEO';
 
   // Export disabled when editor is empty (only whitespace / empty paragraph)
-  const isExportDisabled = !editorHtml || editorHtml.replace(/<[^>]*>/g, '').trim() === '';
+  const isExportDisabled =
+    !editorHtml || editorHtml.replace(/<[^>]*>/g, '').trim() === '';
 
-  useEffect(() => { editorHtmlRef.current = editorHtml; }, [editorHtml]);
+  useEffect(() => {
+    editorHtmlRef.current = editorHtml;
+  }, [editorHtml]);
 
   // Consume a pending OTR document once editor mounts
   useEffect(() => {
@@ -87,10 +104,16 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
   useEffect(() => {
     if (!exportMenuOpen) return;
     const handler = (e: MouseEvent) => {
-      if (exportMenuRef.current && !exportMenuRef.current.contains(e.target as Node)) {
+      if (
+        exportMenuRef.current &&
+        !exportMenuRef.current.contains(e.target as Node)
+      ) {
         setExportMenuOpen(false);
         // Refocus editor when menu dismissed by clicking outside
-        setTimeout(() => document.dispatchEvent(new CustomEvent('editor:focus')), 0);
+        setTimeout(
+          () => document.dispatchEvent(new CustomEvent('editor:focus')),
+          0,
+        );
       }
     };
     document.addEventListener('mousedown', handler);
@@ -110,38 +133,42 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
     const handler = (e: MouseEvent) => {
       const target = e.target as Element;
       // Ignore clicks inside the panel itself or on the topbar actions that toggle the panels
-      if (target.closest('.side-panel') || target.closest('.topbar-actions')) return;
-      
+      if (target.closest('.side-panel') || target.closest('.topbar-actions'))
+        return;
+
       if (settingsPanelOpen) setSettingsPanelOpen(false);
       if (backupPanelOpen) setBackupPanelOpen(false);
       if (helpPanelOpen) setHelpPanelOpen(false);
-      
+
       refocusEditor();
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
   }, [settingsPanelOpen, backupPanelOpen, helpPanelOpen, refocusEditor]);
 
-  const handleExport = useCallback((format: 'txt' | 'md' | 'otr') => {
-    setExportMenuOpen(false);
-    refocusEditor();
-    const html = editorHtmlRef.current;
-    const mediaName = playerState.mediaName;
-    const filename = generateFilename(mediaName || undefined, t);
-    if (format === 'txt') {
-      downloadFile(exportToPlainText(html), `${filename}.txt`, 'text/plain');
-    } else if (format === 'md') {
-      downloadFile(exportToMarkdown(html), `${filename}.md`, 'text/markdown');
-    } else {
-      const otrJson = exportToOtr({
-        html,
-        mediaName,
-        mediaSource: '',
-        mediaTime: playerState.currentTime,
-      });
-      downloadFile(otrJson, `${filename}.otr`, 'application/json');
-    }
-  }, [playerState, refocusEditor]);
+  const handleExport = useCallback(
+    (format: 'txt' | 'md' | 'otr') => {
+      setExportMenuOpen(false);
+      refocusEditor();
+      const html = editorHtmlRef.current;
+      const mediaName = playerState.mediaName;
+      const filename = generateFilename(mediaName || undefined, t);
+      if (format === 'txt') {
+        downloadFile(exportToPlainText(html), `${filename}.txt`, 'text/plain');
+      } else if (format === 'md') {
+        downloadFile(exportToMarkdown(html), `${filename}.md`, 'text/markdown');
+      } else {
+        const otrJson = exportToOtr({
+          html,
+          mediaName,
+          mediaSource: '',
+          mediaTime: playerState.currentTime,
+        });
+        downloadFile(otrJson, `${filename}.otr`, 'application/json');
+      }
+    },
+    [playerState, refocusEditor],
+  );
 
   // Global keyboard shortcuts
   const handleGlobalKey = useCallback(
@@ -166,7 +193,10 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
 
       // Don't steal from inputs
       const target = e.target as HTMLElement;
-      const isInput = target.tagName === 'INPUT' || target.tagName === 'SELECT' || target.tagName === 'TEXTAREA';
+      const isInput =
+        target.tagName === 'INPUT' ||
+        target.tagName === 'SELECT' ||
+        target.tagName === 'TEXTAREA';
       // Allow Escape from anywhere, others only from non-input context
       const isEscape = e.key === 'Escape';
       if (isInput && !isEscape) return;
@@ -195,9 +225,10 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
           let seconds = 0;
           if (trimmed.includes(':')) {
             const parts = trimmed.split(':').map(Number);
-            seconds = parts.length === 3
-              ? parts[0] * 3600 + parts[1] * 60 + parts[2]
-              : parts[0] * 60 + parts[1];
+            seconds =
+              parts.length === 3
+                ? parts[0] * 3600 + parts[1] * 60 + parts[2]
+                : parts[0] * 60 + parts[1];
           } else {
             seconds = parseFloat(trimmed) * 60;
           }
@@ -212,10 +243,14 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
       } else if (matches(shortcuts.saveBackup, e)) {
         e.preventDefault();
         const mediaDetails: MediaDetails = { name: playerState.mediaName };
-        saveBackup(editorHtmlRef.current, mediaDetails, settings.backupsPerFile);
+        saveBackup(
+          editorHtmlRef.current,
+          mediaDetails,
+          settings.backupsPerFile,
+        );
       }
     },
-    [settings, playerState, play, pause, skip, skipTo, speedUp, speedDown]
+    [settings, playerState, play, pause, skip, skipTo, speedUp, speedDown],
   );
 
   useEffect(() => {
@@ -234,16 +269,21 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
       settings.backupsPerFile,
     );
     return () => stopPeriodicBackup();
-  }, [settings.backupIntervalMinutes, settings.backupsPerFile, playerState.mediaName]);
+  }, [
+    settings.backupIntervalMinutes,
+    settings.backupsPerFile,
+    playerState.mediaName,
+  ]);
 
   const handleRestore = useCallback((html: string) => {
     setInitialHtml(html);
   }, []);
 
   const handleFormat = useCallback((format: ActiveFormat) => {
-    document.dispatchEvent(new CustomEvent('editor:format', { detail: { format } }));
+    document.dispatchEvent(
+      new CustomEvent('editor:format', { detail: { format } }),
+    );
   }, []);
-
 
   return (
     <div className="transcribe-view">
@@ -251,9 +291,21 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
         settings={settings}
         activeFormats={activeFormats}
         onFormat={handleFormat}
-        onOpenSettings={() => { setBackupPanelOpen(false); setHelpPanelOpen(false); setSettingsPanelOpen(true); }}
-        onOpenBackup={() => { setSettingsPanelOpen(false); setHelpPanelOpen(false); setBackupPanelOpen(true); }}
-        onOpenHelp={() => { setSettingsPanelOpen(false); setBackupPanelOpen(false); setHelpPanelOpen(true); }}
+        onOpenSettings={() => {
+          setBackupPanelOpen(false);
+          setHelpPanelOpen(false);
+          setSettingsPanelOpen(true);
+        }}
+        onOpenBackup={() => {
+          setSettingsPanelOpen(false);
+          setHelpPanelOpen(false);
+          setBackupPanelOpen(true);
+        }}
+        onOpenHelp={() => {
+          setSettingsPanelOpen(false);
+          setBackupPanelOpen(false);
+          setHelpPanelOpen(true);
+        }}
         onGoHome={() => onNavigate('start')}
         onExport={() => setExportMenuOpen((o) => !o)}
         exportMenuOpen={exportMenuOpen}
@@ -262,7 +314,10 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
         onExportFormat={handleExport}
       />
 
-      <div className="main-area" style={{ display: 'flex', width: '100%', height: '100%' }}>
+      <div
+        className="main-area"
+        style={{ display: 'flex', width: '100%', height: '100%' }}
+      >
         {/* Always in DOM so video drivers can appendChild() before playerState updates */}
         <div
           id="media-container"
@@ -276,7 +331,16 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
             backgroundColor: '#000',
           }}
         />
-        <div style={{ flexGrow: 1, flexShrink: 1, flexBasis: 'auto', height: '100%', overflow: 'hidden', minWidth: 0 }}>
+        <div
+          style={{
+            flexGrow: 1,
+            flexShrink: 1,
+            flexBasis: 'auto',
+            height: '100%',
+            overflow: 'hidden',
+            minWidth: 0,
+          }}
+        >
           <TextPanel
             settings={settings}
             initialHtml={initialHtml}
@@ -289,7 +353,10 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
 
       <SettingsPanel
         open={settingsPanelOpen}
-        onClose={() => { setSettingsPanelOpen(false); refocusEditor(); }}
+        onClose={() => {
+          setSettingsPanelOpen(false);
+          refocusEditor();
+        }}
         settings={settings}
         onUpdate={updateSettings}
         onReset={resetSettings}
@@ -297,13 +364,19 @@ export default function TranscribeView({ settings, updateSettings, resetSettings
 
       <BackupPanel
         open={backupPanelOpen}
-        onClose={() => { setBackupPanelOpen(false); refocusEditor(); }}
+        onClose={() => {
+          setBackupPanelOpen(false);
+          refocusEditor();
+        }}
         onRestore={handleRestore}
       />
 
       <HelpPanel
         open={helpPanelOpen}
-        onClose={() => { setHelpPanelOpen(false); refocusEditor(); }}
+        onClose={() => {
+          setHelpPanelOpen(false);
+          refocusEditor();
+        }}
       />
     </div>
   );

@@ -10,10 +10,10 @@ export default function NarrowScreenWarning() {
     const checkWidth = () => {
       setIsNarrow(window.innerWidth < 1024);
     };
-    
+
     // Initial check
     checkWidth();
-    
+
     // Listen for resize
     window.addEventListener('resize', checkWidth);
     return () => window.removeEventListener('resize', checkWidth);
@@ -26,15 +26,17 @@ export default function NarrowScreenWarning() {
   return (
     <div className="modal-backdrop" style={{ zIndex: 9999 }}>
       <div className="modal" style={{ textAlign: 'center' }}>
-        <h2 className="modal-title" style={{ marginBottom: 'var(--space-3)' }}>{t('narrow-screen-title')}</h2>
+        <h2 className="modal-title" style={{ marginBottom: 'var(--space-3)' }}>
+          {t('narrow-screen-title')}
+        </h2>
         <p style={{ marginBottom: 'var(--space-3)' }}>
           {t('narrow-screen-desc')}
         </p>
         <p className="text-muted" style={{ marginBottom: 'var(--space-6)' }}>
           {t('narrow-screen-min')}
         </p>
-        <button 
-          className="button button-primary" 
+        <button
+          className="button button-primary"
           onClick={() => setDismissed(true)}
         >
           {t('narrow-screen-proceed')}

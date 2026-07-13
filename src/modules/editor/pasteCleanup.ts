@@ -12,12 +12,24 @@
  */
 
 const ALLOWED_TAGS = new Set([
-  'b', 'i', 'em', 'strong', 'a', 'p', 'span', 'br',
-  'h1', 'h2', 'h3', 'ul', 'ol', 'li',
+  'b',
+  'i',
+  'em',
+  'strong',
+  'a',
+  'p',
+  'span',
+  'br',
+  'h1',
+  'h2',
+  'h3',
+  'ul',
+  'ol',
+  'li',
 ]);
 
 const ALLOWED_ATTRS: Record<string, Set<string>> = {
-  a:    new Set(['href']),
+  a: new Set(['href']),
   span: new Set(['class', 'data-timestamp', 'data-seconds']),
 };
 

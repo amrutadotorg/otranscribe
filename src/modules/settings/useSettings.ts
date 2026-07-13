@@ -18,14 +18,17 @@ function loadSettings(): AppSettings {
     // Deep merge: defaults take precedence for missing keys
     return deepMerge(
       DEFAULT_SETTINGS as unknown as Record<string, unknown>,
-      saved
+      saved,
     ) as unknown as AppSettings;
   } catch {
     return DEFAULT_SETTINGS;
   }
 }
 
-function deepMerge(defaults: Record<string, unknown>, overrides: Record<string, unknown>): Record<string, unknown> {
+function deepMerge(
+  defaults: Record<string, unknown>,
+  overrides: Record<string, unknown>,
+): Record<string, unknown> {
   const result = { ...defaults };
   for (const key of Object.keys(overrides)) {
     if (
@@ -37,7 +40,7 @@ function deepMerge(defaults: Record<string, unknown>, overrides: Record<string, 
     ) {
       result[key] = deepMerge(
         defaults[key] as Record<string, unknown>,
-        overrides[key] as Record<string, unknown>
+        overrides[key] as Record<string, unknown>,
       );
     } else {
       result[key] = overrides[key];
@@ -53,11 +56,14 @@ export function useSettings() {
     setSettings((prev) => {
       const next = deepMerge(
         prev as unknown as Record<string, unknown>,
-        updates as Record<string, unknown>
+        updates as Record<string, unknown>,
       ) as unknown as AppSettings;
 
       // Clamp backup settings to valid ranges
-      next.backupIntervalMinutes = Math.min(60, Math.max(1, next.backupIntervalMinutes));
+      next.backupIntervalMinutes = Math.min(
+        60,
+        Math.max(1, next.backupIntervalMinutes),
+      );
       next.backupsPerFile = Math.min(50, Math.max(1, next.backupsPerFile));
 
       try {

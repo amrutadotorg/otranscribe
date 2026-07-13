@@ -15,7 +15,9 @@ export default function TimestampNodeView({ node, extension }: NodeViewProps) {
   const displayText = node.attrs.displayText as string;
 
   const handleClick = () => {
-    const opts = extension.options as { onTimestampClick?: (s: number) => void };
+    const opts = extension.options as {
+      onTimestampClick?: (s: number) => void;
+    };
     opts.onTimestampClick?.(seconds);
   };
 

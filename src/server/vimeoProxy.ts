@@ -34,7 +34,10 @@ interface VimeoVideoMeta {
   name?: string;
 }
 
-export async function vimeoDownloadHandler(req: Request, res: Response): Promise<void> {
+export async function vimeoDownloadHandler(
+  req: Request,
+  res: Response,
+): Promise<void> {
   const token = process.env.VIMEO_ACCESS_TOKEN;
   if (!token) {
     res.status(500).json({ error: 'Vimeo token not configured' });
@@ -61,12 +64,14 @@ export async function vimeoDownloadHandler(req: Request, res: Response): Promise
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      }
+      },
     );
 
     if (!metaRes.ok) {
       const detail = await metaRes.text();
-      res.status(metaRes.status).json({ error: 'vimeo', status: metaRes.status, detail });
+      res
+        .status(metaRes.status)
+        .json({ error: 'vimeo', status: metaRes.status, detail });
       return;
     }
 
@@ -93,7 +98,7 @@ export async function vimeoDownloadHandler(req: Request, res: Response): Promise
     res.setHeader('Content-Type', file.type ?? 'video/mp4');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename="${encodeURIComponent(filename)}"`
+      `attachment; filename="${encodeURIComponent(filename)}"`,
     );
     if (contentLength) {
       res.setHeader('Content-Length', contentLength);

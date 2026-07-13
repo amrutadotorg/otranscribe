@@ -85,7 +85,7 @@ describe('parseOtrFile — youtube-source.otr', () => {
     const doc = parseOtrFile(raw);
 
     expect(doc.mediaDetails.source).toBe(
-      'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     );
     expect(doc.mediaDetails.name).toBe('Example Video Title');
   });
@@ -141,7 +141,7 @@ describe('parseOtrFile — error handling', () => {
 
   it('throws on missing text field', () => {
     expect(() => parseOtrFile(JSON.stringify({ media: 'test.mp3' }))).toThrow(
-      'missing "text" field'
+      'missing "text" field',
     );
   });
 });
@@ -180,7 +180,8 @@ describe('serializeToOtr', () => {
 
 describe('preprocessOtrHtml', () => {
   it('removes contenteditable attribute from timestamps', () => {
-    const input = '<span class="timestamp" contenteditable="false" data-timestamp="2:03">2:03</span>';
+    const input =
+      '<span class="timestamp" contenteditable="false" data-timestamp="2:03">2:03</span>';
     const output = preprocessOtrHtml(input);
     expect(output).not.toContain('contenteditable');
   });

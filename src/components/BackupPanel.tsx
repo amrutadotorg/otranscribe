@@ -11,7 +11,12 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { getAllBackups, restoreBackup, deleteBackup, type BackupEntry } from '../modules/storage/backupManager';
+import {
+  getAllBackups,
+  restoreBackup,
+  deleteBackup,
+  type BackupEntry,
+} from '../modules/storage/backupManager';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 
 interface Props {
@@ -40,7 +45,9 @@ function wordCount(html: string): number {
 
 export default function BackupPanel({ open, onClose, onRestore }: Props) {
   const { t } = useTranslation();
-  const [backups, setBackups] = useState<Array<{ key: string; entry: BackupEntry }>>([]);
+  const [backups, setBackups] = useState<
+    Array<{ key: string; entry: BackupEntry }>
+  >([]);
   const [page, setPage] = useState(0);
   const [previewKey, setPreviewKey] = useState<string | null>(null);
 
@@ -73,19 +80,38 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
     <div className={`side-panel ${open ? 'open' : ''}`} id="backup-panel">
       <div className="side-panel-header">
         <h2>{t('history-title')}</h2>
-        <button className="icon-btn" onClick={onClose} aria-label={t('cancel')} id="close-backup-btn">✕</button>
+        <button
+          className="icon-btn"
+          onClick={onClose}
+          aria-label={t('cancel')}
+          id="close-backup-btn"
+        >
+          ✕
+        </button>
       </div>
 
       <div className="side-panel-body">
         {backups.length === 0 ? (
-          <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+          <p
+            style={{
+              color: 'var(--color-text-muted)',
+              fontSize: 'var(--font-size-sm)',
+            }}
+          >
             {t('no-backups')}
-            <br /><br />
+            <br />
+            <br />
             {t('history-instrux-v2')}
           </p>
         ) : (
           <>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-2)',
+              }}
+            >
               {paginated.map(({ key, entry }) => (
                 <div
                   key={key}
@@ -93,34 +119,68 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                     border: '1px solid var(--color-border)',
                     borderRadius: 'var(--radius-md)',
                     padding: 'var(--space-3)',
-                    background: previewKey === key ? 'var(--color-primary-light)' : 'var(--color-surface-2)',
+                    background:
+                      previewKey === key
+                        ? 'var(--color-primary-light)'
+                        : 'var(--color-surface-2)',
                     cursor: 'pointer',
                     transition: 'background var(--transition-fast)',
                   }}
                   onClick={() => setPreviewKey(previewKey === key ? null : key)}
                 >
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 'var(--space-2)' }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      gap: 'var(--space-2)',
+                    }}
+                  >
                     <div>
-                      <div style={{ fontSize: 'var(--font-size-sm)', fontWeight: 600 }}>
+                      <div
+                        style={{
+                          fontSize: 'var(--font-size-sm)',
+                          fontWeight: 600,
+                        }}
+                      >
                         {formatDate(entry.timestamp)}
                       </div>
-                      <div style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)' }}>
-                        {entry.media || t('backup-no-media')} · {t('wordcount', { n: wordCount(entry.text) })}
+                      <div
+                        style={{
+                          fontSize: 'var(--font-size-sm)',
+                          color: 'var(--color-text-muted)',
+                        }}
+                      >
+                        {entry.media || t('backup-no-media')} ·{' '}
+                        {t('wordcount', { n: wordCount(entry.text) })}
                       </div>
                     </div>
                     <div style={{ display: 'flex', gap: 'var(--space-1)' }}>
                       <button
                         className="btn btn-primary"
-                        style={{ padding: '4px 10px', fontSize: 'var(--font-size-xs)' }}
-                        onClick={(e) => { e.stopPropagation(); handleRestore(key); }}
+                        style={{
+                          padding: '4px 10px',
+                          fontSize: 'var(--font-size-xs)',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleRestore(key);
+                        }}
                         id={`restore-backup-${key.slice(-8)}`}
                       >
                         {t('restore-button')}
                       </button>
                       <button
                         className="btn"
-                        style={{ padding: '4px 8px', fontSize: 'var(--font-size-xs)', color: 'var(--color-danger)' }}
-                        onClick={(e) => { e.stopPropagation(); handleDelete(key); }}
+                        style={{
+                          padding: '4px 8px',
+                          fontSize: 'var(--font-size-xs)',
+                          color: 'var(--color-danger)',
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(key);
+                        }}
                         aria-label={t('aria-delete-backup')}
                       >
                         🗑
@@ -139,7 +199,9 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                         overflow: 'hidden',
                         lineHeight: 1.5,
                       }}
-                      dangerouslySetInnerHTML={{ __html: entry.text.substring(0, 400) + '…' }}
+                      dangerouslySetInnerHTML={{
+                        __html: entry.text.substring(0, 400) + '…',
+                      }}
                     />
                   )}
                 </div>
@@ -148,7 +210,14 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div style={{ display: 'flex', justifyContent: 'center', gap: 'var(--space-2)', marginTop: 'var(--space-4)' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: 'var(--space-2)',
+                  marginTop: 'var(--space-4)',
+                }}
+              >
                 <button
                   className="btn"
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -156,12 +225,20 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                 >
                   {t('prev-page')}
                 </button>
-                <span style={{ alignSelf: 'center', fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)' }}>
+                <span
+                  style={{
+                    alignSelf: 'center',
+                    fontSize: 'var(--font-size-sm)',
+                    color: 'var(--color-text-muted)',
+                  }}
+                >
                   {page + 1} / {totalPages}
                 </span>
                 <button
                   className="btn"
-                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
+                  onClick={() =>
+                    setPage((p) => Math.min(totalPages - 1, p + 1))
+                  }
                   disabled={page === totalPages - 1}
                 >
                   {t('next-page')}

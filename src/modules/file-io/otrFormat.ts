@@ -49,13 +49,15 @@ export function preprocessOtrHtml(html: string): string {
   const doc = parser.parseFromString(`<body>${html}</body>`, 'text/html');
 
   // Normalise all timestamp spans
-  doc.querySelectorAll<HTMLElement>('.timestamp[data-timestamp]').forEach((el) => {
-    const raw = el.getAttribute('data-timestamp') ?? '';
-    const seconds = normaliseTimestamp(raw);
-    el.setAttribute('data-timestamp', String(seconds));
-    // Remove contenteditable attribute — TipTap TimestampNode handles this
-    el.removeAttribute('contenteditable');
-  });
+  doc
+    .querySelectorAll<HTMLElement>('.timestamp[data-timestamp]')
+    .forEach((el) => {
+      const raw = el.getAttribute('data-timestamp') ?? '';
+      const seconds = normaliseTimestamp(raw);
+      el.setAttribute('data-timestamp', String(seconds));
+      // Remove contenteditable attribute — TipTap TimestampNode handles this
+      el.removeAttribute('contenteditable');
+    });
 
   return doc.body.innerHTML;
 }
@@ -66,16 +68,27 @@ export function preprocessOtrHtml(html: string): string {
  * Parse a raw .otr file string into a typed OtrDocument.
  * Throws if the JSON is invalid or missing required fields.
  */
-export function parseOtrFile(raw: string, t?: (key: string) => string): OtrDocument {
+export function parseOtrFile(
+  raw: string,
+  t?: (key: string) => string,
+): OtrDocument {
   let parsed: OtrFileV1;
   try {
     parsed = JSON.parse(raw) as OtrFileV1;
   } catch {
-    throw new Error(t ? t('error-invalid-otr') : 'Not a valid oTranscribe format (.otr) file.');
+    throw new Error(
+      t
+        ? t('error-invalid-otr')
+        : 'Not a valid oTranscribe format (.otr) file.',
+    );
   }
 
   if (typeof parsed.text !== 'string') {
-    throw new Error(t ? t('error-missing-text-otr') : 'Invalid .otr file: missing "text" field.');
+    throw new Error(
+      t
+        ? t('error-missing-text-otr')
+        : 'Invalid .otr file: missing "text" field.',
+    );
   }
 
   const html = preprocessOtrHtml(parsed.text);

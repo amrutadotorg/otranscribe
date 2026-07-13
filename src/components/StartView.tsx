@@ -30,7 +30,10 @@ type ModalMode = 'none' | 'youtube' | 'vimeo';
 
 // ─── Validation helpers ────────────────────────────────────────────
 
-function validateYouTubeUrl(url: string, t: (key: string) => string): string | null {
+function validateYouTubeUrl(
+  url: string,
+  t: (key: string) => string,
+): string | null {
   const patterns = [
     /youtube\.com\/watch\?.*v=[\w-]+/,
     /youtu\.be\/[\w-]+/,
@@ -41,7 +44,10 @@ function validateYouTubeUrl(url: string, t: (key: string) => string): string | n
   return t('error-youtube-url');
 }
 
-function validateVimeoUrl(url: string, t: (key: string) => string): string | null {
+function validateVimeoUrl(
+  url: string,
+  t: (key: string) => string,
+): string | null {
   const patterns = [
     /vimeo\.com\/\d+/,
     /vimeo\.com\/\d+\/[\w]+/,
@@ -53,7 +59,14 @@ function validateVimeoUrl(url: string, t: (key: string) => string): string | nul
 
 // ─── Component ────────────────────────────────────────────────────
 
-export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateSettings, autosaveHtml, onAutosaveDismissed }: Props & { onUpdateSettings?: (updates: Partial<AppSettings>) => void }) {
+export default function StartView({
+  settings,
+  onNavigate,
+  onOtrLoaded,
+  onUpdateSettings,
+  autosaveHtml,
+  onAutosaveDismissed,
+}: Props & { onUpdateSettings?: (updates: Partial<AppSettings>) => void }) {
   const { t, tHtml, lang, setLang, availableLanguages } = useTranslation();
   const mediaFileRef = useRef<HTMLInputElement>(null);
   const otrFileRef = useRef<HTMLInputElement>(null);
@@ -62,10 +75,13 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
   const [modalMode, setModalMode] = useState<ModalMode>('none');
   const [loadError, setLoadError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [vimeoProgress, setVimeoProgress] = useState<{ loaded: number; total: number } | null>(null);
+  const [vimeoProgress, setVimeoProgress] = useState<{
+    loaded: number;
+    total: number;
+  } | null>(null);
   // Whether the autosave recovery banner is visible
   const [showRecoveryBanner, setShowRecoveryBanner] = useState<boolean>(
-    () => typeof autosaveHtml === 'string' && autosaveHtml.trim().length > 0
+    () => typeof autosaveHtml === 'string' && autosaveHtml.trim().length > 0,
   );
 
   // ─── Autosave recovery handlers ─────────────────────────────────
@@ -92,11 +108,14 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
   const vimeoAbortRef = useRef<AbortController | null>(null);
 
   // ESC cancels active Vimeo download
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (e.key === 'Escape' && loading && vimeoAbortRef.current) {
-      vimeoAbortRef.current.abort();
-    }
-  }, [loading]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && loading && vimeoAbortRef.current) {
+        vimeoAbortRef.current.abort();
+      }
+    },
+    [loading],
+  );
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown);
@@ -105,7 +124,9 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
 
   // ─── Handlers ───────────────────────────────────────────────────
 
-  const handleMediaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
@@ -113,7 +134,9 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
     setLoading(true);
     // Navigate FIRST so #media-container is in DOM before driver appends video element
     onNavigate('transcribe');
-    await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+    await new Promise<void>((r) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => r())),
+    );
     try {
       await loadLocalFile(file);
     } catch (err) {
@@ -124,7 +147,9 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
     }
   };
 
-  const handleOtrFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOtrFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     const file = e.target.files?.[0];
     if (!file) return;
     e.target.value = '';
@@ -132,7 +157,7 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
     setLoading(true);
     try {
       const doc = await importOtrFile(file, t);
-      onOtrLoaded(doc);   // sets pendingOtrDoc in App, then navigates to transcribe
+      onOtrLoaded(doc); // sets pendingOtrDoc in App, then navigates to transcribe
     } catch (err) {
       setLoadError(t('error-otr-import'));
       console.error(err);
@@ -148,7 +173,9 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
     // Navigate first so TranscribeView (with #media-container) mounts before the driver
     onNavigate('transcribe');
     // Small tick to let React commit the new view to DOM
-    await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+    await new Promise<void>((r) =>
+      requestAnimationFrame(() => requestAnimationFrame(() => r())),
+    );
     try {
       await loadYouTube(url);
     } catch (err) {
@@ -170,13 +197,20 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
 
     try {
       // Step 1: Download with progress visible on StartView (ESC aborts)
-      const { file, name } = await downloadAndCacheVimeo(url, (loaded, total) => {
-        setVimeoProgress({ loaded, total });
-      }, abortController.signal, t);
+      const { file, name } = await downloadAndCacheVimeo(
+        url,
+        (loaded, total) => {
+          setVimeoProgress({ loaded, total });
+        },
+        abortController.signal,
+        t,
+      );
 
       // Step 2: Navigate so #media-container is in the DOM
       onNavigate('transcribe');
-      await new Promise<void>((r) => requestAnimationFrame(() => requestAnimationFrame(() => r())));
+      await new Promise<void>((r) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => r())),
+      );
       // Step 3: Load the cached file into the player
       await loadVimeoFile(file, name);
     } catch (err) {
@@ -201,22 +235,47 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
 
   return (
     <div className="start-view fade-in">
-      <div style={{ position: 'absolute', top: 'var(--space-4)', right: 'var(--space-4)', display: 'flex', gap: 'var(--space-2)' }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: 'var(--space-4)',
+          right: 'var(--space-4)',
+          display: 'flex',
+          gap: 'var(--space-2)',
+        }}
+      >
         <Tooltip content={t('settings-language')}>
           <select
             value={lang}
             onChange={(e) => setLang(e.target.value)}
-            style={{ fontSize: 'var(--font-size-sm)', padding: '4px 8px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', background: 'var(--color-surface-2)', color: 'var(--color-text)', cursor: 'pointer' }}
+            style={{
+              fontSize: 'var(--font-size-sm)',
+              padding: '4px 8px',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--color-border)',
+              background: 'var(--color-surface-2)',
+              color: 'var(--color-text)',
+              cursor: 'pointer',
+            }}
             aria-label={t('aria-select-language')}
           >
             {availableLanguages.map((l) => {
               let name = l;
               try {
                 const code = l.replace('_', '-');
-                name = new Intl.DisplayNames([code], { type: 'language' }).of(code) || l;
+                name =
+                  new Intl.DisplayNames([code], { type: 'language' }).of(
+                    code,
+                  ) || l;
                 name = name.charAt(0).toUpperCase() + name.slice(1);
-              } catch { /* ignore */ }
-              return <option key={l} value={l}>{name}</option>;
+              } catch {
+                /* ignore */
+              }
+              return (
+                <option key={l} value={l}>
+                  {name}
+                </option>
+              );
             })}
           </select>
         </Tooltip>
@@ -231,20 +290,31 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
               overflow: 'hidden',
             }}
           >
-            {([
-              { value: 'system', icon: '💻', key: 'theme-system' },
-              { value: 'light',  icon: '☀️', key: 'theme-light'  },
-              { value: 'dark',   icon: '🌙', key: 'theme-dark'   },
-            ] as const).map(({ value, icon, key }) => (
+            {(
+              [
+                { value: 'system', icon: '💻', key: 'theme-system' },
+                { value: 'light', icon: '☀️', key: 'theme-light' },
+                { value: 'dark', icon: '🌙', key: 'theme-dark' },
+              ] as const
+            ).map(({ value, icon, key }) => (
               <Tooltip key={value} content={t(key)}>
                 <button
                   onClick={() => onUpdateSettings({ theme: value })}
                   aria-pressed={settings.theme === value}
                   style={{
-                    background: settings.theme === value ? 'var(--color-accent)' : 'var(--color-surface-2)',
-                    color: settings.theme === value ? 'var(--color-on-accent)' : 'var(--color-text)',
+                    background:
+                      settings.theme === value
+                        ? 'var(--color-accent)'
+                        : 'var(--color-surface-2)',
+                    color:
+                      settings.theme === value
+                        ? 'var(--color-on-accent)'
+                        : 'var(--color-text)',
                     border: 'none',
-                    borderRight: value !== 'dark' ? '1px solid var(--color-border)' : 'none',
+                    borderRight:
+                      value !== 'dark'
+                        ? '1px solid var(--color-border)'
+                        : 'none',
                     padding: '4px 9px',
                     cursor: 'pointer',
                     fontSize: '14px',
@@ -278,7 +348,9 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
       />
 
       <div className="start-card">
-        <h1>o<span>Transcribe</span></h1>
+        <h1>
+          o<span>Transcribe</span>
+        </h1>
         <p dangerouslySetInnerHTML={{ __html: tHtml('start-description')! }} />
 
         {/* Autosave recovery banner */}
@@ -298,10 +370,18 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
               flexWrap: 'wrap',
             }}
           >
-            <span style={{ flex: 1, fontSize: 'var(--font-size-sm)', color: 'var(--color-text)' }}>
+            <span
+              style={{
+                flex: 1,
+                fontSize: 'var(--font-size-sm)',
+                color: 'var(--color-text)',
+              }}
+            >
               {t('autosave-recovery-message')}
             </span>
-            <div style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}>
+            <div
+              style={{ display: 'flex', gap: 'var(--space-2)', flexShrink: 0 }}
+            >
               <Tooltip content={t('autosave-restore')}>
                 <button
                   id="btn-autosave-restore"
@@ -365,7 +445,10 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
           {/* Local file */}
           <button
             className="start-option-btn"
-            onClick={() => { setLoadError(null); mediaFileRef.current?.click(); }}
+            onClick={() => {
+              setLoadError(null);
+              mediaFileRef.current?.click();
+            }}
             id="load-local-file-btn"
             disabled={loading}
           >
@@ -379,7 +462,10 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
           {/* YouTube */}
           <button
             className="start-option-btn"
-            onClick={() => { setLoadError(null); setModalMode('youtube'); }}
+            onClick={() => {
+              setLoadError(null);
+              setModalMode('youtube');
+            }}
             id="load-youtube-btn"
             disabled={loading}
           >
@@ -393,7 +479,10 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
           {/* Vimeo */}
           <button
             className="start-option-btn"
-            onClick={() => { setLoadError(null); setModalMode('vimeo'); }}
+            onClick={() => {
+              setLoadError(null);
+              setModalMode('vimeo');
+            }}
             id="load-vimeo-btn"
             disabled={loading}
           >
@@ -407,7 +496,10 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
           {/* Import .otr */}
           <button
             className="start-option-btn"
-            onClick={() => { setLoadError(null); otrFileRef.current?.click(); }}
+            onClick={() => {
+              setLoadError(null);
+              otrFileRef.current?.click();
+            }}
             id="import-otr-btn"
             disabled={loading}
           >
@@ -420,10 +512,24 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
         </div>
 
         {loading && (
-          <div style={{ textAlign: 'center', marginTop: 'var(--space-4)', color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+          <div
+            style={{
+              textAlign: 'center',
+              marginTop: 'var(--space-4)',
+              color: 'var(--color-text-muted)',
+              fontSize: 'var(--font-size-sm)',
+            }}
+          >
             {vimeoProgress ? (
               <div style={{ width: '100%' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 'var(--space-2)',
+                  }}
+                >
                   <span style={{ fontWeight: 500 }}>
                     {t('start-loading-vimeo')}&nbsp;
                     {vimeoProgress.total > 0
@@ -448,28 +554,52 @@ export default function StartView({ settings, onNavigate, onOtrLoaded, onUpdateS
                     </button>
                   </Tooltip>
                 </div>
-                <div style={{
-                  height: '8px',
-                  background: 'var(--color-border)',
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                }}>
-                  <div style={{
-                    height: '100%',
-                    width: vimeoProgress.total > 0
-                      ? `${Math.round((vimeoProgress.loaded / vimeoProgress.total) * 100)}%`
-                      : '100%',
-                    background: 'var(--color-accent)',
+                <div
+                  style={{
+                    height: '8px',
+                    background: 'var(--color-border)',
                     borderRadius: '4px',
-                    transition: 'width 0.2s ease',
-                    animation: vimeoProgress.total === 0 ? 'indeterminate-bar 1.5s ease-in-out infinite' : 'none',
-                  }} />
+                    overflow: 'hidden',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      width:
+                        vimeoProgress.total > 0
+                          ? `${Math.round((vimeoProgress.loaded / vimeoProgress.total) * 100)}%`
+                          : '100%',
+                      background: 'var(--color-accent)',
+                      borderRadius: '4px',
+                      transition: 'width 0.2s ease',
+                      animation:
+                        vimeoProgress.total === 0
+                          ? 'indeterminate-bar 1.5s ease-in-out infinite'
+                          : 'none',
+                    }}
+                  />
                 </div>
-                <div style={{ marginTop: 'var(--space-1)', fontSize: 'var(--font-size-xs)', opacity: 0.7 }}>{t('start-press-esc')}</div>
+                <div
+                  style={{
+                    marginTop: 'var(--space-1)',
+                    fontSize: 'var(--font-size-xs)',
+                    opacity: 0.7,
+                  }}
+                >
+                  {t('start-press-esc')}
+                </div>
               </div>
             ) : (
               <>
-                <span style={{ display: 'inline-block', animation: 'spin 1s linear infinite', marginRight: 'var(--space-2)' }}>⏳</span>
+                <span
+                  style={{
+                    display: 'inline-block',
+                    animation: 'spin 1s linear infinite',
+                    marginRight: 'var(--space-2)',
+                  }}
+                >
+                  ⏳
+                </span>
                 {t('start-loading')}
               </>
             )}

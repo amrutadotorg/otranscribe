@@ -16,7 +16,13 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
-import { parseIni, getTranslation, getHtmlTranslation, getAvailableLanguages, type ParsedLocale } from './iniParser';
+import {
+  parseIni,
+  getTranslation,
+  getHtmlTranslation,
+  getAvailableLanguages,
+  type ParsedLocale,
+} from './iniParser';
 import { STORAGE_KEYS } from '../../storage/storageKeys';
 
 interface I18nContextValue {
@@ -50,11 +56,13 @@ async function loadIniFile(): Promise<string> {
 
 export function I18nProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<string>(
-    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) ?? FALLBACK_LANG
+    () => localStorage.getItem(STORAGE_KEYS.LANGUAGE) ?? FALLBACK_LANG,
   );
   const [locale, setLocale] = useState<ParsedLocale>({ strings: {}, html: {} });
   const [ready, setReady] = useState(false);
-  const [availableLanguages, setAvailableLanguages] = useState<string[]>(['en-US']);
+  const [availableLanguages, setAvailableLanguages] = useState<string[]>([
+    'en-US',
+  ]);
 
   const loadLocale = useCallback(async (targetLang: string) => {
     try {
@@ -84,16 +92,18 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const t = useCallback(
     (key: string, vars?: Record<string, string | number>) =>
       getTranslation(locale, key, vars),
-    [locale]
+    [locale],
   );
 
   const tHtml = useCallback(
     (key: string) => getHtmlTranslation(locale, key),
-    [locale]
+    [locale],
   );
 
   return (
-    <I18nContext.Provider value={{ t, tHtml, lang, setLang, ready, availableLanguages }}>
+    <I18nContext.Provider
+      value={{ t, tHtml, lang, setLang, ready, availableLanguages }}
+    >
       {children}
     </I18nContext.Provider>
   );
@@ -101,6 +111,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
 export function useTranslation(): I18nContextValue {
   const ctx = useContext(I18nContext);
-  if (!ctx) throw new Error('useTranslation must be used inside <I18nProvider>');
+  if (!ctx)
+    throw new Error('useTranslation must be used inside <I18nProvider>');
   return ctx;
 }

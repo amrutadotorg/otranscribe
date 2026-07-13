@@ -15,11 +15,11 @@ import { HTML5AudioDriver } from './drivers/HTML5AudioDriver';
 import { HTML5VideoDriver } from './drivers/HTML5VideoDriver';
 import { YouTubeDriver } from './drivers/YouTubeDriver';
 
-const SKIP_TIME = 1.5;    // seconds per skip
+const SKIP_TIME = 1.5; // seconds per skip
 const SPEED_STEP = 0.125; // playback rate increment
 const MIN_SPEED = 0.5;
 const MAX_SPEED = 2.0;
-const READY_CHECK_INTERVAL = 10;   // ms
+const READY_CHECK_INTERVAL = 10; // ms
 const READY_TIMEOUT_ATTEMPTS = 20000;
 
 export interface PlayerOptions {
@@ -36,7 +36,9 @@ export class Player {
   private _driver: PlayerDriver | null;
   private _destroyed = false;
   private _name: string;
-  private _onPlayPauseCallback?: (status: 'playing' | 'paused' | 'inactive') => void;
+  private _onPlayPauseCallback?: (
+    status: 'playing' | 'paused' | 'inactive',
+  ) => void;
   private _onSpeedChangeCallback?: (speed: number) => void;
   private _onTimeUpdateCallback?: (time: number) => void;
   private _timeUpdateInterval: ReturnType<typeof setInterval> | null = null;
@@ -64,11 +66,19 @@ export class Player {
     }, 100);
   }
 
-  private _resolveDriver(type: PlayerDriverType): new (source: string, cb?: (s: string) => void) => PlayerDriver {
+  private _resolveDriver(
+    type: PlayerDriverType,
+  ): new (source: string, cb?: (s: string) => void) => PlayerDriver {
     switch (type) {
-      case 'HTML5_AUDIO': return HTML5AudioDriver;
-      case 'HTML5_VIDEO': return HTML5VideoDriver;
-      case 'YOUTUBE': return YouTubeDriver as unknown as new (source: string, cb?: (s: string) => void) => PlayerDriver;
+      case 'HTML5_AUDIO':
+        return HTML5AudioDriver;
+      case 'HTML5_VIDEO':
+        return HTML5VideoDriver;
+      case 'YOUTUBE':
+        return YouTubeDriver as unknown as new (
+          source: string,
+          cb?: (s: string) => void,
+        ) => PlayerDriver;
     }
   }
 
@@ -109,7 +119,9 @@ export class Player {
   }
 
   getTime(): number {
-    return this._hasDriver() && this._driver!.isReady() ? this._driver!.getTime() : 0;
+    return this._hasDriver() && this._driver!.isReady()
+      ? this._driver!.getTime()
+      : 0;
   }
 
   setTime(seconds: number): void {
@@ -119,7 +131,8 @@ export class Player {
 
   skip(direction: 'forwards' | 'backwards'): void {
     const current = this.getTime();
-    const next = direction === 'forwards' ? current + SKIP_TIME : current - SKIP_TIME;
+    const next =
+      direction === 'forwards' ? current + SKIP_TIME : current - SKIP_TIME;
     this.setTime(next);
 
     // Compensate for setTime bug on some video elements
@@ -136,7 +149,9 @@ export class Player {
   }
 
   getLength(): number {
-    return this._hasDriver() && this._driver!.isReady() ? this._driver!.getLength() : 0;
+    return this._hasDriver() && this._driver!.isReady()
+      ? this._driver!.getLength()
+      : 0;
   }
 
   getSpeed(): number {
@@ -146,7 +161,9 @@ export class Player {
   setSpeed(speed: number): void {
     if (!this._hasDriver()) return;
     if (speed < MIN_SPEED || speed > MAX_SPEED) {
-      throw new Error(`Speed ${speed} is outside range [${MIN_SPEED}, ${MAX_SPEED}]`);
+      throw new Error(
+        `Speed ${speed} is outside range [${MIN_SPEED}, ${MAX_SPEED}]`,
+      );
     }
     this._driver!.setSpeed(speed);
     this._onSpeedChangeCallback?.(speed);
@@ -155,13 +172,17 @@ export class Player {
   speedUp(): void {
     try {
       this.setSpeed(Math.min(MAX_SPEED, this.getSpeed() + SPEED_STEP));
-    } catch { /* at max */ }
+    } catch {
+      /* at max */
+    }
   }
 
   speedDown(): void {
     try {
       this.setSpeed(Math.max(MIN_SPEED, this.getSpeed() - SPEED_STEP));
-    } catch { /* at min */ }
+    } catch {
+      /* at min */
+    }
   }
 
   getName(): string {

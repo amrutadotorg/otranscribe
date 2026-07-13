@@ -28,9 +28,19 @@ export default function FormatToolbar({ onFormat, activeFormats }: Props) {
     titleKey: string;
     shortcut: string;
   }> = [
-    { format: 'bold',      label: 'B', titleKey: 'title-bold',      shortcut: 'Mod+B' },
-    { format: 'italic',    label: 'I', titleKey: 'title-italic',    shortcut: 'Mod+I' },
-    { format: 'underline', label: 'U', titleKey: 'title-underline', shortcut: 'Mod+U' },
+    { format: 'bold', label: 'B', titleKey: 'title-bold', shortcut: 'Mod+B' },
+    {
+      format: 'italic',
+      label: 'I',
+      titleKey: 'title-italic',
+      shortcut: 'Mod+I',
+    },
+    {
+      format: 'underline',
+      label: 'U',
+      titleKey: 'title-underline',
+      shortcut: 'Mod+U',
+    },
   ];
 
   return (
@@ -52,7 +62,13 @@ export default function FormatToolbar({ onFormat, activeFormats }: Props) {
               id={`format-btn-${format}`}
               style={{ fontStyle: format === 'italic' ? 'italic' : 'normal' }}
             >
-              {format === 'bold' ? <b>{label}</b> : format === 'underline' ? <u>{label}</u> : label}
+              {format === 'bold' ? (
+                <b>{label}</b>
+              ) : format === 'underline' ? (
+                <u>{label}</u>
+              ) : (
+                label
+              )}
             </button>
           </Tooltip>
         );

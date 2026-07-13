@@ -15,16 +15,33 @@ interface Props {
   pauseOnTyping?: boolean;
 }
 
-export default function TextPanel({ settings, initialHtml, onContentChange, onActiveFormatsChange, pauseOnTyping }: Props) {
+export default function TextPanel({
+  settings,
+  initialHtml,
+  onContentChange,
+  onActiveFormatsChange,
+  pauseOnTyping,
+}: Props) {
   const { t } = useTranslation();
   const [wordCount, setWordCount] = useState({ words: 0, chars: 0 });
 
-  const handleActiveFormats = useCallback((formats: Set<ActiveFormat>) => {
-    onActiveFormatsChange?.(formats);
-  }, [onActiveFormatsChange]);
+  const handleActiveFormats = useCallback(
+    (formats: Set<ActiveFormat>) => {
+      onActiveFormatsChange?.(formats);
+    },
+    [onActiveFormatsChange],
+  );
 
   return (
-    <div className="text-panel" style={{ display: 'flex', flexDirection: 'column', height: '100%', position: 'relative' }}>
+    <div
+      className="text-panel"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+        position: 'relative',
+      }}
+    >
       <Editor
         initialHtml={initialHtml}
         settings={settings}
@@ -34,7 +51,8 @@ export default function TextPanel({ settings, initialHtml, onContentChange, onAc
         pauseOnTyping={pauseOnTyping}
       />
       <div className="word-counter" id="word-counter" aria-live="polite">
-        {t('wordcount', { n: wordCount.words })} · {t('charcount', { n: wordCount.chars })}
+        {t('wordcount', { n: wordCount.words })} ·{' '}
+        {t('charcount', { n: wordCount.chars })}
       </div>
     </div>
   );

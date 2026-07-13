@@ -50,14 +50,17 @@ export default function Editor({
   const timestampOffset = parseTimestampOffset(settings.timestampOffset);
   const wordCountTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const reportActiveFormats = useCallback((ed: ReturnType<typeof useEditor>) => {
-    if (!ed || !onActiveFormatsChange) return;
-    const formats = new Set<ActiveFormat>();
-    if (ed.isActive('bold')) formats.add('bold');
-    if (ed.isActive('italic')) formats.add('italic');
-    if (ed.isActive('underline')) formats.add('underline');
-    onActiveFormatsChange(formats);
-  }, [onActiveFormatsChange]);
+  const reportActiveFormats = useCallback(
+    (ed: ReturnType<typeof useEditor>) => {
+      if (!ed || !onActiveFormatsChange) return;
+      const formats = new Set<ActiveFormat>();
+      if (ed.isActive('bold')) formats.add('bold');
+      if (ed.isActive('italic')) formats.add('italic');
+      if (ed.isActive('underline')) formats.add('underline');
+      onActiveFormatsChange(formats);
+    },
+    [onActiveFormatsChange],
+  );
 
   const editor = useEditor({
     extensions: [
@@ -143,7 +146,8 @@ export default function Editor({
       const { format } = e.detail;
       if (format === 'bold') editor.chain().focus().toggleBold().run();
       else if (format === 'italic') editor.chain().focus().toggleItalic().run();
-      else if (format === 'underline') editor.chain().focus().toggleUnderline().run();
+      else if (format === 'underline')
+        editor.chain().focus().toggleUnderline().run();
       // Re-report immediately — onSelectionUpdate only fires on cursor move,
       // not on storedMark changes when there is no selection
       reportActiveFormats(editor);
@@ -159,10 +163,16 @@ export default function Editor({
         editor.commands.focus(null);
       }
     };
-    document.addEventListener('editor:format', handleFormatEvent as EventListener);
+    document.addEventListener(
+      'editor:format',
+      handleFormatEvent as EventListener,
+    );
     document.addEventListener('editor:focus', handleFocusEvent);
     return () => {
-      document.removeEventListener('editor:format', handleFormatEvent as EventListener);
+      document.removeEventListener(
+        'editor:format',
+        handleFormatEvent as EventListener,
+      );
       document.removeEventListener('editor:focus', handleFocusEvent);
     };
   }, [editor, reportActiveFormats]);
@@ -187,15 +197,18 @@ export default function Editor({
     return () => editorEl.removeEventListener('keydown', handleEditorKeyDown);
   }, [editor, pauseOnTyping]);
 
-  const handleContainerClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!editor) return;
-    // Only focus if the click target is the container itself (i.e., padding area),
-    // not a child element inside the editor
-    const editorEl = editor.view.dom as HTMLElement;
-    if (!editorEl.contains(e.target as Node)) {
-      editor.commands.focus();
-    }
-  }, [editor]);
+  const handleContainerClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!editor) return;
+      // Only focus if the click target is the container itself (i.e., padding area),
+      // not a child element inside the editor
+      const editorEl = editor.view.dom as HTMLElement;
+      if (!editorEl.contains(e.target as Node)) {
+        editor.commands.focus();
+      }
+    },
+    [editor],
+  );
 
   return (
     <div

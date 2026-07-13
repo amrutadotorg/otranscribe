@@ -24,7 +24,9 @@ function applyTheme(theme: 'light' | 'dark' | 'system'): void {
   } else if (theme === 'light') {
     root.classList.remove('dark');
   } else {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const prefersDark = window.matchMedia(
+      '(prefers-color-scheme: dark)',
+    ).matches;
     root.classList.toggle('dark', prefersDark);
   }
 }
@@ -41,7 +43,9 @@ export default function App() {
   const [view, setView] = useState<AppView>('start');
   const [pendingOtrDoc, setPendingOtrDoc] = useState<OtrDocument | null>(null);
   // Read autosave once on mount (synchronous — no flash)
-  const [autosaveHtml, setAutosaveHtml] = useState<string | null>(() => loadAutosave());
+  const [autosaveHtml, setAutosaveHtml] = useState<string | null>(() =>
+    loadAutosave(),
+  );
   const { settings, updateSettings, resetSettings } = useSettings();
 
   // Apply theme on mount and change

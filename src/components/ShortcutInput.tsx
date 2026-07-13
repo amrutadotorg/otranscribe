@@ -38,7 +38,13 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
       }
 
       // Remove last shortcut on Backspace (if not holding modifiers)
-      if (e.key === 'Backspace' && !e.metaKey && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+      if (
+        e.key === 'Backspace' &&
+        !e.metaKey &&
+        !e.ctrlKey &&
+        !e.shiftKey &&
+        !e.altKey
+      ) {
         onChange(value.slice(0, -1));
         stopListening();
         return;
@@ -78,7 +84,14 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
   };
 
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap' }}>
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+        flexWrap: 'wrap',
+      }}
+    >
       {value.map((shortcut, i) => (
         <span
           key={`${shortcut}-${i}`}

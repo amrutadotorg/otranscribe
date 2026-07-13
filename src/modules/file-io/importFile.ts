@@ -12,7 +12,10 @@ import type { OtrDocument } from '../../types/otr';
  * Read an .otr File object and parse it.
  * Resolves with OtrDocument on success, rejects with Error on failure.
  */
-export function importOtrFile(file: File, t?: (key: string) => string): Promise<OtrDocument> {
+export function importOtrFile(
+  file: File,
+  t?: (key: string) => string,
+): Promise<OtrDocument> {
   return new Promise((resolve, reject) => {
     if (!file.name.endsWith('.otr') && file.type !== 'application/json') {
       // Accept anyway — .otr is just JSON

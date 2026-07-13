@@ -33,17 +33,22 @@ interface Props {
   onExportFormat: (format: 'txt' | 'md' | 'otr') => void;
 }
 
-export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpenHelp, onOpenBackup, onGoHome, onExport, exportMenuOpen, exportDisabled, exportMenuRef, onExportFormat }: Props) {
+export default function TopBar({
+  activeFormats,
+  onFormat,
+  onOpenSettings,
+  onOpenHelp,
+  onOpenBackup,
+  onGoHome,
+  onExport,
+  exportMenuOpen,
+  exportDisabled,
+  exportMenuRef,
+  onExportFormat,
+}: Props) {
   const { t } = useTranslation();
-  const {
-    playerState,
-    play,
-    pause,
-    skip,
-    skipTo,
-    speedUp,
-    speedDown,
-  } = usePlayer();
+  const { playerState, play, pause, skip, skipTo, speedUp, speedDown } =
+    usePlayer();
 
   const { isPlaying, currentTime, duration, speed, isReady } = playerState;
 
@@ -58,7 +63,7 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
       const ratio = (e.clientX - rect.left) / rect.width;
       skipTo(ratio * duration);
     },
-    [isReady, duration, skipTo]
+    [isReady, duration, skipTo],
   );
 
   const handleTimeClick = useCallback(() => {
@@ -68,9 +73,10 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
     let seconds = 0;
     if (trimmed.includes(':')) {
       const parts = trimmed.split(':').map(Number);
-      seconds = parts.length === 3
-        ? parts[0] * 3600 + parts[1] * 60 + parts[2]
-        : parts[0] * 60 + parts[1];
+      seconds =
+        parts.length === 3
+          ? parts[0] * 3600 + parts[1] * 60 + parts[2]
+          : parts[0] * 60 + parts[1];
     } else {
       seconds = parseFloat(trimmed) * 60;
     }
@@ -86,7 +92,9 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
           role="link"
           tabIndex={0}
           onClick={onGoHome}
-          onKeyDown={(e) => { if (e.key === 'Enter') onGoHome(); }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onGoHome();
+          }}
           style={{ cursor: 'pointer' }}
           aria-label={t('aria-home')}
         >
@@ -194,7 +202,11 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
             🐢
           </button>
         </Tooltip>
-        <div className="speed-display" id="speed-display" aria-label={t('aria-playback-speed', { speed: speedDisplay })}>
+        <div
+          className="speed-display"
+          id="speed-display"
+          aria-label={t('aria-playback-speed', { speed: speedDisplay })}
+        >
           {speedDisplay}
         </div>
         <Tooltip content={t('title-speed-up')}>
@@ -210,10 +222,7 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
         </Tooltip>
 
         {/* Format toolbar — bold/italic/underline */}
-        <FormatToolbar
-          activeFormats={activeFormats}
-          onFormat={onFormat}
-        />
+        <FormatToolbar activeFormats={activeFormats} onFormat={onFormat} />
       </div>
 
       <div className="topbar-actions" id="topbar-actions">
@@ -258,11 +267,23 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
                 overflow: 'hidden',
               }}
             >
-              {([
-                { format: 'txt' as const, label: `📄 ${t('export-text')}`, id: 'export-txt' },
-                { format: 'md'  as const, label: `📝 ${t('export-markdown')}`, id: 'export-md'  },
-                { format: 'otr' as const, label: `💾 ${t('export-otr')}`, id: 'export-otr' },
-              ]).map(({ format, label, id }) => (
+              {[
+                {
+                  format: 'txt' as const,
+                  label: `📄 ${t('export-text')}`,
+                  id: 'export-txt',
+                },
+                {
+                  format: 'md' as const,
+                  label: `📝 ${t('export-markdown')}`,
+                  id: 'export-md',
+                },
+                {
+                  format: 'otr' as const,
+                  label: `💾 ${t('export-otr')}`,
+                  id: 'export-otr',
+                },
+              ].map(({ format, label, id }) => (
                 <button
                   key={format}
                   role="menuitem"
@@ -280,8 +301,14 @@ export default function TopBar({ activeFormats, onFormat, onOpenSettings, onOpen
                     color: 'var(--color-text)',
                     transition: 'background var(--transition-fast)',
                   }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'var(--color-surface-hover)'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = 'none'; }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      'var(--color-surface-hover)';
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLButtonElement).style.background =
+                      'none';
+                  }}
                 >
                   {label}
                 </button>

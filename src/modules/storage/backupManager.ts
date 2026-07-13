@@ -21,7 +21,7 @@ export interface BackupEntry {
 /** Get all backup keys from localStorage */
 export function getAllBackupKeys(): string[] {
   return Object.keys(localStorage).filter((k) =>
-    k.startsWith(STORAGE_KEYS.BACKUP_PREFIX)
+    k.startsWith(STORAGE_KEYS.BACKUP_PREFIX),
   );
 }
 
@@ -42,7 +42,9 @@ export function getAllBackups(): Array<{ key: string; entry: BackupEntry }> {
 }
 
 /** Get backups for a specific media file name */
-export function getBackupsForMedia(mediaName: string): Array<{ key: string; entry: BackupEntry }> {
+export function getBackupsForMedia(
+  mediaName: string,
+): Array<{ key: string; entry: BackupEntry }> {
   return getAllBackups().filter((b) => b.entry.media === mediaName);
 }
 
@@ -52,7 +54,7 @@ export function getBackupsForMedia(mediaName: string): Array<{ key: string; entr
 export function saveBackup(
   html: string,
   mediaDetails: MediaDetails,
-  maxPerFile = 10
+  maxPerFile = 10,
 ): void {
   const timestamp = Date.now();
   const key = `${STORAGE_KEYS.BACKUP_PREFIX}${timestamp}`;
@@ -116,7 +118,7 @@ type BackupFn = () => { html: string; mediaDetails: MediaDetails };
 export function startPeriodicBackup(
   getState: BackupFn,
   intervalMinutes: number,
-  maxPerFile: number
+  maxPerFile: number,
 ): void {
   stopPeriodicBackup();
   const ms = intervalMinutes * 60 * 1000;

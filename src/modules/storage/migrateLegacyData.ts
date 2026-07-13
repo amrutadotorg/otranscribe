@@ -45,7 +45,10 @@ export function migrateLegacyData(): void {
       }
 
       // v1→v3: flatten old keyboard shortcut format
-      if (settings['keyboardShortcuts'] === undefined && settings['escKeyAction']) {
+      if (
+        settings['keyboardShortcuts'] === undefined &&
+        settings['escKeyAction']
+      ) {
         // Old format stored shortcut preferences differently
         settings['keyboardShortcuts'] = {};
       }
@@ -57,7 +60,10 @@ export function migrateLegacyData(): void {
     localStorage.setItem(MIGRATION_DONE_KEY, '1');
     console.info('[migration] Legacy oTranscribe data migrated to v3 format');
   } catch (err) {
-    console.warn('[migration] Migration failed, continuing with defaults:', err);
+    console.warn(
+      '[migration] Migration failed, continuing with defaults:',
+      err,
+    );
     localStorage.setItem(MIGRATION_DONE_KEY, '1'); // Don't retry on failure
   }
 }

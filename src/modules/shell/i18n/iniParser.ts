@@ -83,7 +83,7 @@ export function parseIni(content: string, targetLang: string): ParsedLocale {
 export function getTranslation(
   locale: ParsedLocale,
   key: string,
-  vars?: Record<string, string | number>
+  vars?: Record<string, string | number>,
 ): string {
   let val = locale.strings[key] ?? key; // Fall back to key if not found
   if (vars) {
@@ -94,7 +94,10 @@ export function getTranslation(
   return val;
 }
 
-export function getHtmlTranslation(locale: ParsedLocale, key: string): string | null {
+export function getHtmlTranslation(
+  locale: ParsedLocale,
+  key: string,
+): string | null {
   return locale.html[key] ?? null;
 }
 

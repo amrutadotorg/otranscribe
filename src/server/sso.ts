@@ -39,7 +39,7 @@ function hexToBytes(hex: string): ArrayBuffer {
 async function verifySignature(
   payload: string,
   signature: string,
-  secret: string
+  secret: string,
 ): Promise<boolean> {
   try {
     const key = await crypto.subtle.importKey(
@@ -47,13 +47,13 @@ async function verifySignature(
       new TextEncoder().encode(secret),
       { name: 'HMAC', hash: 'SHA-256' },
       false,
-      ['verify']
+      ['verify'],
     );
     return await crypto.subtle.verify(
       'HMAC',
       key,
       hexToBytes(signature),
-      new TextEncoder().encode(payload)
+      new TextEncoder().encode(payload),
     );
   } catch {
     return false;
@@ -63,10 +63,13 @@ async function verifySignature(
 export async function ssoMiddleware(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> {
   // Bypass SSO in development mode (as per PLAN.md R9)
-  if (process.env.NODE_ENV === 'development' || process.env.SKIP_SSO === 'true') {
+  if (
+    process.env.NODE_ENV === 'development' ||
+    process.env.SKIP_SSO === 'true'
+  ) {
     next();
     return;
   }
@@ -86,7 +89,7 @@ export async function ssoMiddleware(
 
   const cookieHeader = req.headers.cookie ?? '';
   const match = cookieHeader.match(
-    new RegExp(`(^|;\\s*)${COOKIE_NAME}=([^;]+)`)
+    new RegExp(`(^|;\\s*)${COOKIE_NAME}=([^;]+)`),
   );
   const ssoCookie = match ? match[2] : null;
 

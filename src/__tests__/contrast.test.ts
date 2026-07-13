@@ -32,7 +32,9 @@ function hexToRgb(hex: string): [number, number, number] {
 function relativeLuminance(hex: string): number {
   const [r, g, b] = hexToRgb(hex);
   return (
-    0.2126 * srgbToLinear(r) + 0.7152 * srgbToLinear(g) + 0.0722 * srgbToLinear(b)
+    0.2126 * srgbToLinear(r) +
+    0.7152 * srgbToLinear(g) +
+    0.0722 * srgbToLinear(b)
   );
 }
 
@@ -52,9 +54,7 @@ function contrastRatio(hex1: string, hex2: string): number {
  * Blend an RGBA color onto a solid background (hex) and return the effective hex.
  */
 function rgbaOnBg(rgba: string, bgHex: string): string {
-  const match = rgba.match(
-    /rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d.]+)?\)/,
-  );
+  const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+),?\s*([\d.]+)?\)/);
   if (!match) throw new Error(`Invalid rgba: ${rgba}`);
   const r = parseInt(match[1]);
   const g = parseInt(match[2]);

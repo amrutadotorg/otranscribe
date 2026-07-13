@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+
 - `minutes` translation key in 28 languages (suffix next to backup interval input)
 - `debouncedAutosave()` function in autosave module
 - **Autosave recovery on startup**: when the app loads and a non-empty autosave is detected in localStorage, a recovery banner is shown on StartView. "Restore" loads the session into TranscribeView; "Discard" clears the stale slot. New translation keys: `autosave-recovery-message`, `autosave-restore`, `autosave-discard` (English; other languages fall back automatically).
@@ -14,6 +15,7 @@
 - `shortcut-listen` and `saveBackup` translation keys in 28 languages
 
 ### Changed
+
 - **Backup interval setting**: added translated unit suffix ("min", "分", "Мин", etc.) next to the numeric input in Settings panel
 - **Autosave**: replaced `setInterval(1000)` polling with debounce-based save (1s after last content change). Saves only when user actually edits text, reducing unnecessary localStorage writes
 - **Keyboard shortcuts UI**: replaced plain text inputs with interactive `ShortcutInput` component (tags + Listen button)
@@ -21,12 +23,14 @@
 - **Translation corrections** (from reviewer): de `shortcut-listen` Lauschen→Erfassen, ru/uk shortcut-listen → Записать/Записати, ar shortcuts-instrux prefix fix, fil susi→key, ro shortcuts-instrux phrasing, bo shortcuts-instrux full rewrite
 
 ### Removed
+
 - `startAutosave()` / `stopAutosave()` polling functions (replaced by `debouncedAutosave()`)
 - `useEffect` in Editor.tsx that started/stopped the autosave polling loop
 - 5 dead shortcuts from settings: bold, italic, underline, addTimestamp, addTimestampMilliseconds (TipTap/browser handle these internally)
 - Hardcoded `Ctrl+S` — now a configurable shortcut
 
 ### Fixed
+
 - Backup interval setting now clearly shows the unit (minutes) in all 28 supported languages
 - **Periodic backup not working**: `startPeriodicBackup()` was defined but never called. Now wired into `TranscribeView.tsx` — creates timestamped backups every N minutes (configurable in Settings)
 - **Periodic backup duplicate entries**: backup was created every N minutes regardless of content changes. Now only creates a new entry when the editor content actually changed

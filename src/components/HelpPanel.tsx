@@ -54,7 +54,8 @@ export default function HelpPanel({ open, onClose }: Props) {
     questions.push({
       id: i,
       q,
-      answerHtml: answerParts.length > 0 ? answerParts.join('<br /><br />') : null
+      answerHtml:
+        answerParts.length > 0 ? answerParts.join('<br /><br />') : null,
     });
   }
 
@@ -62,24 +63,53 @@ export default function HelpPanel({ open, onClose }: Props) {
     <div className={`side-panel ${open ? 'open' : ''}`} id="help-panel">
       <div className="side-panel-header">
         <h2>{t('help')}</h2>
-        <button className="icon-btn" onClick={onClose} aria-label={t('cancel')} id="close-help-btn">✕</button>
+        <button
+          className="icon-btn"
+          onClick={onClose}
+          aria-label={t('cancel')}
+          id="close-help-btn"
+        >
+          ✕
+        </button>
       </div>
-      
+
       <div className="side-panel-body" style={{ overflowY: 'auto' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--space-4)',
+          }}
+        >
           {questions.map(({ id, q, answerHtml }) => (
             <div key={id}>
-              <h3 style={{ fontSize: 'var(--font-size-md)', marginBottom: 'var(--space-2)' }}>{q}</h3>
+              <h3
+                style={{
+                  fontSize: 'var(--font-size-md)',
+                  marginBottom: 'var(--space-2)',
+                }}
+              >
+                {q}
+              </h3>
               {answerHtml ? (
-                <p 
-                  style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)', lineHeight: 1.5 }}
-                  dangerouslySetInnerHTML={{ __html: answerHtml }} 
+                <p
+                  style={{
+                    fontSize: 'var(--font-size-sm)',
+                    color: 'var(--color-text-muted)',
+                    lineHeight: 1.5,
+                  }}
+                  dangerouslySetInnerHTML={{ __html: answerHtml }}
                 />
               ) : null}
             </div>
           ))}
           {questions.length === 0 && (
-            <p style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-sm)' }}>
+            <p
+              style={{
+                color: 'var(--color-text-muted)',
+                fontSize: 'var(--font-size-sm)',
+              }}
+            >
               No help content available.
             </p>
           )}

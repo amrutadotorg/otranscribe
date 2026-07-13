@@ -18,34 +18,34 @@ const OUT_FILE = path.resolve(__dirname, '../public/data.ini');
 
 // Map filename → BCP-47 language code used as [section] in combined file
 const FILE_MAP = {
-  '_english.ini':           'en-US',
-  'arabic.ini':             'ar',
-  'catalan.ini':            'ca',
+  '_english.ini': 'en-US',
+  'arabic.ini': 'ar',
+  'catalan.ini': 'ca',
   'chinese-simplified.ini': 'zh-CN',
-  'chinese-traditional.ini':'zh-TW',
-  'danish.ini':             'da',
-  'dutch.ini':              'nl',
-  'filipino.ini':           'fil',
-  'french.ini':             'fr',
-  'german.ini':             'de',
-  'greek.ini':              'el',
-  'hindi.ini':              'hi',
-  'indonesian.ini':         'id',
-  'italian.ini':            'it',
-  'japanese.ini':           'ja',
-  'marathi.ini':            'mr',
-  'norwegian.ini':          'no',
-  'polish.ini':             'pl',
-  'portuguese-br.ini':      'pt-BR',
-  'portuguese.ini':         'pt',
-  'romanian.ini':           'ro',
-  'russian.ini':            'ru',
-  'spanish.ini':            'es',
-  'swedish.ini':            'sv',
-  'tibetan.ini':            'bo',
-  'turkish.ini':            'tr',
-  'ukrainian.ini':          'uk',
-  'vietnamese.ini':         'vi',
+  'chinese-traditional.ini': 'zh-TW',
+  'danish.ini': 'da',
+  'dutch.ini': 'nl',
+  'filipino.ini': 'fil',
+  'french.ini': 'fr',
+  'german.ini': 'de',
+  'greek.ini': 'el',
+  'hindi.ini': 'hi',
+  'indonesian.ini': 'id',
+  'italian.ini': 'it',
+  'japanese.ini': 'ja',
+  'marathi.ini': 'mr',
+  'norwegian.ini': 'no',
+  'polish.ini': 'pl',
+  'portuguese-br.ini': 'pt-BR',
+  'portuguese.ini': 'pt',
+  'romanian.ini': 'ro',
+  'russian.ini': 'ru',
+  'spanish.ini': 'es',
+  'swedish.ini': 'sv',
+  'tibetan.ini': 'bo',
+  'turkish.ini': 'tr',
+  'ukrainian.ini': 'uk',
+  'vietnamese.ini': 'vi',
 };
 
 const sections = [];
@@ -71,5 +71,9 @@ const output = sections.join('\n\n') + '\n';
 fs.mkdirSync(path.dirname(OUT_FILE), { recursive: true });
 fs.writeFileSync(OUT_FILE, output, 'utf8');
 
-console.log(`\n[build-locale] Written ${sections.length} locales to ${OUT_FILE}`);
-console.log(`[build-locale] Total size: ${(output.length / 1024).toFixed(1)} KB`);
+console.log(
+  `\n[build-locale] Written ${sections.length} locales to ${OUT_FILE}`,
+);
+console.log(
+  `[build-locale] Total size: ${(output.length / 1024).toFixed(1)} KB`,
+);

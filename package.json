@@ -9,6 +9,8 @@
     "build:locale": "node scripts/build-locale.mjs",
     "build:server": "tsc --project tsconfig.node.json",
     "lint": "eslint src --ext .ts,.tsx",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

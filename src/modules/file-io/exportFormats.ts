@@ -35,11 +35,13 @@ function formatSecondsForExport(seconds: number): string {
 export function injectTimestamps(html: string): string {
   const div = document.createElement('div');
   div.innerHTML = html;
-  div.querySelectorAll<HTMLElement>('.timestamp[data-timestamp]').forEach((el) => {
-    const raw = parseFloat(el.getAttribute('data-timestamp') ?? '0');
-    const text = formatSecondsForExport(raw);
-    el.replaceWith(document.createTextNode(`[${text}] `));
-  });
+  div
+    .querySelectorAll<HTMLElement>('.timestamp[data-timestamp]')
+    .forEach((el) => {
+      const raw = parseFloat(el.getAttribute('data-timestamp') ?? '0');
+      const text = formatSecondsForExport(raw);
+      el.replaceWith(document.createTextNode(`[${text}] `));
+    });
   return div.innerHTML;
 }
 
@@ -98,7 +100,10 @@ export function sanitizeFilename(name: string): string {
     .substring(0, 100);
 }
 
-export function generateFilename(mediaName?: string, t?: (key: string) => string): string {
+export function generateFilename(
+  mediaName?: string,
+  t?: (key: string) => string,
+): string {
   const date = new Date().toUTCString();
   if (mediaName) {
     return sanitizeFilename(mediaName) + ' ' + date;
@@ -111,7 +116,10 @@ export function generateFilename(mediaName?: string, t?: (key: string) => string
 export type ExportOptions = Record<string, never>;
 
 /** Convert editor HTML to Markdown string */
-export function exportToMarkdown(html: string, _opts: ExportOptions = {}): string {
+export function exportToMarkdown(
+  html: string,
+  _opts: ExportOptions = {},
+): string {
   const withTs = injectTimestamps(html);
   const clean = sanitizeForMarkdown(withTs);
   const md = turndownService.turndown(clean);
@@ -119,7 +127,10 @@ export function exportToMarkdown(html: string, _opts: ExportOptions = {}): strin
 }
 
 /** Convert editor HTML to plain text string */
-export function exportToPlainText(html: string, _opts: ExportOptions = {}): string {
+export function exportToPlainText(
+  html: string,
+  _opts: ExportOptions = {},
+): string {
   const withTs = injectTimestamps(html);
   const clean = sanitizeForPlainText(withTs);
   const md = turndownService.turndown(clean);
@@ -134,7 +145,10 @@ export function exportToOtr(opts: SerializeOptions): string {
 // ─── Clipboard helpers ─────────────────────────────────────────────────────
 
 /** Copy text/html + text/plain to clipboard simultaneously (for TXT export) */
-export async function copyRichText(html: string, plainText: string): Promise<void> {
+export async function copyRichText(
+  html: string,
+  plainText: string,
+): Promise<void> {
   if (navigator.clipboard?.write && window.ClipboardItem) {
     const item = new ClipboardItem({
       'text/html': new Blob([html], { type: 'text/html' }),
@@ -165,7 +179,11 @@ export async function copyPlainText(text: string): Promise<void> {
 // ─── Download trigger ──────────────────────────────────────────────────────
 
 /** Trigger a file download in the browser */
-export function downloadFile(content: string, filename: string, mimeType = 'text/plain'): void {
+export function downloadFile(
+  content: string,
+  filename: string,
+  mimeType = 'text/plain',
+): void {
   const blob = new Blob([content], { type: mimeType });
   const href = URL.createObjectURL(blob);
   const a = document.createElement('a');

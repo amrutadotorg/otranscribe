@@ -19,7 +19,9 @@ declare global {
 /** Parse YouTube video ID from various URL formats */
 export function parseYouTubeUrl(url: string): string | null {
   if (!url) return null;
-  const cleanUrl = decodeURIComponent(url.replace(/\s/g, '').replace(/•.*$/, ''));
+  const cleanUrl = decodeURIComponent(
+    url.replace(/\s/g, '').replace(/•.*$/, ''),
+  );
   const patterns = [
     /(?:https?:\/\/)?(?:www\.)?youtu\.be\/([A-Za-z0-9_-]{11})/,
     /(?:https?:\/\/)?(?:www\.)?youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/,
@@ -69,7 +71,7 @@ export class YouTubeDriver implements PlayerDriver {
 
   constructor(
     source: string,
-    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void
+    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void,
   ) {
     this._container = document.createElement('div');
     this._container.id = 'oTplayerEl';
@@ -108,7 +110,8 @@ export class YouTubeDriver implements PlayerDriver {
           },
           events: {
             onReady: () => this._onReady(onPlayPause),
-            onStateChange: (ev: YT.OnStateChangeEvent) => this._onStateChange(ev, onPlayPause),
+            onStateChange: (ev: YT.OnStateChangeEvent) =>
+              this._onStateChange(ev, onPlayPause),
           },
         });
       };
@@ -119,7 +122,7 @@ export class YouTubeDriver implements PlayerDriver {
   private async _fetchTitle(videoId: string): Promise<void> {
     try {
       const res = await fetch(
-        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+        `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`,
       );
       if (res.ok) {
         const data = (await res.json()) as { title?: string };
@@ -132,7 +135,7 @@ export class YouTubeDriver implements PlayerDriver {
 
   private _onStateChange(
     ev: YT.OnStateChangeEvent,
-    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void
+    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void,
   ): void {
     if (this._isDestroyed) return;
     if (ev.data === 1) {
@@ -144,7 +147,7 @@ export class YouTubeDriver implements PlayerDriver {
   }
 
   private _onReady(
-    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void
+    onPlayPause?: (status: 'playing' | 'paused' | 'inactive') => void,
   ): void {
     if (this._isDestroyed) return;
 

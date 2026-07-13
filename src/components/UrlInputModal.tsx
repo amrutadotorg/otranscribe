@@ -91,7 +91,9 @@ export default function UrlInputModal({
         id="url-input-modal"
       >
         <div className="modal-header">
-          <h2 id="url-modal-title" className="modal-title">{title}</h2>
+          <h2 id="url-modal-title" className="modal-title">
+            {title}
+          </h2>
           <button
             className="icon-btn"
             onClick={onCancel}
@@ -103,7 +105,13 @@ export default function UrlInputModal({
         </div>
 
         {description && (
-          <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)', marginBottom: 'var(--space-3)' }}>
+          <p
+            style={{
+              fontSize: 'var(--font-size-sm)',
+              color: 'var(--color-text-muted)',
+              marginBottom: 'var(--space-3)',
+            }}
+          >
             {description}
           </p>
         )}
@@ -115,8 +123,13 @@ export default function UrlInputModal({
           id="url-modal-input"
           placeholder={placeholder}
           value={value}
-          onChange={(e) => { setValue(e.target.value); setError(null); }}
-          onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(); }}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setError(null);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSubmit();
+          }}
           aria-label={t('aria-url-input')}
           aria-describedby={error ? 'url-modal-error' : undefined}
           autoComplete="off"
@@ -126,7 +139,11 @@ export default function UrlInputModal({
         {error && (
           <p
             id="url-modal-error"
-            style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-danger)', marginTop: 'var(--space-1)' }}
+            style={{
+              fontSize: 'var(--font-size-sm)',
+              color: 'var(--color-danger)',
+              marginTop: 'var(--space-1)',
+            }}
             role="alert"
           >
             {error}
@@ -137,7 +154,11 @@ export default function UrlInputModal({
           <button className="btn" onClick={onCancel} id="url-modal-btn-cancel">
             {t('cancel-btn')}
           </button>
-          <button className="btn btn-primary" onClick={handleSubmit} id="url-modal-btn-confirm">
+          <button
+            className="btn btn-primary"
+            onClick={handleSubmit}
+            id="url-modal-btn-confirm"
+          >
             {t('load-btn')}
           </button>
         </div>

@@ -38,15 +38,28 @@ export default function Tooltip({
     onOpenChange: setIsOpen,
     placement,
     whileElementsMounted: autoUpdate,
-    middleware: [offset(8), flip(), shift({ padding: 8 }), arrow({ element: arrowRef })],
+    middleware: [
+      offset(8),
+      flip(),
+      shift({ padding: 8 }),
+      arrow({ element: arrowRef }),
+    ],
   });
 
-  const hover = useHover(context, { delay: { open: delay, close: 0 }, move: false });
+  const hover = useHover(context, {
+    delay: { open: delay, close: 0 },
+    move: false,
+  });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
   const role = useRole(context, { role: 'tooltip' });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    hover,
+    focus,
+    dismiss,
+    role,
+  ]);
 
   if (!isValidElement(children)) return children;
 
@@ -147,7 +160,13 @@ function TooltipBubble({
       {...floatingProps}
     >
       {content}
-      <FloatingArrow ref={arrowRef} context={context} fill="var(--color-surface)" stroke="var(--color-border)" strokeWidth={1} />
+      <FloatingArrow
+        ref={arrowRef}
+        context={context}
+        fill="var(--color-surface)"
+        stroke="var(--color-border)"
+        strokeWidth={1}
+      />
     </div>
   );
 }

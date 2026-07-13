@@ -12,20 +12,20 @@
 
 ## Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| Framework | React 19, TypeScript 6 |
-| Build Tool | Vite 8 |
-| Rich Text Editor | TipTap 3 (with StarterKit, Bold, Italic, Underline extensions) |
-| Styling | Plain CSS with CSS Custom Properties (CSS variables), no CSS modules |
+| Category         | Technology                                                                       |
+| ---------------- | -------------------------------------------------------------------------------- |
+| Framework        | React 19, TypeScript 6                                                           |
+| Build Tool       | Vite 8                                                                           |
+| Rich Text Editor | TipTap 3 (with StarterKit, Bold, Italic, Underline extensions)                   |
+| Styling          | Plain CSS with CSS Custom Properties (CSS variables), no CSS modules             |
 | State Management | React Context API (`PlayerContext`, `I18nContext`), custom hooks (`useSettings`) |
-| Routing | Manual view state (`AppView` type), no React Router |
-| Testing | Vitest (unit), Playwright (e2e) |
-| Linting | ESLint + typescript-eslint + Prettier, oxlint |
-| Server | Express 4 (Node.js) |
-| PWA | vite-plugin-pwa (Workbox) |
-| i18n | Custom INI-based translation system |
-| Path Alias | `@` → `./src` |
+| Routing          | Manual view state (`AppView` type), no React Router                              |
+| Testing          | Vitest (unit), Playwright (e2e)                                                  |
+| Linting          | ESLint + typescript-eslint + Prettier, oxlint                                    |
+| Server           | Express 4 (Node.js)                                                              |
+| PWA              | vite-plugin-pwa (Workbox)                                                        |
+| i18n             | Custom INI-based translation system                                              |
+| Path Alias       | `@` → `./src`                                                                    |
 
 ## Scripts
 
@@ -80,6 +80,7 @@ git push
 ```
 
 **Commit message format** (Conventional Commits):
+
 - `feat:` — new feature or functionality
 - `fix:` — bug fix
 - `refactor:` — code restructuring without behavior change
@@ -89,6 +90,7 @@ git push
 - `chore:` — build, config, dependencies, tooling
 
 **Examples:**
+
 - `feat: add dark mode toggle to settings panel`
 - `fix: resolve timestamp parsing for legacy .otr files`
 - `refactor: extract player driver creation into helper`
@@ -105,6 +107,7 @@ PORT=3000                                   # Optional, defaults to 3000
 ```
 
 **Setup:**
+
 1. Copy `.env.example` (if exists) or create `.env` manually
 2. Obtain a Vimeo API token from https://developer.vimeo.com/
 3. Generate a random hex string for `SSO_SALT` (e.g., `openssl rand -hex 32`)
@@ -301,6 +304,7 @@ wordcount           = {{n}} Wörter
 ```
 
 **Rules:**
+
 - Sections are BCP-47 language codes: `[en-US]`, `[de]`, `[pl]`, etc.
 - Keys are lowercase, hyphen-separated: `error-youtube-url`, `settings-title`
 - Variable interpolation: `{{n}}`, `{{name}}` — replaced at runtime
@@ -337,6 +341,7 @@ function MyComponent() {
 ### Vimeo — SDK integration abandoned
 
 We attempted to use the official Vimeo JavaScript Player SDK (`@vimeo/player`) for embedded playback but abandoned it due to:
+
 - CORS restrictions preventing programmatic download of the video file
 - The SDK only exposes an `<iframe>` player — no access to the raw video stream for caching
 - No way to read the video blob for IndexedDB caching or offline playback
@@ -355,21 +360,21 @@ The `.otr` file parser (`otrFormat.ts`) handles both legacy MM:SS timestamps (st
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
-| `src/main.tsx` | Entry point — mounts React, runs migration |
-| `src/App.tsx` | Root component — view routing, theme, providers |
-| `src/index.css` | Design system — all CSS tokens and global styles |
-| `src/modules/audio-engine/PlayerContext.tsx` | Global player state + controls |
-| `src/modules/settings/useSettings.ts` | Settings persistence hook |
-| `src/modules/editor/Editor.tsx` | TipTap editor setup |
-| `src/modules/file-io/otrFormat.ts` | .otr file format parser/serializer |
-| `src/types/settings.d.ts` | `AppSettings` interface definition |
-| `src/types/otr.d.ts` | `.otr` file format types |
-| `vite.config.ts` | Build config, PWA, aliases, proxy |
-| `tsconfig.app.json` | TypeScript strict config for app |
-| `eslint.config.js` | Linting rules |
-| `package.json` | Scripts: `dev`, `build`, `test`, `lint`, `test:e2e` |
+| File                                         | Purpose                                             |
+| -------------------------------------------- | --------------------------------------------------- |
+| `src/main.tsx`                               | Entry point — mounts React, runs migration          |
+| `src/App.tsx`                                | Root component — view routing, theme, providers     |
+| `src/index.css`                              | Design system — all CSS tokens and global styles    |
+| `src/modules/audio-engine/PlayerContext.tsx` | Global player state + controls                      |
+| `src/modules/settings/useSettings.ts`        | Settings persistence hook                           |
+| `src/modules/editor/Editor.tsx`              | TipTap editor setup                                 |
+| `src/modules/file-io/otrFormat.ts`           | .otr file format parser/serializer                  |
+| `src/types/settings.d.ts`                    | `AppSettings` interface definition                  |
+| `src/types/otr.d.ts`                         | `.otr` file format types                            |
+| `vite.config.ts`                             | Build config, PWA, aliases, proxy                   |
+| `tsconfig.app.json`                          | TypeScript strict config for app                    |
+| `eslint.config.js`                           | Linting rules                                       |
+| `package.json`                               | Scripts: `dev`, `build`, `test`, `lint`, `test:e2e` |
 
 ## Common Patterns
 
@@ -378,4 +383,3 @@ The `.otr` file parser (`otrFormat.ts`) handles both legacy MM:SS timestamps (st
 - **flushSync**: Used in `PlayerContext` to synchronously update DOM before driver initialization
 - **Deep merge**: Settings use recursive deep merge for partial updates
 - **Translation**: `useTranslation()` hook returns `t(key)` and `tHtml(key)` functions
-

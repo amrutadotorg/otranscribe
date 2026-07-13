@@ -10,34 +10,34 @@ Znaleziono martwy kod i nieużywane zależności niezwiązane z Preact.
 
 ### Wysoki priorytet
 
-| Plik:linia | Opis | Rekomendacja |
-|-----------|------|-------------|
-| `src/modules/settings/useSettings.ts:80-89` | `migrateOldSettings()` — eksportowana, pusta funkcja, nigdy importowana | Usunąć |
-| `src/types/settings.d.ts:24-43` | `DEFAULT_SETTINGS` const w pliku `.d.ts` — duplikat `defaults.ts`, nigdy importowana | Usunąć |
+| Plik:linia                                  | Opis                                                                                 | Rekomendacja |
+| ------------------------------------------- | ------------------------------------------------------------------------------------ | ------------ |
+| `src/modules/settings/useSettings.ts:80-89` | `migrateOldSettings()` — eksportowana, pusta funkcja, nigdy importowana              | Usunąć       |
+| `src/types/settings.d.ts:24-43`             | `DEFAULT_SETTINGS` const w pliku `.d.ts` — duplikat `defaults.ts`, nigdy importowana | Usunąć       |
 
 ### Średni priorytet
 
-| Plik:linia | Opis | Rekomendacja |
-|-----------|------|-------------|
-| `src/modules/audio-engine/Player.ts:206-208` | `setPlayer()` — eksportowana, nigdy importowana z zewnątrz | Usunąć |
-| `src/modules/editor/pasteCleanup.ts:82-108` | `stripInlineStyles()` — eksportowana, nigdy importowana | Usunąć |
-| `src/modules/file-io/exportFormats.ts:137-163` | `copyRichText()` + `copyPlainText()` — eksportowane, nigdy importowane | Usunąć |
-| `src/modules/storage/vimeoCache.ts:54-72` | `deleteCachedVimeoFile()` + `clearVimeoCache()` — eksportowane, nigdy importowane | Usunąć |
+| Plik:linia                                     | Opis                                                                              | Rekomendacja |
+| ---------------------------------------------- | --------------------------------------------------------------------------------- | ------------ |
+| `src/modules/audio-engine/Player.ts:206-208`   | `setPlayer()` — eksportowana, nigdy importowana z zewnątrz                        | Usunąć       |
+| `src/modules/editor/pasteCleanup.ts:82-108`    | `stripInlineStyles()` — eksportowana, nigdy importowana                           | Usunąć       |
+| `src/modules/file-io/exportFormats.ts:137-163` | `copyRichText()` + `copyPlainText()` — eksportowane, nigdy importowane            | Usunąć       |
+| `src/modules/storage/vimeoCache.ts:54-72`      | `deleteCachedVimeoFile()` + `clearVimeoCache()` — eksportowane, nigdy importowane | Usunąć       |
 
 ### Niski priorytet
 
-| Plik:linia | Opis | Rekomendacja |
-|-----------|------|-------------|
-| `src/types/otr.d.ts:25-28` | `TimestampData` interface — eksportowany, nigdy importowany | Usunąć |
-| `src/modules/storage/storageKeys.ts:21` | `STORAGE_KEYS.LAST_FILE` — nigdy używany | Usunąć z obiektu |
-| `src/modules/storage/storageKeys.ts:27` | `STORAGE_KEYS.VIMEO_ID_LEGACY` — nigdy używany | Usunąć z obiektu |
+| Plik:linia                              | Opis                                                        | Rekomendacja     |
+| --------------------------------------- | ----------------------------------------------------------- | ---------------- |
+| `src/types/otr.d.ts:25-28`              | `TimestampData` interface — eksportowany, nigdy importowany | Usunąć           |
+| `src/modules/storage/storageKeys.ts:21` | `STORAGE_KEYS.LAST_FILE` — nigdy używany                    | Usunąć z obiektu |
+| `src/modules/storage/storageKeys.ts:27` | `STORAGE_KEYS.VIMEO_ID_LEGACY` — nigdy używany              | Usunąć z obiektu |
 
 ### Eksporty wewnętrzne (niepotrzebnie `export`)
 
 Funkcje eksportowane, ale używane tylko wewnątrz własnego pliku — usunąć `export`:
 
 - `src/modules/file-io/exportFormats.ts` — `injectTimestamps` (linia 35), `sanitizeForExport` (52), `sanitizeForPlainText` (59), `sanitizeForMarkdown` (72), `sanitizeFilename` (92)
-- `src/modules/file-io/otrFormat.ts` — `convertTimestampToSeconds` (19), `normaliseTimestamp` (31), `preprocessOtrHtml` (46) *(używane też w testach)*
+- `src/modules/file-io/otrFormat.ts` — `convertTimestampToSeconds` (19), `normaliseTimestamp` (31), `preprocessOtrHtml` (46) _(używane też w testach)_
 - `src/modules/audio-engine/drivers/YouTubeDriver.ts` — `parseYouTubeUrl` (20)
 - `src/modules/storage/backupManager.ts` — `getAllBackupKeys` (22), `getBackupsForMedia` (45)
 - `src/modules/storage/migrateLegacyData.ts` — `needsMigration` (19)
@@ -65,19 +65,19 @@ Funkcje eksportowane, ale używane tylko wewnątrz własnego pliku — usunąć 
 
 ### Nieużywane zależności devDependencies
 
-| Zależność | Problem | Rekomendacja |
-|----------|---------|-------------|
-| `eslint-plugin-react` | Zainstalowana, ale nie używana w `eslint.config.js` | Usunąć |
-| `eslint-plugin-react-hooks` | Zainstalowana, ale nie używana w `eslint.config.js` | Usunąć |
-| `oxlint` | Zainstalowany, ale brak skryptu npm i configa | Usunąć |
+| Zależność                   | Problem                                             | Rekomendacja |
+| --------------------------- | --------------------------------------------------- | ------------ |
+| `eslint-plugin-react`       | Zainstalowana, ale nie używana w `eslint.config.js` | Usunąć       |
+| `eslint-plugin-react-hooks` | Zainstalowana, ale nie używana w `eslint.config.js` | Usunąć       |
+| `oxlint`                    | Zainstalowany, ale brak skryptu npm i configa       | Usunąć       |
 
 ### Potencjalnie redundantskie zależności
 
-| Zależność | Problem | Rekomendacja |
-|----------|---------|-------------|
-| `@tiptap/extension-bold` | Nigdy bezpośrednio importowany — bundled w `@tiptap/starter-kit` | Rozważyć usunięcie |
-| `@tiptap/extension-italic` | Tak samo jak bold — bundled w StarterKit | Rozważyć usunięcie |
-| `@tiptap/pm` | Nigdy importowany, ale jest peer dep `@tiptap/react` — musi pozostać | Zostawić |
+| Zależność                  | Problem                                                              | Rekomendacja       |
+| -------------------------- | -------------------------------------------------------------------- | ------------------ |
+| `@tiptap/extension-bold`   | Nigdy bezpośrednio importowany — bundled w `@tiptap/starter-kit`     | Rozważyć usunięcie |
+| `@tiptap/extension-italic` | Tak samo jak bold — bundled w StarterKit                             | Rozważyć usunięcie |
+| `@tiptap/pm`               | Nigdy importowany, ale jest peer dep `@tiptap/react` — musi pozostać | Zostawić           |
 
 ---
 
@@ -95,10 +95,10 @@ Funkcje eksportowane, ale używane tylko wewnątrz własnego pliku — usunąć 
 
 ## Podsumowanie
 
-| Priorytet | Ilość | Co usunąć |
-|-----------|-------|-----------|
-| WYSOKI | 2 | `migrateOldSettings()`, `DEFAULT_SETTINGS` z `.d.ts` |
-| ŚREDNI | 9 | 6 martwych eksportów + 3 nieużywane zależności devDep |
-| NISKI | 12 | 9 eksportów wewnętrznych do oznaczenia jako prywatne + 2 martwe stałe + 1 martwy interface + 2 redundantskie tipTap deps |
+| Priorytet | Ilość | Co usunąć                                                                                                                |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------ |
+| WYSOKI    | 2     | `migrateOldSettings()`, `DEFAULT_SETTINGS` z `.d.ts`                                                                     |
+| ŚREDNI    | 9     | 6 martwych eksportów + 3 nieużywane zależności devDep                                                                    |
+| NISKI     | 12    | 9 eksportów wewnętrznych do oznaczenia jako prywatne + 2 martwe stałe + 1 martwy interface + 2 redundantskie tipTap deps |
 
 **Łącznie: 23 znaleziska do przeglądu (żadne nie jest krytyczne).**

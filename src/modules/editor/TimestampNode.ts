@@ -31,7 +31,7 @@ export const TimestampNode = Node.create<TimestampOptions>({
 
   group: 'inline',
   inline: true,
-  atom: true,  // Non-editable atom — matches original contenteditable="false"
+  atom: true, // Non-editable atom — matches original contenteditable="false"
   selectable: false,
 
   addOptions() {
@@ -69,9 +69,10 @@ export const TimestampNode = Node.create<TimestampOptions>({
           let secs: number;
           if (raw.includes(':')) {
             const parts = raw.split(':').map(Number);
-            secs = parts.length === 3
-              ? parts[0] * 3600 + parts[1] * 60 + parts[2]
-              : parts[0] * 60 + parts[1];
+            secs =
+              parts.length === 3
+                ? parts[0] * 3600 + parts[1] * 60 + parts[2]
+                : parts[0] * 60 + parts[1];
           } else {
             secs = parseFloat(raw);
           }

@@ -16,8 +16,10 @@ export class HTML5VideoDriver extends HTML5AudioDriver {
     const video = document.createElement('video');
     video.src = source;
     video.className = 'video-player';
-    video.style.cssText = 'width: 100%; height: 100%; display: block; background: #000; object-fit: contain;';
-    const container = document.getElementById('media-container') || document.body;
+    video.style.cssText =
+      'width: 100%; height: 100%; display: block; background: #000; object-fit: contain;';
+    const container =
+      document.getElementById('media-container') || document.body;
     container.appendChild(video);
     this.element = video;
 

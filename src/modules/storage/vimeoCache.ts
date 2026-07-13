@@ -24,7 +24,10 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 /** Cache a Vimeo File object by videoId */
-export async function cacheVimeoFile(videoId: string, file: File): Promise<void> {
+export async function cacheVimeoFile(
+  videoId: string,
+  file: File,
+): Promise<void> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIMEO_STORE_NAME, 'readwrite');
@@ -36,7 +39,9 @@ export async function cacheVimeoFile(videoId: string, file: File): Promise<void>
 }
 
 /** Retrieve a cached Vimeo File by videoId. Returns null if not found. */
-export async function getCachedVimeoFile(videoId: string): Promise<File | null> {
+export async function getCachedVimeoFile(
+  videoId: string,
+): Promise<File | null> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIMEO_STORE_NAME, 'readonly');
@@ -94,10 +99,13 @@ export async function downloadAndCacheVimeo(
   vimeoUrl: string,
   onProgress?: (loaded: number, total: number) => void,
   signal?: AbortSignal,
-  t?: (key: string, vars?: Record<string, string | number>) => string
+  t?: (key: string, vars?: Record<string, string | number>) => string,
 ): Promise<{ file: File; videoId: string; name: string }> {
   const videoId = extractVimeoId(vimeoUrl);
-  if (!videoId) throw new Error(t ? t('error-vimeo-id') : 'Could not extract Vimeo video ID');
+  if (!videoId)
+    throw new Error(
+      t ? t('error-vimeo-id') : 'Could not extract Vimeo video ID',
+    );
 
   // Check cache first
   const cached = await getCachedVimeoFile(videoId);
@@ -108,7 +116,10 @@ export async function downloadAndCacheVimeo(
   // Download via server proxy
   let res: Response;
   try {
-    res = await fetch(`/api/vimeo/download?url=${encodeURIComponent(vimeoUrl)}`, { signal });
+    res = await fetch(
+      `/api/vimeo/download?url=${encodeURIComponent(vimeoUrl)}`,
+      { signal },
+    );
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') throw err;
     throw new Error(t ? t('error-vimeo-download') : 'Vimeo download failed');
@@ -122,7 +133,9 @@ export async function downloadAndCacheVimeo(
           window.location.href = data.loginUrl;
           return { file: new File([], ''), videoId, name: '' }; // unreachable
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
     }
     throw new Error(t ? t('error-vimeo-download') : 'Vimeo download failed');
   }
@@ -150,7 +163,9 @@ export async function downloadAndCacheVimeo(
   }
 
   const blob = new Blob(chunks, { type: 'video/mp4' });
-  const file = new File([blob], decodeURIComponent(filename), { type: 'video/mp4' });
+  const file = new File([blob], decodeURIComponent(filename), {
+    type: 'video/mp4',
+  });
 
   await cacheVimeoFile(videoId, file);
   return { file, videoId, name: file.name };
