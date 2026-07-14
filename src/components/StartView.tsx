@@ -24,6 +24,10 @@ interface Props {
   autosaveHtml?: string | null;
   /** Called after user restores or discards autosave (so App clears its state) */
   onAutosaveDismissed?: () => void;
+  /** YouTube URL passed via ?video_url= query param, or null if none */
+  pendingYouTubeUrl?: string | null;
+  /** Called after the pending YouTube URL has been consumed */
+  onYouTubePendingConsumed?: () => void;
 }
 
 type ModalMode = 'none' | 'youtube' | 'vimeo';
@@ -66,6 +70,8 @@ export default function StartView({
   onUpdateSettings,
   autosaveHtml,
   onAutosaveDismissed,
+  pendingYouTubeUrl,
+  onYouTubePendingConsumed,
 }: Props & { onUpdateSettings?: (updates: Partial<AppSettings>) => void }) {
   const { t, tHtml, lang, setLang, availableLanguages } = useTranslation();
   const mediaFileRef = useRef<HTMLInputElement>(null);
@@ -166,25 +172,42 @@ export default function StartView({
     }
   };
 
-  const handleYouTubeConfirm = async (url: string) => {
-    setModalMode('none');
-    setLoadError(null);
-    setLoading(true);
-    // Navigate first so TranscribeView (with #media-container) mounts before the driver
-    onNavigate('transcribe');
-    // Small tick to let React commit the new view to DOM
-    await new Promise<void>((r) =>
-      requestAnimationFrame(() => requestAnimationFrame(() => r())),
-    );
-    try {
-      await loadYouTube(url);
-    } catch (err) {
-      setLoadError(t('error-youtube-load'));
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const handleYouTubeConfirm = useCallback(
+    async (url: string) => {
+      setModalMode('none');
+      setLoadError(null);
+      setLoading(true);
+      // Navigate first so TranscribeView (with #media-container) mounts before the driver
+      onNavigate('transcribe');
+      // Small tick to let React commit the new view to DOM
+      await new Promise<void>((r) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => r())),
+      );
+      try {
+        await loadYouTube(url);
+      } catch (err) {
+        setLoadError(t('error-youtube-load'));
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [loadYouTube, onNavigate, t],
+  );
+
+  // Auto-load YouTube URL passed via ?video_url= query parameter
+  useEffect(() => {
+    if (!pendingYouTubeUrl) return;
+    // Consume the pending URL immediately to prevent double-trigger
+    onYouTubePendingConsumed?.();
+    // Remove the param from the browser URL to prevent re-load on refresh
+    const cleanUrl =
+      window.location.pathname +
+      (window.location.hash ? window.location.hash : '');
+    history.replaceState(null, '', cleanUrl);
+    // Trigger the YouTube load flow
+    handleYouTubeConfirm(pendingYouTubeUrl);
+  }, [pendingYouTubeUrl, handleYouTubeConfirm, onYouTubePendingConsumed]);
 
   const handleVimeoConfirm = async (url: string) => {
     setModalMode('none');

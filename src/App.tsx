@@ -13,6 +13,7 @@ import StartView from './components/StartView';
 import TranscribeView from './components/TranscribeView';
 import NarrowScreenWarning from './components/NarrowScreenWarning';
 import { loadAutosave } from './modules/storage/autosave';
+import { getVideoUrlParam } from './modules/shell/urlParams';
 import type { OtrDocument } from './types/otr';
 
 export type AppView = 'start' | 'transcribe';
@@ -42,6 +43,10 @@ function DocumentTitleUpdater() {
 export default function App() {
   const [view, setView] = useState<AppView>('start');
   const [pendingOtrDoc, setPendingOtrDoc] = useState<OtrDocument | null>(null);
+  // Read ?video_url= once on mount (synchronous lazy initializer)
+  const [pendingYouTubeUrl, setPendingYouTubeUrl] = useState<string | null>(
+    () => getVideoUrlParam(),
+  );
   // Read autosave once on mount (synchronous — no flash)
   const [autosaveHtml, setAutosaveHtml] = useState<string | null>(() =>
     loadAutosave(),
@@ -87,6 +92,8 @@ export default function App() {
                 setPendingOtrDoc(doc);
                 handleNavigate('transcribe');
               }}
+              pendingYouTubeUrl={pendingYouTubeUrl}
+              onYouTubePendingConsumed={() => setPendingYouTubeUrl(null)}
             />
           ) : (
             <TranscribeView
