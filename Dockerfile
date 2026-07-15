@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:24-slim AS build
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm run build:server
 
 # ─── Production stage ──────────────────────────────────────────
 
-FROM node:24-alpine
+FROM node:24-slim
 
 WORKDIR /app
 
@@ -32,8 +32,8 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/dist-server ./dist-server
 
 # Security: non-root user
-RUN addgroup -S app && adduser -S app -G app && chown -R app:app /app
-USER app
+RUN chown -R node:node /app
+USER node
 
 EXPOSE 3000
 
