@@ -150,6 +150,9 @@ The `.env` file is gitignored — never commit it.
 │   │   │   └── drivers/            # HTML5 audio/video, YouTube iframe
 │   │   ├── editor/                 # TipTap editor setup
 │   │   │   ├── Editor.tsx          # Main editor component
+│   │   │   ├── PhoneticInputExtension.ts  # TipTap extension for phonetic input
+│   │   │   ├── transliteration.ts  # Client-side transliteration fetch wrapper
+│   │   │   ├── transliterationLanguages.ts  # Language metadata (code + i18n key pairs)
 │   │   │   ├── TimestampExtension.ts  # Custom TipTap node
 │   │   │   ├── TimestampNode.ts    # Node schema definition
 │   │   │   ├── TimestampNodeView.tsx  # Node React rendering
@@ -177,7 +180,8 @@ The `.env` file is gitignored — never commit it.
 │   ├── server/                     # Express server (separate build)
 │   │   ├── index.ts                # Server entry point
 │   │   ├── sso.ts                  # SSO middleware
-│   │   └── vimeoProxy.ts           # Vimeo proxy endpoint
+│   │   ├── vimeoProxy.ts           # Vimeo proxy endpoint
+│   │   └── transliterateProxy.ts   # Transliteration proxy endpoint
 │   └── types/                      # TypeScript type definitions
 │       ├── otr.d.ts                # .otr file format types
 │       ├── player.d.ts             # Player state/driver types
@@ -349,21 +353,30 @@ function MyComponent() {
 
 ## Known Issues / Gotchas
 
-### Phonetic input (transliteration) — i18n keys added
+### Phonetic input (transliteration) — Phases 0-5 implemented
 
-Phase 5 of the phonetic input feature has been implemented. The i18n keys for the phonetic input settings are now in place across all 28 locale files.
+Phases 0-5 of the phonetic input feature are implemented and deployed. The feature adds optional Latin → script transliteration (e.g. Devanagari, Arabic, Cyrillic) to the TipTap editor, using Google's `inputtools.google.com` API via a server-side proxy.
+
+**How it works:** User types Latin text, presses Space, and the last word is transparently replaced with the top transliteration candidate from Google's API. Space is inserted immediately (no lag); replacement happens in the background.
 
 **Key files:**
-- `src/l10n/_english.ini` — source of truth for i18n keys (26 keys: 1 main + 25 language names)
-- `public/data.ini` — generated locale file (do not edit directly)
+- `src/server/transliterateProxy.ts` — Express proxy endpoint (`GET /api/transliterate`) with LRU cache, circuit breaker, per-IP rate limiter
+- `src/modules/editor/transliteration.ts` — Client-side `transliterate()` fetch wrapper (returns `[]` on any failure for silent fallback)
+- `src/modules/editor/PhoneticInputExtension.ts` — TipTap extension: intercepts Space, extracts Latin word, replaces via async API call. Uses ProseMirror `Mapping` for correct concurrent word replacement
+- `src/modules/editor/transliterationLanguages.ts` — Single source of truth for 29 supported languages (code + i18n key pairs)
+- `src/types/settings.d.ts` — `PhoneticInputSettings` interface (`enabled`, `lang`)
+- `src/modules/settings/defaults.ts` — Default: `enabled: false`, `lang: 'sa-t-i0-und'` (Sanskrit)
+- `src/components/SettingsPanel.tsx:299-337` — Settings UI: checkbox to enable + language select dropdown
+- `src/l10n/_english.ini` — 30 i18n keys (1 toggle label + 29 language names)
+- `public/data.ini` — Generated combined locale file
 
-**i18n keys added:**
-- `settings-phonetic-input-enabled` — main toggle label
-- `settings-phonetic-lang-*` — 25 language name keys (Amharic, Arabic, Bengali, etc.)
+**Settings persistence:** `phoneticInput` is part of `AppSettings`, stored in localStorage via `useSettings` hook.
 
-**Translation status:** All 28 locale files have been updated with translations. The fallback mechanism ensures missing keys in any language will use the English value.
+**Config update pattern:** `Editor.tsx` uses a `useRef(settings)` to ensure `PhoneticInputExtension`'s `getConfig` getter always reads the latest settings without recreating the editor (which would destroy undo history).
 
-**Next steps:** Phases 0-4, 6-8 still need to be implemented to complete the phonetic input feature. See `TODO.md` for details.
+**Offline behavior:** `transliterate()` checks `navigator.onLine` and returns `[]` when offline — the editor falls back to plain Latin input.
+
+**Remaining phases:** Phase 6 (tests), Phase 7 (full verification), Phase 8 (commit + push). See `TODO.md` for details.
 
 ### Vimeo — SDK integration abandoned
 

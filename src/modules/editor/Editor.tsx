@@ -50,6 +50,8 @@ export default function Editor({
   const { t } = useTranslation();
   const timestampOffset = parseTimestampOffset(settings.timestampOffset);
   const wordCountTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const settingsRef = useRef(settings);
+  settingsRef.current = settings;
 
   const reportActiveFormats = useCallback(
     (ed: ReturnType<typeof useEditor>) => {
@@ -83,8 +85,8 @@ export default function Editor({
       }),
       PhoneticInputExtension.configure({
         getConfig: () => ({
-          enabled: settings.phoneticInput.enabled,
-          lang: settings.phoneticInput.lang,
+          enabled: settingsRef.current.phoneticInput.enabled,
+          lang: settingsRef.current.phoneticInput.lang,
         }),
       }),
     ],
