@@ -6,17 +6,17 @@ Ten dokument jest przeznaczony do wykonania przez agenta AI (np. Claude Code) pr
 
 ## Status implementacji
 
-| Faza | Status | Opis |
-|------|--------|------|
-| Faza 0 | ⏳ | Branch + instalacja zależności |
-| Faza 1 | ⏳ | Serwer: endpoint proxy |
-| Faza 2 | ⏳ | Klient: moduł transliteracji (fetch wrapper) |
-| Faza 3 | ⏳ | Integracja z edytorem TipTap (input rule na spację) |
-| Faza 4 | ⏳ | Ustawienia (typ, defaulty, UI w SettingsPanel) |
+| Faza       | Status | Opis                                                           |
+| ---------- | ------ | -------------------------------------------------------------- |
+| Faza 0     | ⏳     | Branch + instalacja zależności                                 |
+| Faza 1     | ⏳     | Serwer: endpoint proxy                                         |
+| Faza 2     | ⏳     | Klient: moduł transliteracji (fetch wrapper)                   |
+| Faza 3     | ⏳     | Integracja z edytorem TipTap (input rule na spację)            |
+| Faza 4     | ⏳     | Ustawienia (typ, defaulty, UI w SettingsPanel)                 |
 | **Faza 5** | **✅** | **i18n (nowe klucze tłumaczeń) — zaimplementowano 2026-07-15** |
-| Faza 6 | ⏳ | Testy jednostkowe + e2e |
-| Faza 7 | ⏳ | Weryfikacja (lint/tsc/test/e2e/knip) |
-| Faza 8 | ⏳ | Commit + push |
+| Faza 6     | ⏳     | Testy jednostkowe + e2e                                        |
+| Faza 7     | ⏳     | Weryfikacja (lint/tsc/test/e2e/knip)                           |
+| Faza 8     | ⏳     | Commit + push                                                  |
 
 ### Zrealizowano w Fazie 5
 
@@ -29,52 +29,52 @@ Ten dokument jest przeznaczony do wykonania przez agenta AI (np. Claude Code) pr
 
 ## 0. Założenia i decyzje projektowe
 
-| Decyzja | Wybór | Uzasadnienie |
-|---|---|---|
-| Gdzie woła się zewnętrzne API | **Serwer (Express proxy)**, nie klient | Unika ryzyka CORS, ukrywa surowy endpoint, umożliwia cache/rate-limit — zgodnie z istniejącym wzorcem `vimeoProxy.ts` |
-| Zachowanie offline (PWA) | Funkcja **wyłącza się automatycznie**, gdy `navigator.onLine === false` | Projekt jest offline-first, nie można blokować edytora brakiem sieci |
-| Moment transliteracji | Po wpisaniu spacji/interpunkcji (jak w oryginalnym rozszerzeniu), nie na każdy znak | Unika nadmiaru zapytań sieciowych |
-| MVP: wybór spośród kandydatów | **Nie w pierwszej iteracji** — automatycznie wstawiany pierwszy kandydat | Ogranicza zakres; dropdown wyboru to Faza 2 (opcjonalna) |
-| Języki na start | Pełna lista wspierana przez `inputtools.google.com` (29 języków, patrz tabela niżej) — domyślnie ustawiony `sa-t-i0-und` (sanskryt) | Skoro API i tak wspiera wszystkie, nie ma powodu sztucznie zawężać wyboru w UI do dwóch języków |
-| Zależności npm | **Brak nowych** — serwer woła `fetch()` bezpośrednio na Google API | `google-input-tool` wymaga polyfilla `XMLHttpRequest` w Node i nie dodaje wartości ponad surowy `fetch` |
+| Decyzja                       | Wybór                                                                                                                               | Uzasadnienie                                                                                                          |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| Gdzie woła się zewnętrzne API | **Serwer (Express proxy)**, nie klient                                                                                              | Unika ryzyka CORS, ukrywa surowy endpoint, umożliwia cache/rate-limit — zgodnie z istniejącym wzorcem `vimeoProxy.ts` |
+| Zachowanie offline (PWA)      | Funkcja **wyłącza się automatycznie**, gdy `navigator.onLine === false`                                                             | Projekt jest offline-first, nie można blokować edytora brakiem sieci                                                  |
+| Moment transliteracji         | Po wpisaniu spacji/interpunkcji (jak w oryginalnym rozszerzeniu), nie na każdy znak                                                 | Unika nadmiaru zapytań sieciowych                                                                                     |
+| MVP: wybór spośród kandydatów | **Nie w pierwszej iteracji** — automatycznie wstawiany pierwszy kandydat                                                            | Ogranicza zakres; dropdown wyboru to Faza 2 (opcjonalna)                                                              |
+| Języki na start               | Pełna lista wspierana przez `inputtools.google.com` (29 języków, patrz tabela niżej) — domyślnie ustawiony `sa-t-i0-und` (sanskryt) | Skoro API i tak wspiera wszystkie, nie ma powodu sztucznie zawężać wyboru w UI do dwóch języków                       |
+| Zależności npm                | **Brak nowych** — serwer woła `fetch()` bezpośrednio na Google API                                                                  | `google-input-tool` wymaga polyfilla `XMLHttpRequest` w Node i nie dodaje wartości ponad surowy `fetch`               |
 
 ### Pełna lista wspieranych języków (`inputtools.google.com`)
 
-| Język | Kod |
-|---|---|
-| Amharic | `am-t-i0-und` |
-| Arabic | `ar-t-i0-und` |
-| Belarusian | `be-t-i0-und` |
-| Bengali | `bn-t-i0-und` |
-| Bulgarian | `bg-t-i0-und` |
-| Chinese (Hong Kong) | `yue-hant-t-i0-und` |
-| Chinese (Simplified, China) | `zh-t-i0-pinyin` |
+| Język                         | Kod                   |
+| ----------------------------- | --------------------- |
+| Amharic                       | `am-t-i0-und`         |
+| Arabic                        | `ar-t-i0-und`         |
+| Belarusian                    | `be-t-i0-und`         |
+| Bengali                       | `bn-t-i0-und`         |
+| Bulgarian                     | `bg-t-i0-und`         |
+| Chinese (Hong Kong)           | `yue-hant-t-i0-und`   |
+| Chinese (Simplified, China)   | `zh-t-i0-pinyin`      |
 | Chinese (Traditional, Taiwan) | `zh-hant-t-i0-pinyin` |
-| Greek | `el-t-i0-und` |
-| Gujarati | `gu-t-i0-und` |
-| Hebrew | `he-t-i0-und` |
-| Hindi | `hi-t-i0-und` |
-| Kannada | `kn-t-i0-und` |
-| Malayalam | `ml-t-i0-und` |
-| Marathi | `mr-t-i0-und` |
-| Nepali | `ne-t-i0-und` |
-| Oriya | `or-t-i0-und` |
-| Persian | `fa-t-i0-und` |
-| Punjabi | `pa-t-i0-und` |
-| Russian | `ru-t-i0-und` |
-| Sanskrit | `sa-t-i0-und` |
-| Serbian | `sr-t-i0-und` |
-| Sinhalese | `si-t-i0-und` |
-| Tamil | `ta-t-i0-und` |
-| Telugu | `te-t-i0-und` |
-| Thai | `th-t-i0-und` |
-| Tigrinya | `ti-t-i0-und` |
-| Ukrainian | `uk-t-i0-und` |
-| Urdu | `ur-t-i0-und` |
+| Greek                         | `el-t-i0-und`         |
+| Gujarati                      | `gu-t-i0-und`         |
+| Hebrew                        | `he-t-i0-und`         |
+| Hindi                         | `hi-t-i0-und`         |
+| Kannada                       | `kn-t-i0-und`         |
+| Malayalam                     | `ml-t-i0-und`         |
+| Marathi                       | `mr-t-i0-und`         |
+| Nepali                        | `ne-t-i0-und`         |
+| Oriya                         | `or-t-i0-und`         |
+| Persian                       | `fa-t-i0-und`         |
+| Punjabi                       | `pa-t-i0-und`         |
+| Russian                       | `ru-t-i0-und`         |
+| Sanskrit                      | `sa-t-i0-und`         |
+| Serbian                       | `sr-t-i0-und`         |
+| Sinhalese                     | `si-t-i0-und`         |
+| Tamil                         | `ta-t-i0-und`         |
+| Telugu                        | `te-t-i0-und`         |
+| Thai                          | `th-t-i0-und`         |
+| Tigrinya                      | `ti-t-i0-und`         |
+| Ukrainian                     | `uk-t-i0-und`         |
+| Urdu                          | `ur-t-i0-und`         |
 
 Ta tabela jest jedynym źródłem prawdy dla `ALLOWED_LANG_CODES` (serwer), `TransliterationLang` (klient) i listy `<option>` w ustawieniach (Faza 4) oraz kluczy i18n (Faza 5) — patrz aktualizacje niżej. **Łącznie 29 języków + angielski (en-US) = 30 obsługiwanych języków.**
 
-**Ryzyko do zaakceptowania świadomie (nie do rozwiązania kodem):** `inputtools.google.com` to nieoficjalne, niedokumentowane API Google. Brak SLA — może przestać działać lub zacząć być blokowane bez ostrzeżenia. Traktować funkcję jako *best-effort enhancement*, nigdy jako krytyczną ścieżkę.
+**Ryzyko do zaakceptowania świadomie (nie do rozwiązania kodem):** `inputtools.google.com` to nieoficjalne, niedokumentowane API Google. Brak SLA — może przestać działać lub zacząć być blokowane bez ostrzeżenia. Traktować funkcję jako _best-effort enhancement_, nigdy jako krytyczną ścieżkę.
 
 ---
 
@@ -134,12 +134,35 @@ const MAX_TEXT_LENGTH = 64;
 // Allow-list: only known-supported IME language codes are forwarded.
 // Keep in sync with TransliterationLang in src/modules/editor/transliteration.ts.
 const ALLOWED_LANG_CODES = new Set([
-  'am-t-i0-und', 'ar-t-i0-und', 'be-t-i0-und', 'bn-t-i0-und', 'bg-t-i0-und',
-  'yue-hant-t-i0-und', 'zh-t-i0-pinyin', 'zh-hant-t-i0-pinyin', 'el-t-i0-und',
-  'gu-t-i0-und', 'he-t-i0-und', 'hi-t-i0-und', 'kn-t-i0-und', 'ml-t-i0-und',
-  'mr-t-i0-und', 'ne-t-i0-und', 'or-t-i0-und', 'fa-t-i0-und', 'pa-t-i0-und',
-  'ru-t-i0-und', 'sa-t-i0-und', 'sr-t-i0-und', 'si-t-i0-und', 'ta-t-i0-und',
-  'te-t-i0-und', 'th-t-i0-und', 'ti-t-i0-und', 'uk-t-i0-und', 'ur-t-i0-und',
+  'am-t-i0-und',
+  'ar-t-i0-und',
+  'be-t-i0-und',
+  'bn-t-i0-und',
+  'bg-t-i0-und',
+  'yue-hant-t-i0-und',
+  'zh-t-i0-pinyin',
+  'zh-hant-t-i0-pinyin',
+  'el-t-i0-und',
+  'gu-t-i0-und',
+  'he-t-i0-und',
+  'hi-t-i0-und',
+  'kn-t-i0-und',
+  'ml-t-i0-und',
+  'mr-t-i0-und',
+  'ne-t-i0-und',
+  'or-t-i0-und',
+  'fa-t-i0-und',
+  'pa-t-i0-und',
+  'ru-t-i0-und',
+  'sa-t-i0-und',
+  'sr-t-i0-und',
+  'si-t-i0-und',
+  'ta-t-i0-und',
+  'te-t-i0-und',
+  'th-t-i0-und',
+  'ti-t-i0-und',
+  'uk-t-i0-und',
+  'ur-t-i0-und',
 ]);
 
 // In-memory LRU cache: lang:text → candidates. Oldest entries evicted at MAX_CACHE_SIZE.
@@ -172,9 +195,11 @@ setInterval(() => {
 }, 5 * 60_000).unref();
 
 function getClientIp(req: Request): string {
-  return (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
-    ?? req.socket.remoteAddress
-    ?? 'unknown';
+  return (
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ??
+    req.socket.remoteAddress ??
+    'unknown'
+  );
 }
 
 function checkRateLimit(ip: string): boolean {
@@ -200,7 +225,12 @@ export async function transliterateHandler(
 ): Promise<void> {
   const { text, lang, num } = req.query;
 
-  if (!text || typeof text !== 'string' || text.length === 0 || text.length > MAX_TEXT_LENGTH) {
+  if (
+    !text ||
+    typeof text !== 'string' ||
+    text.length === 0 ||
+    text.length > MAX_TEXT_LENGTH
+  ) {
     res.status(400).json({ error: 'invalid_text' });
     return;
   }
@@ -213,7 +243,12 @@ export async function transliterateHandler(
   // Rate limit: per-IP sliding window
   const clientIp = getClientIp(req);
   if (!checkRateLimit(clientIp)) {
-    res.status(429).json({ error: 'rate_limited', retryAfter: Math.ceil(RATE_WINDOW_MS / 1000) });
+    res
+      .status(429)
+      .json({
+        error: 'rate_limited',
+        retryAfter: Math.ceil(RATE_WINDOW_MS / 1000),
+      });
     return;
   }
 
@@ -251,7 +286,9 @@ export async function transliterateHandler(
       if (consecutiveFailures >= CONSECUTIVE_ERRORS) {
         circuitOpenUntil = Date.now() + COOLDOWN_MS;
       }
-      res.status(502).json({ error: 'upstream_error', status: upstream.status });
+      res
+        .status(502)
+        .json({ error: 'upstream_error', status: upstream.status });
       return;
     }
 
@@ -280,7 +317,9 @@ export async function transliterateHandler(
     if (consecutiveFailures >= CONSECUTIVE_ERRORS) {
       circuitOpenUntil = Date.now() + COOLDOWN_MS;
     }
-    res.status(isAbort ? 504 : 502).json({ error: isAbort ? 'timeout' : 'proxy_error' });
+    res
+      .status(isAbort ? 504 : 502)
+      .json({ error: isAbort ? 'timeout' : 'proxy_error' });
   } finally {
     clearTimeout(timeout);
   }
@@ -334,12 +373,35 @@ Nowy plik `src/modules/editor/transliteration.ts`:
 // Keep in sync with ALLOWED_LANG_CODES in src/server/transliterateProxy.ts
 // and the language table in the implementation plan.
 export type TransliterationLang =
-  | 'am-t-i0-und' | 'ar-t-i0-und' | 'be-t-i0-und' | 'bn-t-i0-und' | 'bg-t-i0-und'
-  | 'yue-hant-t-i0-und' | 'zh-t-i0-pinyin' | 'zh-hant-t-i0-pinyin' | 'el-t-i0-und'
-  | 'gu-t-i0-und' | 'he-t-i0-und' | 'hi-t-i0-und' | 'kn-t-i0-und' | 'ml-t-i0-und'
-  | 'mr-t-i0-und' | 'ne-t-i0-und' | 'or-t-i0-und' | 'fa-t-i0-und' | 'pa-t-i0-und'
-  | 'ru-t-i0-und' | 'sa-t-i0-und' | 'sr-t-i0-und' | 'si-t-i0-und' | 'ta-t-i0-und'
-  | 'te-t-i0-und' | 'th-t-i0-und' | 'ti-t-i0-und' | 'uk-t-i0-und' | 'ur-t-i0-und';
+  | 'am-t-i0-und'
+  | 'ar-t-i0-und'
+  | 'be-t-i0-und'
+  | 'bn-t-i0-und'
+  | 'bg-t-i0-und'
+  | 'yue-hant-t-i0-und'
+  | 'zh-t-i0-pinyin'
+  | 'zh-hant-t-i0-pinyin'
+  | 'el-t-i0-und'
+  | 'gu-t-i0-und'
+  | 'he-t-i0-und'
+  | 'hi-t-i0-und'
+  | 'kn-t-i0-und'
+  | 'ml-t-i0-und'
+  | 'mr-t-i0-und'
+  | 'ne-t-i0-und'
+  | 'or-t-i0-und'
+  | 'fa-t-i0-und'
+  | 'pa-t-i0-und'
+  | 'ru-t-i0-und'
+  | 'sa-t-i0-und'
+  | 'sr-t-i0-und'
+  | 'si-t-i0-und'
+  | 'ta-t-i0-und'
+  | 'te-t-i0-und'
+  | 'th-t-i0-und'
+  | 'ti-t-i0-und'
+  | 'uk-t-i0-und'
+  | 'ur-t-i0-und';
 
 const REQUEST_TIMEOUT_MS = 1500;
 
@@ -490,7 +552,11 @@ export const PhoneticInputExtension = Extension.create<PhoneticInputOptions>({
   },
 
   onCreate() {
-    const handler = ({ transaction }: { transaction: { docChanged: boolean; mapping: Mapping } }) => {
+    const handler = ({
+      transaction,
+    }: {
+      transaction: { docChanged: boolean; mapping: Mapping };
+    }) => {
       if (!transaction.docChanged) return;
       const pending = this.storage.pending as PendingReplacement[];
       for (const p of pending) {
@@ -600,33 +666,39 @@ Integracja w `src/modules/editor/Editor.tsx` — dodać do listy rozszerzeń Tip
 import { PhoneticInputExtension } from './PhoneticInputExtension';
 
 // ...w komponencie, w useEditor extensions:
-const editor = useEditor({
-  extensions: [
-    // ...istniejące rozszerzenia (StarterKit, Underline, TimestampNode, TimestampExtension)
-    PhoneticInputExtension.configure({
-      getConfig: () => ({
-        enabled: settings.phoneticInput.enabled,
-        lang: settings.phoneticInput.lang,
+const editor = useEditor(
+  {
+    extensions: [
+      // ...istniejące rozszerzenia (StarterKit, Underline, TimestampNode, TimestampExtension)
+      PhoneticInputExtension.configure({
+        getConfig: () => ({
+          enabled: settings.phoneticInput.enabled,
+          lang: settings.phoneticInput.lang,
+        }),
       }),
-    }),
-  ],
-  // ...
-}, []); // PUSTA TABLICA — edytor nigdy nie jest rekreowany.
+    ],
+    // ...
+  },
+  [],
+); // PUSTA TABLICA — edytor nigdy nie jest rekreowany.
 ```
 
 **Dlaczego getter zamiast `deps` rekreacji:**
+
 - Rekreacja edytora (`deps` ≠ `[]`) niszczy historię Undo/Redo i resetuje focus.
 - Getter czyta `settings` z closure — zawsze najświeższe wartości, bez kosztów rekreacji.
 - `useEditor` z pustymi deps = edytor tworzy się jeden raz, rozszerzenie czyta config przy każdym wciśnięciu spacji.
 
 **Optymistyczna spacja (brak lagów):**
+
 - Spacja wstawiana natychmiast (`return false`) — brak opóźnienia w UI.
 - Transliteracja w tle — jeśli API odpowie za 500ms, podmiana nastąpi bez wiedzy użytkownika.
 - Walidacja przed podmianą — jeśli użytkownik skasował słowo w międzyczasie, podmiana nie nastąpi.
 
 **Race condition — ProseMirror Mapping:**
+
 - Każde oczekujące zastąpienie ma własny `Mapping` (z `@tiptap/pm/transform`).
-- Handler `transaction` w `onCreate` dopisuje każdą transakcję do mappingu *każdego* wciąż oczekującego elementu.
+- Handler `transaction` w `onCreate` dopisuje każdą transakcję do mappingu _każdego_ wciąż oczekującego elementu.
 - Gdy callback API wróci — `mapping.map(wordStart)` zwraca przesuniętą pozycję, uwzględniając podmiany innych słów.
 - `onDestroy` odrejestrowuje listener — brak wycieku pamięci.
 
@@ -660,8 +732,14 @@ export const TRANSLITERATION_LANGUAGES: TransliterationLanguageMeta[] = [
   { code: 'bn-t-i0-und', i18nKey: 'settings-phonetic-lang-bengali' },
   { code: 'bg-t-i0-und', i18nKey: 'settings-phonetic-lang-bulgarian' },
   { code: 'yue-hant-t-i0-und', i18nKey: 'settings-phonetic-lang-chinese-hk' },
-  { code: 'zh-t-i0-pinyin', i18nKey: 'settings-phonetic-lang-chinese-simplified' },
-  { code: 'zh-hant-t-i0-pinyin', i18nKey: 'settings-phonetic-lang-chinese-traditional' },
+  {
+    code: 'zh-t-i0-pinyin',
+    i18nKey: 'settings-phonetic-lang-chinese-simplified',
+  },
+  {
+    code: 'zh-hant-t-i0-pinyin',
+    i18nKey: 'settings-phonetic-lang-chinese-traditional',
+  },
   { code: 'el-t-i0-und', i18nKey: 'settings-phonetic-lang-greek' },
   { code: 'gu-t-i0-und', i18nKey: 'settings-phonetic-lang-gujarati' },
   { code: 'he-t-i0-und', i18nKey: 'settings-phonetic-lang-hebrew' },
@@ -738,39 +816,46 @@ import type { TransliterationLang } from '../modules/editor/transliteration';
     type="checkbox"
     checked={settings.phoneticInput.enabled}
     onChange={(e) =>
-      onUpdate({ phoneticInput: { ...settings.phoneticInput, enabled: e.target.checked } })
+      onUpdate({
+        phoneticInput: { ...settings.phoneticInput, enabled: e.target.checked },
+      })
     }
     style={{ width: 16, height: 16, cursor: 'pointer' }}
   />
-</LabelRow>
+</LabelRow>;
 
-{settings.phoneticInput.enabled && (
-  <LabelRow label={t('settings-phonetic-input-lang')}>
-    <select
-      value={settings.phoneticInput.lang}
-      onChange={(e) =>
-        onUpdate({
-          phoneticInput: { ...settings.phoneticInput, lang: e.target.value as TransliterationLang },
-        })
-      }
-      style={{
-        fontSize: 'var(--font-size-sm)',
-        padding: '4px 8px',
-        borderRadius: 'var(--radius-sm)',
-        border: '1px solid var(--color-border)',
-        background: 'var(--color-surface-2)',
-        color: 'var(--color-text)',
-        maxWidth: 140,
-      }}
-    >
-      {TRANSLITERATION_LANGUAGES.map(({ code, i18nKey }) => (
-        <option key={code} value={code}>
-          {t(i18nKey)}
-        </option>
-      ))}
-    </select>
-  </LabelRow>
-)}
+{
+  settings.phoneticInput.enabled && (
+    <LabelRow label={t('settings-phonetic-input-lang')}>
+      <select
+        value={settings.phoneticInput.lang}
+        onChange={(e) =>
+          onUpdate({
+            phoneticInput: {
+              ...settings.phoneticInput,
+              lang: e.target.value as TransliterationLang,
+            },
+          })
+        }
+        style={{
+          fontSize: 'var(--font-size-sm)',
+          padding: '4px 8px',
+          borderRadius: 'var(--radius-sm)',
+          border: '1px solid var(--color-border)',
+          background: 'var(--color-surface-2)',
+          color: 'var(--color-text)',
+          maxWidth: 140,
+        }}
+      >
+        {TRANSLITERATION_LANGUAGES.map(({ code, i18nKey }) => (
+          <option key={code} value={code}>
+            {t(i18nKey)}
+          </option>
+        ))}
+      </select>
+    </LabelRow>
+  );
+}
 ```
 
 **Kluczowa różnica vs. oryginalna propozycja:** `SettingsPanel` nie ma hooka `useSettings` — `onUpdate` jest propsem (patrz linia 25: `onUpdate: (updates: Partial<AppSettings>) => void`). `onUpdate` przyjmuje `Partial<AppSettings>`, więc `${}` shallow merge w `onUpdate({...})` jest wystarczający — głęboki merge zachodzi w hooku `useSettings` w komponencie nadrzędnym.

@@ -21,12 +21,35 @@ const MAX_TEXT_LENGTH = 64;
 // Allow-list: only known-supported IME language codes are forwarded.
 // Keep in sync with TransliterationLang in src/modules/editor/transliteration.ts.
 const ALLOWED_LANG_CODES = new Set([
-  'am-t-i0-und', 'ar-t-i0-und', 'be-t-i0-und', 'bn-t-i0-und', 'bg-t-i0-und',
-  'yue-hant-t-i0-und', 'zh-t-i0-pinyin', 'zh-hant-t-i0-pinyin', 'el-t-i0-und',
-  'gu-t-i0-und', 'he-t-i0-und', 'hi-t-i0-und', 'kn-t-i0-und', 'ml-t-i0-und',
-  'mr-t-i0-und', 'ne-t-i0-und', 'or-t-i0-und', 'fa-t-i0-und', 'pa-t-i0-und',
-  'ru-t-i0-und', 'sa-t-i0-und', 'sr-t-i0-und', 'si-t-i0-und', 'ta-t-i0-und',
-  'te-t-i0-und', 'th-t-i0-und', 'ti-t-i0-und', 'uk-t-i0-und', 'ur-t-i0-und',
+  'am-t-i0-und',
+  'ar-t-i0-und',
+  'be-t-i0-und',
+  'bn-t-i0-und',
+  'bg-t-i0-und',
+  'yue-hant-t-i0-und',
+  'zh-t-i0-pinyin',
+  'zh-hant-t-i0-pinyin',
+  'el-t-i0-und',
+  'gu-t-i0-und',
+  'he-t-i0-und',
+  'hi-t-i0-und',
+  'kn-t-i0-und',
+  'ml-t-i0-und',
+  'mr-t-i0-und',
+  'ne-t-i0-und',
+  'or-t-i0-und',
+  'fa-t-i0-und',
+  'pa-t-i0-und',
+  'ru-t-i0-und',
+  'sa-t-i0-und',
+  'sr-t-i0-und',
+  'si-t-i0-und',
+  'ta-t-i0-und',
+  'te-t-i0-und',
+  'th-t-i0-und',
+  'ti-t-i0-und',
+  'uk-t-i0-und',
+  'ur-t-i0-und',
 ]);
 
 // In-memory LRU cache: lang:text → candidates. Oldest entries evicted at MAX_CACHE_SIZE.
@@ -59,9 +82,11 @@ setInterval(() => {
 }, 5 * 60_000).unref();
 
 function getClientIp(req: Request): string {
-  return (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim()
-    ?? req.socket.remoteAddress
-    ?? 'unknown';
+  return (
+    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ??
+    req.socket.remoteAddress ??
+    'unknown'
+  );
 }
 
 function checkRateLimit(ip: string): boolean {
@@ -87,7 +112,12 @@ export async function transliterateHandler(
 ): Promise<void> {
   const { text, lang, num } = req.query as TransliterateQuery;
 
-  if (!text || typeof text !== 'string' || text.length === 0 || text.length > MAX_TEXT_LENGTH) {
+  if (
+    !text ||
+    typeof text !== 'string' ||
+    text.length === 0 ||
+    text.length > MAX_TEXT_LENGTH
+  ) {
     res.status(400).json({ error: 'invalid_text' });
     return;
   }
@@ -100,7 +130,12 @@ export async function transliterateHandler(
   // Rate limit: per-IP sliding window
   const clientIp = getClientIp(req);
   if (!checkRateLimit(clientIp)) {
-    res.status(429).json({ error: 'rate_limited', retryAfter: Math.ceil(RATE_WINDOW_MS / 1000) });
+    res
+      .status(429)
+      .json({
+        error: 'rate_limited',
+        retryAfter: Math.ceil(RATE_WINDOW_MS / 1000),
+      });
     return;
   }
 
@@ -138,7 +173,9 @@ export async function transliterateHandler(
       if (consecutiveFailures >= CONSECUTIVE_ERRORS) {
         circuitOpenUntil = Date.now() + COOLDOWN_MS;
       }
-      res.status(502).json({ error: 'upstream_error', status: upstream.status });
+      res
+        .status(502)
+        .json({ error: 'upstream_error', status: upstream.status });
       return;
     }
 
@@ -167,7 +204,9 @@ export async function transliterateHandler(
     if (consecutiveFailures >= CONSECUTIVE_ERRORS) {
       circuitOpenUntil = Date.now() + COOLDOWN_MS;
     }
-    res.status(isAbort ? 504 : 502).json({ error: isAbort ? 'timeout' : 'proxy_error' });
+    res
+      .status(isAbort ? 504 : 502)
+      .json({ error: isAbort ? 'timeout' : 'proxy_error' });
   } finally {
     clearTimeout(timeout);
   }
