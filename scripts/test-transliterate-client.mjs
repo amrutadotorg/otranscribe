@@ -18,35 +18,145 @@ const GOOGLE_INPUTTOOLS_URL = 'https://inputtools.google.com/request';
 
 // All 25 languages from TODO.md Phase 0
 const TEST_LANGUAGES = [
-  { code: 'am-t-i0-und',      name: 'Amharic',             testWord: 'selam',       script: 'Ethiopic' },
-  { code: 'ar-t-i0-und',      name: 'Arabic',              testWord: 'marhaba',     script: 'Arabic' },
-  { code: 'be-t-i0-und',      name: 'Belarusian',          testWord: 'privet',      script: 'Cyrillic' },
-  { code: 'bn-t-i0-und',      name: 'Bengali',             testWord: 'namaskar',    script: 'Bengali' },
-  { code: 'bg-t-i0-und',      name: 'Bulgarian',           testWord: 'zdravey',     script: 'Cyrillic' },
-  { code: 'yue-hant-t-i0-und', name: 'Chinese (HK)',       testWord: 'neihou',      script: 'Chinese' },
-  { code: 'zh-t-i0-pinyin',   name: 'Chinese (Simplified)', testWord: 'nihao',       script: 'Chinese' },
-  { code: 'zh-hant-t-i0-pinyin', name: 'Chinese (Traditional)', testWord: 'nihao',     script: 'Chinese' },
-  { code: 'el-t-i0-und',      name: 'Greek',               testWord: 'yassou',      script: 'Greek' },
-  { code: 'gu-t-i0-und',      name: 'Gujarati',            testWord: 'namaste',     script: 'Gujarati' },
-  { code: 'he-t-i0-und',      name: 'Hebrew',              testWord: 'shalom',      script: 'Hebrew' },
-  { code: 'hi-t-i0-und',      name: 'Hindi',               testWord: 'namaste',     script: 'Devanagari' },
-  { code: 'kn-t-i0-und',      name: 'Kannada',             testWord: 'namaskara',   script: 'Kannada' },
-  { code: 'ml-t-i0-und',      name: 'Malayalam',           testWord: 'namaskaram',  script: 'Malayalam' },
-  { code: 'mr-t-i0-und',      name: 'Marathi',             testWord: 'namaskar',    script: 'Devanagari' },
-  { code: 'ne-t-i0-und',      name: 'Nepali',              testWord: 'namaste',     script: 'Devanagari' },
-  { code: 'or-t-i0-und',      name: 'Oriya',               testWord: 'namaskar',    script: 'Odia' },
-  { code: 'fa-t-i0-und',      name: 'Persian',             testWord: 'salam',       script: 'Arabic' },
-  { code: 'pa-t-i0-und',      name: 'Punjabi',             testWord: 'namaste',     script: 'Gurmukhi' },
-  { code: 'ru-t-i0-und',      name: 'Russian',             testWord: 'privet',      script: 'Cyrillic' },
-  { code: 'sa-t-i0-und',      name: 'Sanskrit',            testWord: 'namaste',     script: 'Devanagari' },
-  { code: 'sr-t-i0-und',      name: 'Serbian',             testWord: 'zdravo',      script: 'Cyrillic' },
-  { code: 'si-t-i0-und',      name: 'Sinhalese',           testWord: 'ayubowan',    script: 'Sinhala' },
-  { code: 'ta-t-i0-und',      name: 'Tamil',               testWord: 'vanakkam',    script: 'Tamil' },
-  { code: 'te-t-i0-und',      name: 'Telugu',              testWord: 'namaskaram',  script: 'Telugu' },
-  { code: 'th-t-i0-und',      name: 'Thai',                testWord: 'sawasdee',    script: 'Thai' },
-  { code: 'ti-t-i0-und',      name: 'Tigrinya',            testWord: 'selam',       script: 'Ethiopic' },
-  { code: 'uk-t-i0-und',      name: 'Ukrainian',           testWord: 'privit',      script: 'Cyrillic' },
-  { code: 'ur-t-i0-und',      name: 'Urdu',                testWord: 'salam',       script: 'Arabic' },
+  {
+    code: 'am-t-i0-und',
+    name: 'Amharic',
+    testWord: 'selam',
+    script: 'Ethiopic',
+  },
+  {
+    code: 'ar-t-i0-und',
+    name: 'Arabic',
+    testWord: 'marhaba',
+    script: 'Arabic',
+  },
+  {
+    code: 'be-t-i0-und',
+    name: 'Belarusian',
+    testWord: 'privet',
+    script: 'Cyrillic',
+  },
+  {
+    code: 'bn-t-i0-und',
+    name: 'Bengali',
+    testWord: 'namaskar',
+    script: 'Bengali',
+  },
+  {
+    code: 'bg-t-i0-und',
+    name: 'Bulgarian',
+    testWord: 'zdravey',
+    script: 'Cyrillic',
+  },
+  {
+    code: 'yue-hant-t-i0-und',
+    name: 'Chinese (HK)',
+    testWord: 'neihou',
+    script: 'Chinese',
+  },
+  {
+    code: 'zh-t-i0-pinyin',
+    name: 'Chinese (Simplified)',
+    testWord: 'nihao',
+    script: 'Chinese',
+  },
+  {
+    code: 'zh-hant-t-i0-pinyin',
+    name: 'Chinese (Traditional)',
+    testWord: 'nihao',
+    script: 'Chinese',
+  },
+  { code: 'el-t-i0-und', name: 'Greek', testWord: 'yassou', script: 'Greek' },
+  {
+    code: 'gu-t-i0-und',
+    name: 'Gujarati',
+    testWord: 'namaste',
+    script: 'Gujarati',
+  },
+  { code: 'he-t-i0-und', name: 'Hebrew', testWord: 'shalom', script: 'Hebrew' },
+  {
+    code: 'hi-t-i0-und',
+    name: 'Hindi',
+    testWord: 'namaste',
+    script: 'Devanagari',
+  },
+  {
+    code: 'kn-t-i0-und',
+    name: 'Kannada',
+    testWord: 'namaskara',
+    script: 'Kannada',
+  },
+  {
+    code: 'ml-t-i0-und',
+    name: 'Malayalam',
+    testWord: 'namaskaram',
+    script: 'Malayalam',
+  },
+  {
+    code: 'mr-t-i0-und',
+    name: 'Marathi',
+    testWord: 'namaskar',
+    script: 'Devanagari',
+  },
+  {
+    code: 'ne-t-i0-und',
+    name: 'Nepali',
+    testWord: 'namaste',
+    script: 'Devanagari',
+  },
+  { code: 'or-t-i0-und', name: 'Oriya', testWord: 'namaskar', script: 'Odia' },
+  { code: 'fa-t-i0-und', name: 'Persian', testWord: 'salam', script: 'Arabic' },
+  {
+    code: 'pa-t-i0-und',
+    name: 'Punjabi',
+    testWord: 'namaste',
+    script: 'Gurmukhi',
+  },
+  {
+    code: 'ru-t-i0-und',
+    name: 'Russian',
+    testWord: 'privet',
+    script: 'Cyrillic',
+  },
+  {
+    code: 'sa-t-i0-und',
+    name: 'Sanskrit',
+    testWord: 'namaste',
+    script: 'Devanagari',
+  },
+  {
+    code: 'sr-t-i0-und',
+    name: 'Serbian',
+    testWord: 'zdravo',
+    script: 'Cyrillic',
+  },
+  {
+    code: 'si-t-i0-und',
+    name: 'Sinhalese',
+    testWord: 'ayubowan',
+    script: 'Sinhala',
+  },
+  { code: 'ta-t-i0-und', name: 'Tamil', testWord: 'vanakkam', script: 'Tamil' },
+  {
+    code: 'te-t-i0-und',
+    name: 'Telugu',
+    testWord: 'namaskaram',
+    script: 'Telugu',
+  },
+  { code: 'th-t-i0-und', name: 'Thai', testWord: 'sawasdee', script: 'Thai' },
+  {
+    code: 'ti-t-i0-und',
+    name: 'Tigrinya',
+    testWord: 'selam',
+    script: 'Ethiopic',
+  },
+  {
+    code: 'uk-t-i0-und',
+    name: 'Ukrainian',
+    testWord: 'privit',
+    script: 'Cyrillic',
+  },
+  { code: 'ur-t-i0-und', name: 'Urdu', testWord: 'salam', script: 'Arabic' },
 ];
 
 // ── CLI args ──────────────────────────────────────────────────────────────────
@@ -57,8 +167,8 @@ const getArg = (flag) => {
 };
 const hasFlag = (flag) => args.includes(flag);
 
-const onlyLang = getArg('--lang');      // e.g. "hi" or "hi-t-i0-und"
-const customText = getArg('--text');    // e.g. "namaste"
+const onlyLang = getArg('--lang'); // e.g. "hi" or "hi-t-i0-und"
+const customText = getArg('--text'); // e.g. "namaste"
 const numResults = parseInt(getArg('--num') || '5', 10);
 const verbose = hasFlag('--verbose');
 const help = hasFlag('--help') || hasFlag('-h');
@@ -120,9 +230,9 @@ async function fetchTransliteration(text, lang, num = 5) {
 function extractCandidates(data) {
   try {
     const arr = data;
-    const inner = arr[1];       // [[sourceText, [candidates]]]
-    const entry = inner[0];     // [sourceText, [candidates]]
-    const list = entry[1];      // [candidate1, candidate2, ...]
+    const inner = arr[1]; // [[sourceText, [candidates]]]
+    const entry = inner[0]; // [sourceText, [candidates]]
+    const list = entry[1]; // [candidate1, candidate2, ...]
     return list.filter((c) => typeof c === 'string');
   } catch {
     return [];
@@ -153,14 +263,18 @@ function printResult({ lang, text, result }, idx, total) {
   }
 
   if (result.candidates.length === 0) {
-    console.log(`     WARNING: No candidates returned (status ${result.status})`);
+    console.log(
+      `     WARNING: No candidates returned (status ${result.status})`,
+    );
     if (verbose && result.raw) {
       console.log(`     Raw: ${JSON.stringify(result.raw)}`);
     }
     return;
   }
 
-  console.log(`     Candidates (${result.candidates.length}): ${result.candidates.join(', ')}`);
+  console.log(
+    `     Candidates (${result.candidates.length}): ${result.candidates.join(', ')}`,
+  );
   console.log(`     Latency: ${result.latencyMs}ms | Status: ${result.status}`);
 
   if (verbose && result.raw) {
@@ -182,7 +296,9 @@ async function runHindiPhraseTest() {
   }
 
   for (const r of results) {
-    console.log(`  "${r.word}" → ${r.candidates.length > 0 ? r.candidates[0] : '(empty)'} (${r.latencyMs}ms)`);
+    console.log(
+      `  "${r.word}" → ${r.candidates.length > 0 ? r.candidates[0] : '(empty)'} (${r.latencyMs}ms)`,
+    );
   }
 
   // Test compound word
@@ -201,7 +317,9 @@ async function runBoundaryTests() {
 
   // Empty text
   const empty = await fetchTransliteration('', 'hi-t-i0-und', 5);
-  console.log(`  Empty text: status=${empty.status}, ok=${empty.ok}, candidates=${empty.candidates.length}`);
+  console.log(
+    `  Empty text: status=${empty.status}, ok=${empty.ok}, candidates=${empty.candidates.length}`,
+  );
 
   // Very long text (> 64 chars — server limit)
   const longText = 'a'.repeat(100);
@@ -210,7 +328,9 @@ async function runBoundaryTests() {
 
   // Invalid language code
   const invalidLang = await fetchTransliteration('test', 'xx-invalid-xx', 5);
-  console.log(`  Invalid lang: status=${invalidLang.status}, ok=${invalidLang.ok}`);
+  console.log(
+    `  Invalid lang: status=${invalidLang.status}, ok=${invalidLang.ok}`,
+  );
 
   // num=1 vs num=8
   const num1 = await fetchTransliteration('namaste', 'hi-t-i0-und', 1);
@@ -227,7 +347,9 @@ async function main() {
   console.log('╚══════════════════════════════════════════════════════════╝');
   console.log(`  Date: ${new Date().toISOString()}`);
   console.log(`  Node: ${process.version}`);
-  console.log(`  Mode: ${onlyLang ? `single lang (${onlyLang})` : 'all languages'}`);
+  console.log(
+    `  Mode: ${onlyLang ? `single lang (${onlyLang})` : 'all languages'}`,
+  );
   console.log(`  Word: ${customText || '(per-language defaults)'}`);
   console.log(`  Num:  ${numResults}`);
   console.log('');
@@ -236,7 +358,9 @@ async function main() {
   let langs = TEST_LANGUAGES;
   if (onlyLang) {
     langs = TEST_LANGUAGES.filter(
-      (l) => l.code.includes(onlyLang) || l.name.toLowerCase().includes(onlyLang.toLowerCase()),
+      (l) =>
+        l.code.includes(onlyLang) ||
+        l.name.toLowerCase().includes(onlyLang.toLowerCase()),
     );
     if (langs.length === 0) {
       console.error(`No language matching "${onlyLang}". Available codes:`);
@@ -260,7 +384,9 @@ async function main() {
   results.forEach((r, i) => printResult(r, i, results.length));
 
   // Summary
-  const passed = results.filter((r) => r.result.ok && r.result.candidates.length > 0).length;
+  const passed = results.filter(
+    (r) => r.result.ok && r.result.candidates.length > 0,
+  ).length;
   const failed = results.length - passed;
   console.log(`\n── Summary ──`);
   console.log(`  Total:   ${results.length}`);
@@ -272,7 +398,8 @@ async function main() {
     results
       .filter((r) => !r.result.ok || r.result.candidates.length === 0)
       .forEach((r) => {
-        const reason = r.result.error || `empty candidates (status ${r.result.status})`;
+        const reason =
+          r.result.error || `empty candidates (status ${r.result.status})`;
         console.log(`  ❌ ${r.lang.name} (${r.lang.code}): ${reason}`);
       });
   }
@@ -287,10 +414,16 @@ async function main() {
   console.log('\n── Verdict ──');
   if (failed === 0) {
     console.log('  ✅ All languages return valid transliteration candidates.');
-    console.log('  → Phase 1 (server proxy) and Phase 2 (client module) assumptions are VALID.');
+    console.log(
+      '  → Phase 1 (server proxy) and Phase 2 (client module) assumptions are VALID.',
+    );
   } else {
-    console.log(`  ⚠️  ${failed} language(s) failed — review before proceeding.`);
-    console.log('  → Check if API is down or if specific language codes need adjustment.');
+    console.log(
+      `  ⚠️  ${failed} language(s) failed — review before proceeding.`,
+    );
+    console.log(
+      '  → Check if API is down or if specific language codes need adjustment.',
+    );
   }
 
   process.exit(failed > 0 ? 1 : 0);

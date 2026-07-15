@@ -82,4 +82,3 @@ export function useSettings() {
 
   return { settings, updateSettings, resetSettings };
 }
-

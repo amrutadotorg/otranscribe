@@ -24,10 +24,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 /** Cache a Vimeo File object by videoId */
-async function cacheVimeoFile(
-  videoId: string,
-  file: File,
-): Promise<void> {
+async function cacheVimeoFile(videoId: string, file: File): Promise<void> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIMEO_STORE_NAME, 'readwrite');
@@ -39,9 +36,7 @@ async function cacheVimeoFile(
 }
 
 /** Retrieve a cached Vimeo File by videoId. Returns null if not found. */
-async function getCachedVimeoFile(
-  videoId: string,
-): Promise<File | null> {
+async function getCachedVimeoFile(videoId: string): Promise<File | null> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(VIMEO_STORE_NAME, 'readonly');

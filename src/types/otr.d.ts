@@ -20,4 +20,3 @@ export interface MediaDetails {
   source?: string; // URL for YouTube
   vimeoId?: string; // Vimeo video ID
 }
-

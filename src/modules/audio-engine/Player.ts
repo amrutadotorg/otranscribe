@@ -224,8 +224,6 @@ export function getPlayer(): Player | null {
   return _globalPlayer;
 }
 
-
-
 export function createPlayer(opts: PlayerOptions): Promise<Player> {
   return new Promise((resolve) => {
     // Destroy existing player

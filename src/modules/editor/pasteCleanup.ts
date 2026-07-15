@@ -86,4 +86,3 @@ export function cleanHTML(dirty: string): string {
 
   return doc.body.innerHTML;
 }
-

@@ -301,7 +301,12 @@ export default function SettingsPanel({
               type="checkbox"
               checked={settings.phoneticInput.enabled}
               onChange={(e) =>
-                onUpdate({ phoneticInput: { ...settings.phoneticInput, enabled: e.target.checked } })
+                onUpdate({
+                  phoneticInput: {
+                    ...settings.phoneticInput,
+                    enabled: e.target.checked,
+                  },
+                })
               }
               id="setting-phonetic-input-enabled"
               style={{ width: 16, height: 16, cursor: 'pointer' }}
@@ -313,7 +318,10 @@ export default function SettingsPanel({
                 value={settings.phoneticInput.lang}
                 onChange={(e) =>
                   onUpdate({
-                    phoneticInput: { ...settings.phoneticInput, lang: e.target.value as TransliterationLang },
+                    phoneticInput: {
+                      ...settings.phoneticInput,
+                      lang: e.target.value as TransliterationLang,
+                    },
                   })
                 }
                 id="setting-phonetic-input-lang"

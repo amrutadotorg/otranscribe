@@ -19,8 +19,14 @@ export const TRANSLITERATION_LANGUAGES: TransliterationLanguageMeta[] = [
   { code: 'bn-t-i0-und', i18nKey: 'settings-phonetic-lang-bengali' },
   { code: 'bg-t-i0-und', i18nKey: 'settings-phonetic-lang-bulgarian' },
   { code: 'yue-hant-t-i0-und', i18nKey: 'settings-phonetic-lang-chinese-hk' },
-  { code: 'zh-t-i0-pinyin', i18nKey: 'settings-phonetic-lang-chinese-simplified' },
-  { code: 'zh-hant-t-i0-pinyin', i18nKey: 'settings-phonetic-lang-chinese-traditional' },
+  {
+    code: 'zh-t-i0-pinyin',
+    i18nKey: 'settings-phonetic-lang-chinese-simplified',
+  },
+  {
+    code: 'zh-hant-t-i0-pinyin',
+    i18nKey: 'settings-phonetic-lang-chinese-traditional',
+  },
   { code: 'el-t-i0-und', i18nKey: 'settings-phonetic-lang-greek' },
   { code: 'gu-t-i0-und', i18nKey: 'settings-phonetic-lang-gujarati' },
   { code: 'he-t-i0-und', i18nKey: 'settings-phonetic-lang-hebrew' },

@@ -25,11 +25,7 @@ export default function QuickTutorial({ onDismiss }: Props) {
   const timestamp = t('quick-tutorial-timestamp', { mod });
 
   return (
-    <div
-      className="quick-tutorial"
-      onClick={onDismiss}
-      role="presentation"
-    >
+    <div className="quick-tutorial" onClick={onDismiss} role="presentation">
       <p className="quick-tutorial-placeholder">{placeholder}</p>
       <div className="quick-tutorial-tips">
         <p className="quick-tutorial-heading">{heading}</p>

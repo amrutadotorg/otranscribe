@@ -32,4 +32,3 @@ export const DEFAULT_SETTINGS: AppSettings = {
     lang: 'sa-t-i0-und',
   },
 };
-

@@ -360,6 +360,7 @@ Phases 0-5 of the phonetic input feature are implemented and deployed. The featu
 **How it works:** User types Latin text, presses Space, and the last word is transparently replaced with the top transliteration candidate from Google's API. Space is inserted immediately (no lag); replacement happens in the background.
 
 **Key files:**
+
 - `src/server/transliterateProxy.ts` — Express proxy endpoint (`GET /api/transliterate`) with LRU cache, circuit breaker, per-IP rate limiter
 - `src/modules/editor/transliteration.ts` — Client-side `transliterate()` fetch wrapper (returns `[]` on any failure for silent fallback)
 - `src/modules/editor/PhoneticInputExtension.ts` — TipTap extension: intercepts Space, extracts Latin word, replaces via async API call. Uses ProseMirror `Mapping` for correct concurrent word replacement

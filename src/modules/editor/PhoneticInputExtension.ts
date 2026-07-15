@@ -57,7 +57,11 @@ export const PhoneticInputExtension = Extension.create<PhoneticInputOptions>({
   },
 
   onCreate() {
-    const handler = ({ transaction }: { transaction: { docChanged: boolean; mapping: Mapping } }) => {
+    const handler = ({
+      transaction,
+    }: {
+      transaction: { docChanged: boolean; mapping: Mapping };
+    }) => {
       if (!transaction.docChanged) return;
       const pending = this.storage.pending as PendingReplacement[];
       for (const p of pending) {
@@ -70,7 +74,10 @@ export const PhoneticInputExtension = Extension.create<PhoneticInputOptions>({
 
   onDestroy() {
     if (this.storage.txHandler) {
-      this.editor.off('transaction', this.storage.txHandler as Parameters<typeof this.editor.off>[1]);
+      this.editor.off(
+        'transaction',
+        this.storage.txHandler as Parameters<typeof this.editor.off>[1],
+      );
     }
   },
 

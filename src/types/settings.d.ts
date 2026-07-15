@@ -29,4 +29,3 @@ export interface AppSettings {
   };
   phoneticInput: PhoneticInputSettings;
 }
-

@@ -47,8 +47,6 @@ function injectTimestamps(html: string): string {
 
 // ─── HTML sanitization helpers ─────────────────────────────────────────────
 
-
-
 /**
  * Sanitize to minimal tags for plain text export (strips all tags).
  */
@@ -135,7 +133,6 @@ export function exportToPlainText(
 export function exportToOtr(opts: SerializeOptions): string {
   return serializeToOtr(opts);
 }
-
 
 // ─── Download trigger ──────────────────────────────────────────────────────
 

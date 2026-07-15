@@ -243,12 +243,10 @@ export async function transliterateHandler(
   // Rate limit: per-IP sliding window
   const clientIp = getClientIp(req);
   if (!checkRateLimit(clientIp)) {
-    res
-      .status(429)
-      .json({
-        error: 'rate_limited',
-        retryAfter: Math.ceil(RATE_WINDOW_MS / 1000),
-      });
+    res.status(429).json({
+      error: 'rate_limited',
+      retryAfter: Math.ceil(RATE_WINDOW_MS / 1000),
+    });
     return;
   }
 

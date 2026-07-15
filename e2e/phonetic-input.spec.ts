@@ -33,7 +33,9 @@ test.describe('Phonetic input (transliteration)', () => {
     await expect(page.locator('#setting-phonetic-input-enabled')).toBeVisible();
   });
 
-  test('language select appears when phonetic input is enabled', async ({ page }) => {
+  test('language select appears when phonetic input is enabled', async ({
+    page,
+  }) => {
     await loadApp(page);
 
     // Open settings
@@ -41,7 +43,9 @@ test.describe('Phonetic input (transliteration)', () => {
     await expect(page.locator('#settings-panel')).toBeVisible();
 
     // Language select should NOT be visible before enabling
-    await expect(page.locator('#setting-phonetic-input-lang')).not.toBeVisible();
+    await expect(
+      page.locator('#setting-phonetic-input-lang'),
+    ).not.toBeVisible();
 
     // Enable phonetic input
     await page.locator('#setting-phonetic-input-enabled').check();
@@ -50,7 +54,9 @@ test.describe('Phonetic input (transliteration)', () => {
     await expect(page.locator('#setting-phonetic-input-lang')).toBeVisible();
   });
 
-  test('typing a Latin word followed by space triggers transliteration', async ({ page }) => {
+  test('typing a Latin word followed by space triggers transliteration', async ({
+    page,
+  }) => {
     // Mock the transliterate API endpoint
     await page.route('**/api/transliterate*', (route) =>
       route.fulfill({ json: { candidates: ['नमस्ते'] } }),
