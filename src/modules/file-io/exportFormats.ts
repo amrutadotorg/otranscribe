@@ -107,7 +107,7 @@ export function generateFilename(
 
 // ─── Export format functions ────────────────────────────────────────────────
 
-export type ExportOptions = Record<string, never>;
+type ExportOptions = Record<string, never>;
 
 /** Convert editor HTML to Markdown string */
 export function exportToMarkdown(

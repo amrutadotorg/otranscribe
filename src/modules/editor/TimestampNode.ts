@@ -12,7 +12,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import TimestampNodeView from './TimestampNodeView';
 import { formatTime } from './TimestampExtension';
 
-export interface TimestampOptions {
+interface TimestampOptions {
   /** Called when a timestamp is clicked */
   onTimestampClick?: (seconds: number) => void;
 }

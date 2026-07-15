@@ -39,7 +39,7 @@ async function cacheVimeoFile(
 }
 
 /** Retrieve a cached Vimeo File by videoId. Returns null if not found. */
-export async function getCachedVimeoFile(
+async function getCachedVimeoFile(
   videoId: string,
 ): Promise<File | null> {
   const db = await openDB();

@@ -29,7 +29,7 @@ function needsMigration(): boolean {
  *
  * The main migration needed is for settings format changes.
  */
-export function migrateLegacyData(): void {
+function migrateLegacyData(): void {
   if (!needsMigration()) return;
 
   try {

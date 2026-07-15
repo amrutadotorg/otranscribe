@@ -18,7 +18,7 @@ const YOUTUBE_PATTERNS: RegExp[] = [
  * Returns true if `url` is a recognised YouTube URL.
  * Only URLs matching the whitelist above pass — all others are rejected.
  */
-export function isValidYouTubeUrl(url: string): boolean {
+function isValidYouTubeUrl(url: string): boolean {
   return YOUTUBE_PATTERNS.some((p) => p.test(url));
 }
 

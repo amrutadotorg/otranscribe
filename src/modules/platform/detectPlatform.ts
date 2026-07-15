@@ -5,7 +5,7 @@
  * and formats shortcut strings for display.
  */
 
-export function isMac(): boolean {
+function isMac(): boolean {
   return (
     navigator.platform.includes('Mac') ||
     navigator.userAgent.includes('Mac') ||
