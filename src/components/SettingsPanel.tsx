@@ -13,6 +13,7 @@
 
 import type { AppSettings } from '../types/settings';
 import { DEFAULT_SETTINGS } from '../modules/settings/defaults';
+import { formatShortcutDisplay } from '../modules/platform/detectPlatform';
 import Tooltip from './Tooltip';
 import ShortcutInput from './ShortcutInput';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
@@ -34,6 +35,7 @@ const SHORTCUT_KEYS: Record<string, string> = {
   speedDown: 'speedDown',
   speedUp: 'speedUp',
   saveBackup: 'saveBackup',
+  insertTimestamp: 'insertTimestamp',
 };
 
 function LabelRow({
@@ -349,6 +351,7 @@ export default function SettingsPanel({
           {t('settings-default-shortcuts')}
           {Object.values(DEFAULT_SETTINGS.keyboardShortcuts.shortcuts)
             .flat()
+            .map(formatShortcutDisplay)
             .join(' · ')}
         </div>
       </div>

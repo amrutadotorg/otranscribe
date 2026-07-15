@@ -817,3 +817,57 @@ a:hover {
   gap: var(--space-2);
   margin-top: var(--space-4);
 }
+
+/* ─── Quick Tutorial (editor onboarding) ─────────────────────── */
+
+.quick-tutorial {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-6) clamp(var(--space-6), 10vw, 120px);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: 1;
+  animation: fadeIn 0.3s ease;
+}
+
+.quick-tutorial-placeholder {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+  margin-bottom: var(--space-6);
+}
+
+.quick-tutorial-tips {
+  max-width: 420px;
+}
+
+.quick-tutorial-heading {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.quick-tutorial-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.quick-tutorial-tips li {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}

@@ -13,7 +13,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const L10N_DIR = path.resolve(__dirname, '../../transcribe/src/l10n');
+const L10N_DIR = path.resolve(__dirname, '../src/l10n');
 const OUT_FILE = path.resolve(__dirname, '../public/data.ini');
 
 // Map filename → BCP-47 language code used as [section] in combined file

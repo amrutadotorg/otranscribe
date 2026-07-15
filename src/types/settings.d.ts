@@ -7,6 +7,7 @@ export interface KeyboardShortcuts {
   speedDown: string[];
   speedUp: string[];
   saveBackup: string[];
+  insertTimestamp: string[];
 }
 
 export interface AppSettings {

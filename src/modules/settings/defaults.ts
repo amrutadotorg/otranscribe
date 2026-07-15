@@ -24,6 +24,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
       speedDown: ['f3', 'mod+3'],
       speedUp: ['f4', 'mod+4'],
       saveBackup: ['mod+s'],
+      insertTimestamp: ['mod+j'],
     },
   },
 };

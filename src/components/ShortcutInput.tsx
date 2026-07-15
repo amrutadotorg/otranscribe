@@ -9,6 +9,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
+import { formatShortcutDisplay } from '../modules/platform/detectPlatform';
 
 interface Props {
   value: string[];
@@ -108,7 +109,7 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
             color: 'var(--color-text)',
           }}
         >
-          {shortcut}
+          {formatShortcutDisplay(shortcut)}
           <button
             onClick={() => removeShortcut(i)}
             style={{

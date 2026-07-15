@@ -4,6 +4,7 @@
 
 import { useState, useCallback } from 'react';
 import Editor, { type ActiveFormat } from '../modules/editor/Editor';
+import QuickTutorial from './QuickTutorial';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 import type { AppSettings } from '../types/settings';
 
@@ -24,12 +25,23 @@ export default function TextPanel({
 }: Props) {
   const { t } = useTranslation();
   const [wordCount, setWordCount] = useState({ words: 0, chars: 0 });
+  const [showTutorial, setShowTutorial] = useState(true);
 
   const handleActiveFormats = useCallback(
     (formats: Set<ActiveFormat>) => {
       onActiveFormatsChange?.(formats);
     },
     [onActiveFormatsChange],
+  );
+
+  const handleContentChange = useCallback(
+    (html: string) => {
+      onContentChange?.(html);
+      if (showTutorial && html.replace(/<[^>]*>/g, '').trim().length > 0) {
+        setShowTutorial(false);
+      }
+    },
+    [onContentChange, showTutorial],
   );
 
   return (
@@ -45,11 +57,22 @@ export default function TextPanel({
       <Editor
         initialHtml={initialHtml}
         settings={settings}
-        onContentChange={onContentChange}
+        onContentChange={handleContentChange}
         onWordCountChange={(words, chars) => setWordCount({ words, chars })}
         onActiveFormatsChange={handleActiveFormats}
         pauseOnTyping={pauseOnTyping}
       />
+      {showTutorial && !initialHtml && (
+        <QuickTutorial
+          onDismiss={() => {
+            setShowTutorial(false);
+            setTimeout(
+              () => document.dispatchEvent(new CustomEvent('editor:focus')),
+              0,
+            );
+          }}
+        />
+      )}
       <div className="word-counter" id="word-counter" aria-live="polite">
         {t('wordcount', { n: wordCount.words })} ·{' '}
         {t('charcount', { n: wordCount.chars })}

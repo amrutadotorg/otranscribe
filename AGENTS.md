@@ -128,6 +128,7 @@ The `.env` file is gitignored — never commit it.
 │   │   ├── TranscribeView.tsx      # Main transcription workspace
 │   │   ├── TopBar.tsx              # Player controls + toolbar
 │   │   ├── TextPanel.tsx           # TipTap editor wrapper
+│   │   ├── QuickTutorial.tsx       # Editor onboarding overlay
 │   │   ├── FormatToolbar.tsx       # Bold/italic/underline buttons
 │   │   ├── SettingsPanel.tsx       # Slide-in settings
 │   │   ├── BackupPanel.tsx         # Slide-in backup manager
@@ -135,6 +136,11 @@ The `.env` file is gitignored — never commit it.
 │   │   ├── UrlInputModal.tsx       # YouTube/Vimeo URL input dialog
 │   │   ├── Tooltip.tsx             # Floating tooltip wrapper
 │   │   └── NarrowScreenWarning.tsx # Mobile breakpoint warning
+│   ├── l10n/                       # Locale source files (.ini)
+│   │   ├── _english.ini            # English (source of truth for translations)
+│   │   ├── arabic.ini              # Arabic
+│   │   ├── french.ini              # French
+│   │   └── ...                     # (28 languages total)
 │   ├── modules/                    # Feature modules (domain logic)
 │   │   ├── audio-engine/           # Player abstraction + drivers
 │   │   │   ├── Player.ts           # Player interface + factory
@@ -151,6 +157,8 @@ The `.env` file is gitignored — never commit it.
 │   │   │   ├── exportFormats.ts    # Export to txt/md/otr
 │   │   │   ├── otrFormat.ts        # .otr JSON format parser/serializer
 │   │   │   └── __tests__/          # Unit tests for file-io
+│   │   ├── platform/               # Platform detection
+│   │   │   └── detectPlatform.ts   # Mac/Windows detection, shortcut display
 │   │   ├── settings/               # Settings persistence
 │   │   │   ├── useSettings.ts      # Hook: localStorage read/write + deep merge
 │   │   │   └── defaults.ts         # Default settings values
@@ -313,7 +321,7 @@ wordcount           = {{n}} Wörter
 
 ### Editing translations
 
-1. **Source locale files** live in `../../transcribe/src/l10n/` (external repo, referenced by `scripts/build-locale.mjs`)
+1. **Source locale files** live in `src/l10n/` (referenced via `scripts/build-locale.mjs`)
 2. **Edit** the `.ini` files in that directory (or add new keys to `_english.ini`)
 3. **Run** `npm run build:locale` to regenerate `public/data.ini`
 4. **Never edit `public/data.ini` directly** — it will be overwritten on next build
