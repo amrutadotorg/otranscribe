@@ -22,7 +22,7 @@ export function debouncedAutosave(html: string): void {
 }
 
 /** Write HTML to autosave slot */
-export function saveAutosave(html: string): void {
+function saveAutosave(html: string): void {
   try {
     localStorage.setItem(STORAGE_KEYS.AUTOSAVE, html);
   } catch (e) {

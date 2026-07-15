@@ -17,7 +17,7 @@ declare global {
 }
 
 /** Parse YouTube video ID from various URL formats */
-export function parseYouTubeUrl(url: string): string | null {
+function parseYouTubeUrl(url: string): string | null {
   if (!url) return null;
   const cleanUrl = decodeURIComponent(
     url.replace(/\s/g, '').replace(/•.*$/, ''),

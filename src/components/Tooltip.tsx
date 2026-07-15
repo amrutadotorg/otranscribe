@@ -76,7 +76,7 @@ export default function Tooltip({
   if (isDisabled) {
     const disabledChild = cloneElement(children, {
       style: { ...(childProps.style as object), pointerEvents: 'none' },
-    } as any);
+    } as Partial<unknown>);
 
     return (
       <>
@@ -104,7 +104,7 @@ export default function Tooltip({
   const child = cloneElement(children, {
     ref: refs.setReference,
     ...getReferenceProps(childProps),
-  } as any);
+  } as Partial<unknown>);
 
   return (
     <>

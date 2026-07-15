@@ -19,7 +19,7 @@ export interface BackupEntry {
 }
 
 /** Get all backup keys from localStorage */
-export function getAllBackupKeys(): string[] {
+function getAllBackupKeys(): string[] {
   return Object.keys(localStorage).filter((k) =>
     k.startsWith(STORAGE_KEYS.BACKUP_PREFIX),
   );
@@ -42,7 +42,7 @@ export function getAllBackups(): Array<{ key: string; entry: BackupEntry }> {
 }
 
 /** Get backups for a specific media file name */
-export function getBackupsForMedia(
+function getBackupsForMedia(
   mediaName: string,
 ): Array<{ key: string; entry: BackupEntry }> {
   return getAllBackups().filter((b) => b.entry.media === mediaName);

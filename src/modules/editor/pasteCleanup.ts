@@ -87,34 +87,3 @@ export function cleanHTML(dirty: string): string {
   return doc.body.innerHTML;
 }
 
-/**
- * Strip inline styles from an HTML string.
- * Used before paste into editor.
- */
-export function stripInlineStyles(html: string): string {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(`<body>${html}</body>`, 'text/html');
-
-  doc.body.querySelectorAll<HTMLElement>('*').forEach((el) => {
-    el.removeAttribute('style');
-    Array.from(el.attributes).forEach((attr) => {
-      if (
-        attr.name.startsWith('data-path') ||
-        attr.name.startsWith('data-index') ||
-        attr.name === 'aria-live' ||
-        attr.name === 'aria-busy' ||
-        attr.name.startsWith('_ng')
-      ) {
-        el.removeAttribute(attr.name);
-      }
-    });
-  });
-
-  doc.body.querySelectorAll('div').forEach((div) => {
-    const p = doc.createElement('p');
-    p.innerHTML = div.innerHTML;
-    div.replaceWith(p);
-  });
-
-  return doc.body.innerHTML;
-}

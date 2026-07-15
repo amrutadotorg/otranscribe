@@ -22,8 +22,6 @@
   },
   "dependencies": {
     "@floating-ui/react": "^0.27.19",
-    "@tiptap/extension-bold": "^3.27.1",
-    "@tiptap/extension-italic": "^3.27.1",
     "@tiptap/extension-underline": "^3.27.1",
     "@tiptap/pm": "^3.27.1",
     "@tiptap/react": "^3.27.1",
@@ -35,6 +33,7 @@
     "turndown": "^7.2.4"
   },
   "devDependencies": {
+    "@rolldown/binding-linux-arm64-gnu": "^1.1.5",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.61.1",
     "@types/express": "^5.0.6",
@@ -49,8 +48,7 @@
     "@vitest/ui": "^4.1.9",
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
-    "jsdom": "^29.1.1",
-    "oxlint": "^1.71.0",
+    "jsdom": "~26.1.0",
     "prettier": "^3.9.4",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.63.0",

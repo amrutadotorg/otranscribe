@@ -83,13 +83,3 @@ export function useSettings() {
   return { settings, updateSettings, resetSettings };
 }
 
-// ─── Migration from old localStorageManager format ────────────────────────
-
-/**
- * Run once at startup to migrate settings from old format.
- * Old oTranscribe stored settings under the same key, so direct read should work.
- */
-export function migrateOldSettings(): void {
-  // Settings key is the same as original — no migration needed
-  // Future: handle schema changes here
-}

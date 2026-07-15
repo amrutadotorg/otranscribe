@@ -224,9 +224,7 @@ export function getPlayer(): Player | null {
   return _globalPlayer;
 }
 
-export function setPlayer(player: Player | null): void {
-  _globalPlayer = player;
-}
+
 
 export function createPlayer(opts: PlayerOptions): Promise<Player> {
   return new Promise((resolve) => {

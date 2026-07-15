@@ -21,8 +21,3 @@ export interface MediaDetails {
   vimeoId?: string; // Vimeo video ID
 }
 
-/** Timestamp data stored in editor nodes */
-export interface TimestampData {
-  seconds: number; // Raw media time (NOT offset-adjusted)
-  displayText: string; // Formatted display text (with offset if any)
-}

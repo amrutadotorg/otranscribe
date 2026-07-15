@@ -16,7 +16,7 @@ import { STORAGE_KEYS } from './storageKeys';
 const MIGRATION_DONE_KEY = 'otranscribe-v3-migration-done';
 
 /** Check if old data exists and hasn't been migrated yet */
-export function needsMigration(): boolean {
+function needsMigration(): boolean {
   if (localStorage.getItem(MIGRATION_DONE_KEY) === '1') return false;
   // Check for existence of original autosave key
   return localStorage.getItem(STORAGE_KEYS.AUTOSAVE) !== null;

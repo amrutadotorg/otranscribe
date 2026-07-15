@@ -8,7 +8,7 @@
  */
 
 import TurndownService from 'turndown';
-import { cleanHTML } from '../editor/pasteCleanup';
+
 import { serializeToOtr, type SerializeOptions } from './otrFormat';
 
 const turndownService = new TurndownService();
@@ -32,7 +32,7 @@ function formatSecondsForExport(seconds: number): string {
  * Replace all <span class="timestamp" data-timestamp="…"> elements
  * with inline text `[MM:SS] ` so that exported text includes time markers.
  */
-export function injectTimestamps(html: string): string {
+function injectTimestamps(html: string): string {
   const div = document.createElement('div');
   div.innerHTML = html;
   div
@@ -47,18 +47,12 @@ export function injectTimestamps(html: string): string {
 
 // ─── HTML sanitization helpers ─────────────────────────────────────────────
 
-/**
- * Allowlist for full export (preserves bold/italic).
- * Matches the original oTranscribe sanitize-html config.
- */
-export function sanitizeForExport(html: string): string {
-  return cleanHTML(html);
-}
+
 
 /**
  * Sanitize to minimal tags for plain text export (strips all tags).
  */
-export function sanitizeForPlainText(html: string): string {
+function sanitizeForPlainText(html: string): string {
   const div = document.createElement('div');
   div.innerHTML = html;
   // Replace block-level elements with newlines
@@ -71,7 +65,7 @@ export function sanitizeForPlainText(html: string): string {
 /**
  * Sanitize to minimal tags for Markdown export.
  */
-export function sanitizeForMarkdown(html: string): string {
+function sanitizeForMarkdown(html: string): string {
   // Keep only inline formatting tags; remove all attributes
   const ALLOWED_MD = new Set(['p', 'em', 'strong', 'i', 'b', 'br']);
   const div = document.createElement('div');
@@ -91,7 +85,7 @@ export function sanitizeForMarkdown(html: string): string {
 
 // ─── Filename helpers ──────────────────────────────────────────────────────
 
-export function sanitizeFilename(name: string): string {
+function sanitizeFilename(name: string): string {
   if (!name) return '';
   return name
     .replace(/[<>:"/\\|?*]/g, '_')
@@ -142,39 +136,6 @@ export function exportToOtr(opts: SerializeOptions): string {
   return serializeToOtr(opts);
 }
 
-// ─── Clipboard helpers ─────────────────────────────────────────────────────
-
-/** Copy text/html + text/plain to clipboard simultaneously (for TXT export) */
-export async function copyRichText(
-  html: string,
-  plainText: string,
-): Promise<void> {
-  if (navigator.clipboard?.write && window.ClipboardItem) {
-    const item = new ClipboardItem({
-      'text/html': new Blob([html], { type: 'text/html' }),
-      'text/plain': new Blob([plainText], { type: 'text/plain' }),
-    });
-    return navigator.clipboard.write([item]);
-  }
-  return copyPlainText(plainText);
-}
-
-/** Copy plain text to clipboard */
-export async function copyPlainText(text: string): Promise<void> {
-  if (navigator.clipboard?.writeText) {
-    return navigator.clipboard.writeText(text);
-  }
-  // Fallback for older browsers
-  const textarea = document.createElement('textarea');
-  textarea.value = text;
-  textarea.setAttribute('readonly', '');
-  textarea.style.position = 'fixed';
-  textarea.style.left = '-9999px';
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
-}
 
 // ─── Download trigger ──────────────────────────────────────────────────────
 

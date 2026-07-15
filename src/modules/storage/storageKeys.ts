@@ -17,14 +17,8 @@ export const STORAGE_KEYS = {
   /** Settings */
   SETTINGS: `${LSM_PREFIX}oTranscribe-settings`,
 
-  /** Last file info */
-  LAST_FILE: `${LSM_PREFIX}oT-lastfile`,
-
   /** Language code */
   LANGUAGE: `${LSM_PREFIX}oTranscribe-language`,
-
-  /** Legacy Vimeo video ID (without LSM prefix) */
-  VIMEO_ID_LEGACY: 'otranscribe-vimeo-id',
 } as const;
 
 /** IndexedDB database name */

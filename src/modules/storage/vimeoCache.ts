@@ -24,7 +24,7 @@ function openDB(): Promise<IDBDatabase> {
 }
 
 /** Cache a Vimeo File object by videoId */
-export async function cacheVimeoFile(
+async function cacheVimeoFile(
   videoId: string,
   file: File,
 ): Promise<void> {
@@ -55,30 +55,7 @@ export async function getCachedVimeoFile(
   });
 }
 
-/** Delete a cached file by videoId */
-export async function deleteCachedVimeoFile(videoId: string): Promise<void> {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(VIMEO_STORE_NAME, 'readwrite');
-    tx.objectStore(VIMEO_STORE_NAME).delete(videoId);
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-/** Clear all cached Vimeo files */
-export async function clearVimeoCache(): Promise<void> {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(VIMEO_STORE_NAME, 'readwrite');
-    tx.objectStore(VIMEO_STORE_NAME).clear();
-    tx.oncomplete = () => resolve();
-    tx.onerror = () => reject(tx.error);
-  });
-}
-
-/** Extract Vimeo video ID from URL */
-export function extractVimeoId(url: string): string | null {
+function extractVimeoId(url: string): string | null {
   const patterns = [
     /vimeo\.com\/(\d+)(?:\/\S*)?$/,
     /player\.vimeo\.com\/video\/(\d+)/,
