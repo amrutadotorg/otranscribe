@@ -107,6 +107,8 @@ export class YouTubeDriver implements PlayerDriver {
             fs: 0,
             rel: 0,
             modestbranding: 1,
+            origin: window.location.origin,
+            enablejsapi: 1,
           },
           events: {
             onReady: () => this._onReady(onPlayPause),
