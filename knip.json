@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "ignore": ["src/server/**"],
-  "ignoreDependencies": ["dotenv", "express", "@types/express", "@rolldown/binding-linux-arm64-gnu"],
+  "ignoreDependencies": ["dotenv", "express", "@types/express"],
   "ignoreBinaries": ["knip"]
 }
