@@ -17,6 +17,7 @@
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "knip": "knip",
     "server": "node dist-server/index.js",
     "dev:server": "NODE_ENV=development node dist-server/index.js"
   },
@@ -46,6 +47,7 @@
     "eslint": "^10.6.0",
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "~26.1.0",
+    "knip": "^6.26.0",
     "prettier": "^3.9.4",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.63.0",
