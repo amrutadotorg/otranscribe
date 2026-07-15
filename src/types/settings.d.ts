@@ -1,4 +1,4 @@
-export interface KeyboardShortcuts {
+interface KeyboardShortcuts {
   playPause: string[];
   backwards: string[];
   forwards: string[];
