@@ -23,7 +23,7 @@ const LATIN_WORD_PATTERN = /[A-Za-z]+$/;
 // otherwise long compound words get silently truncated before the API call.
 const WORD_LOOKBACK = 64;
 
-export interface PhoneticInputConfig {
+interface PhoneticInputConfig {
   enabled: boolean;
   lang: TransliterationLang;
 }
