@@ -43,6 +43,7 @@ npm run build:locale # Merge .ini locale files → public/data.ini
 npm run build:server # Compile Express server → dist-server/
 npm run server       # Run production server (requires build:server first)
 npm run dev:server   # Run server in development mode
+npx knip             # Find unused deps, exports, types (via knip.json config)
 ```
 
 **Note:** There is no dedicated `typecheck` script. Use `tsc --noEmit` directly, or rely on `npm run build` which runs `tsc -b` as a first step.
@@ -65,6 +66,7 @@ npm run lint         # 1. Lint — must pass with zero errors
 tsc --noEmit         # 2. Typecheck — must compile with zero errors
 npm run test         # 3. Unit tests — all must pass
 npm run test:e2e     # 4. E2E tests — all must pass (if changed UI or player logic)
+npx knip             # 5. Dead code — must report zero unused files/exports
 ```
 
 If any step fails, fix the issue before proceeding. Never commit code that doesn't compile or fails lint.
@@ -192,6 +194,7 @@ The `.env` file is gitignored — never commit it.
 ├── tsconfig.app.json               # TS config for app source
 ├── tsconfig.node.json              # TS config for server source
 ├── eslint.config.js                # ESLint flat config
+├── knip.json                       # Knip dead-code analysis config (ignores server/)
 ├── playwright.config.ts            # Playwright config
 ├── .env                            # Environment variables (gitignored)
 └── package.json                    # Dependencies & scripts
