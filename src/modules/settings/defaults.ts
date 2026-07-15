@@ -27,4 +27,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
       insertTimestamp: ['mod+j'],
     },
   },
+  phoneticInput: {
+    enabled: false,
+    lang: 'sa-t-i0-und',
+  },
 };
+

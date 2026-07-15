@@ -11,6 +11,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { ssoMiddleware } from './sso.js';
 import { vimeoDownloadHandler } from './vimeoProxy.js';
+import { transliterateHandler } from './transliterateProxy.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -22,6 +23,9 @@ app.use(ssoMiddleware);
 
 // Vimeo download proxy
 app.get('/api/vimeo/download', vimeoDownloadHandler);
+
+// Transliteration proxy (phonetic input)
+app.get('/api/transliterate', transliterateHandler);
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));

@@ -17,6 +17,8 @@ import { formatShortcutDisplay } from '../modules/platform/detectPlatform';
 import Tooltip from './Tooltip';
 import ShortcutInput from './ShortcutInput';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
+import { TRANSLITERATION_LANGUAGES } from '../modules/editor/transliterationLanguages';
+import type { TransliterationLang } from '../modules/editor/transliteration';
 
 interface Props {
   open: boolean;
@@ -294,6 +296,45 @@ export default function SettingsPanel({
               />
             </Tooltip>
           </LabelRow>
+          <LabelRow label={t('settings-phonetic-input-enabled')}>
+            <input
+              type="checkbox"
+              checked={settings.phoneticInput.enabled}
+              onChange={(e) =>
+                onUpdate({ phoneticInput: { ...settings.phoneticInput, enabled: e.target.checked } })
+              }
+              id="setting-phonetic-input-enabled"
+              style={{ width: 16, height: 16, cursor: 'pointer' }}
+            />
+          </LabelRow>
+          {settings.phoneticInput.enabled && (
+            <LabelRow label={t('settings-phonetic-input-lang')}>
+              <select
+                value={settings.phoneticInput.lang}
+                onChange={(e) =>
+                  onUpdate({
+                    phoneticInput: { ...settings.phoneticInput, lang: e.target.value as TransliterationLang },
+                  })
+                }
+                id="setting-phonetic-input-lang"
+                style={{
+                  fontSize: 'var(--font-size-sm)',
+                  padding: '4px 8px',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-surface-2)',
+                  color: 'var(--color-text)',
+                  maxWidth: 160,
+                }}
+              >
+                {TRANSLITERATION_LANGUAGES.map(({ code, i18nKey }) => (
+                  <option key={code} value={code}>
+                    {t(i18nKey)}
+                  </option>
+                ))}
+              </select>
+            </LabelRow>
+          )}
         </Section>
 
         {/* Keyboard shortcuts */}

@@ -349,6 +349,22 @@ function MyComponent() {
 
 ## Known Issues / Gotchas
 
+### Phonetic input (transliteration) — i18n keys added
+
+Phase 5 of the phonetic input feature has been implemented. The i18n keys for the phonetic input settings are now in place across all 28 locale files.
+
+**Key files:**
+- `src/l10n/_english.ini` — source of truth for i18n keys (26 keys: 1 main + 25 language names)
+- `public/data.ini` — generated locale file (do not edit directly)
+
+**i18n keys added:**
+- `settings-phonetic-input-enabled` — main toggle label
+- `settings-phonetic-lang-*` — 25 language name keys (Amharic, Arabic, Bengali, etc.)
+
+**Translation status:** All 28 locale files have been updated with translations. The fallback mechanism ensures missing keys in any language will use the English value.
+
+**Next steps:** Phases 0-4, 6-8 still need to be implemented to complete the phonetic input feature. See `TODO.md` for details.
+
 ### Vimeo — SDK integration abandoned
 
 We attempted to use the official Vimeo JavaScript Player SDK (`@vimeo/player`) for embedded playback but abandoned it due to:

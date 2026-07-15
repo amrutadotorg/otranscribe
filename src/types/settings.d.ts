@@ -10,6 +10,13 @@ interface KeyboardShortcuts {
   insertTimestamp: string[];
 }
 
+// Note: .d.ts files are ambient declarations — cannot use `import` statements.
+// Use `import()` type syntax to reference TransliterationLang from the module.
+interface PhoneticInputSettings {
+  enabled: boolean;
+  lang: import('../modules/editor/transliteration').TransliterationLang;
+}
+
 export interface AppSettings {
   timestampMilliseconds: boolean;
   timestampOffset: string;
@@ -20,5 +27,6 @@ export interface AppSettings {
   keyboardShortcuts: {
     shortcuts: KeyboardShortcuts;
   };
+  phoneticInput: PhoneticInputSettings;
 }
 

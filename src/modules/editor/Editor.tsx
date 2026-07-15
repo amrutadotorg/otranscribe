@@ -22,6 +22,7 @@ import { useEffect, useCallback, useRef } from 'react';
 import { TimestampNode } from './TimestampNode';
 import { TimestampExtension } from './TimestampExtension';
 import { cleanHTML } from './pasteCleanup';
+import { PhoneticInputExtension } from './PhoneticInputExtension';
 import { getPlayer } from '../audio-engine/Player';
 import type { AppSettings } from '../../types/settings';
 import { debouncedAutosave } from '../storage/autosave';
@@ -79,6 +80,12 @@ export default function Editor({
         getPlayer,
         timestampOffset,
         useMilliseconds: settings.timestampMilliseconds,
+      }),
+      PhoneticInputExtension.configure({
+        getConfig: () => ({
+          enabled: settings.phoneticInput.enabled,
+          lang: settings.phoneticInput.lang,
+        }),
       }),
     ],
     autofocus: 'end',
