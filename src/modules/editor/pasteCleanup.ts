@@ -8,7 +8,6 @@
  * Node.js dependency (path/fs) leaking into the browser bundle.
  *
  * Matches original oTranscribe clean-html.js + stripInlineStyles behaviour.
- * See PLAN.md section 1.2 Table B, 2.4
  */
 
 const ALLOWED_TAGS = new Set([

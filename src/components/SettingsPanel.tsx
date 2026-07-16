@@ -7,8 +7,6 @@
  * - Backup (interval, max per file)
  * - Editor (pause on typing)
  * - Keyboard shortcuts (list with edit capability)
- *
- * See PLAN.md Faza 6, Table G
  */
 
 import type { AppSettings } from '../types/settings';

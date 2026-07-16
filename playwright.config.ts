@@ -2,7 +2,6 @@ import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright E2E test configuration
- * See PLAN.md Faza 9
  *
  * Run: npm run test:e2e
  * Prerequisite: npm run dev (or nohup npm run dev &)

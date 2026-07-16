@@ -3,7 +3,6 @@
  *
  * Stores File objects keyed by videoId.
  * Mirrors original vimeo-file-cache.js.
- * See PLAN.md section 1.2 Table E, Risk R6
  */
 
 import { VIMEO_DB_NAME, VIMEO_STORE_NAME } from './storageKeys';

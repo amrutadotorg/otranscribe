@@ -3,7 +3,6 @@
  *
  * Uses the YouTube iframe API (YT.Player).
  * Preserves the original hack: play→pause on init to fix focus stealing.
- * See PLAN.md Risk R3, Faza 3
  */
 
 import type { PlayerDriver } from '../../../types/player';
@@ -153,10 +152,10 @@ export class YouTubeDriver implements PlayerDriver {
   ): void {
     if (this._isDestroyed) return;
 
-    this._duration = this._ytEl?.getDuration?.() ?? 0;
+      this._duration = this._ytEl?.getDuration?.() ?? 0;
 
-    // Kickstart YouTube (play→pause trick to fix focus stealing — see PLAN.md R3)
-    const t1 = setTimeout(() => {
+      // Kickstart YouTube (play→pause trick to fix focus stealing)
+      const t1 = setTimeout(              () => {
       if (this._isDestroyed) return;
       this.play();
       const t2 = setTimeout(() => {

@@ -2,7 +2,6 @@
  * useSettings.ts — React hook for app settings
  *
  * Reads/writes settings to localStorage. Provides deep merge on update.
- * See PLAN.md section 6
  */
 
 import { useState, useCallback } from 'react';

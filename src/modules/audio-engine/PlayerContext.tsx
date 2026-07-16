@@ -1,8 +1,5 @@
 /**
  * PlayerContext.tsx — React context for player state
- *
- * Provides player controls and real-time state to all components.
- * See PLAN.md Faza 3
  */
 
 import {

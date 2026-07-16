@@ -11,8 +11,6 @@
  * - Autosave
  * - Format state reporting (for FormatToolbar)
  * - Pause on typing (pauses player when user starts typing)
- *
- * See PLAN.md Faza 4
  */
 
 import { useEditor, EditorContent } from '@tiptap/react';

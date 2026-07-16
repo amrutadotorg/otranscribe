@@ -3,8 +3,6 @@
  *
  * Fetches highest-quality download link from Vimeo API and streams to client.
  * Token is kept server-side (never exposed to browser).
- *
- * See PLAN.md section 1.3, 3 (vimeoProxy.ts)
  */
 
 import type { Request, Response } from 'express';

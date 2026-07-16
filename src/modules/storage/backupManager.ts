@@ -4,8 +4,6 @@
  * Creates timestamped backup entries grouped by media file name.
  * Max N backups per file (default 10), evicts oldest.
  * Behaviour mirrors original oTranscribe backup.js.
- *
- * See PLAN.md section 5, Table E
  */
 
 import { STORAGE_KEYS } from './storageKeys';

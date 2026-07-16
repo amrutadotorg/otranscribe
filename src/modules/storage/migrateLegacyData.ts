@@ -7,8 +7,6 @@
  *
  * This module detects and migrates data from the old SPA if it exists.
  * Called once on app start, idempotent.
- *
- * See PLAN.md section 2.6 (Legacy data migration)
  */
 
 import { STORAGE_KEYS } from './storageKeys';

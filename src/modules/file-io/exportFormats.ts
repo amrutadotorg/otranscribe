@@ -3,8 +3,6 @@
  *
  * Formats: Markdown, Plain Text, .otr JSON
  * No side effects, no DOM access — testable pure functions.
- *
- * See PLAN.md section 1.2 Table F
  */
 
 import TurndownService from 'turndown';

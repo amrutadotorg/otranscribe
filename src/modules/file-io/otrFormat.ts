@@ -4,8 +4,6 @@
  * Supports:
  *  - v1 (original, no version field): timestamps as seconds or "MM:SS" strings
  *  - Future v2: media as object (planned)
- *
- * See PLAN.md sections 1.2 Table D, 4.1 for format spec.
  */
 
 import type { OtrFileV1, OtrDocument, MediaDetails } from '../../types/otr';

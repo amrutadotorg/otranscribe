@@ -3,8 +3,6 @@
  *
  * Adds keyboard shortcuts Mod+J (timestamp) and Mod+Ctrl+J (timestamp with ms).
  * Integrates with PlayerContext to get current time.
- *
- * See PLAN.md Faza 4, Table A (addTimestamp / addTimestampMilliseconds)
  */
 
 import { Extension } from '@tiptap/core';

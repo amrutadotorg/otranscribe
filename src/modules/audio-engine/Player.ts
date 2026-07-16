@@ -6,8 +6,6 @@
  * - speed control (0.5–2, step 0.125)
  * - play() auto-rewinds 1.5s (original UX behavior)
  * - callbacks for state changes
- *
- * See PLAN.md section 3, Table A
  */
 
 import type { PlayerDriver, PlayerDriverType } from '../../types/player';

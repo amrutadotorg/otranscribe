@@ -7,8 +7,6 @@
  * - Keys with .innerHTML suffix (unsafe HTML values)
  * - Comments (lines starting with #)
  * - Multiple-value entries (last wins within section)
- *
- * See PLAN.md Faza 7, Risk R5
  */
 
 export interface ParsedLocale {
@@ -101,15 +99,3 @@ export function getHtmlTranslation(
   return locale.html[key] ?? null;
 }
 
-/** Extract all language codes (section headers) from the ini content */
-export function getAvailableLanguages(content: string): string[] {
-  const langs = new Set<string>();
-  const lines = content.split('\n');
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
-    if (line.startsWith('[') && line.endsWith(']')) {
-      langs.add(line.slice(1, -1).trim());
-    }
-  }
-  return Array.from(langs);
-}

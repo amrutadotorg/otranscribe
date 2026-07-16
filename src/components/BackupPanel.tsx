@@ -6,8 +6,6 @@
  * - Preview on hover
  * - Restore button loads backup into editor
  * - Pagination (8 per page)
- *
- * See PLAN.md Faza 5, Table J (Panel historii backup)
  */
 
 import { useState, useEffect, useCallback } from 'react';

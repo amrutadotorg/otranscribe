@@ -3,8 +3,6 @@
  *
  * Verifies the `amruta_sso` cookie (HMAC-SHA256).
  * Token format: `username|expires|sig` (URL-encoded)
- *
- * See PLAN.md section 1.3
  */
 
 import type { Request, Response, NextFunction } from 'express';
@@ -72,7 +70,7 @@ export async function ssoMiddleware(
   res: Response,
   next: NextFunction,
 ): Promise<void> {
-  // Bypass SSO in development mode (as per PLAN.md R9)
+  // Bypass SSO locally so dev doesn't need a real WordPress SSO cookie
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.SKIP_SSO === 'true'

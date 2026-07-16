@@ -1,8 +1,5 @@
 /**
  * defaults.ts — Default settings values
- *
- * Matches original oTranscribe settings defaults exactly.
- * See PLAN.md section 1.2 Table G
  */
 
 import type { AppSettings } from '../../types/settings';

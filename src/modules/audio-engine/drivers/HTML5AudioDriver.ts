@@ -2,7 +2,6 @@
  * HTML5AudioDriver.ts — Driver for local audio files
  *
  * Injects an <audio> element into body, manages playback.
- * See PLAN.md Faza 3, Table A
  */
 
 import type { PlayerDriver } from '../../../types/player';

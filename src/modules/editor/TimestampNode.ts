@@ -4,7 +4,7 @@
  * Renders as: <span class="timestamp" data-timestamp="{seconds}" contenteditable="false">
  * Clicking the node seeks the player to that position.
  *
- * See PLAN.md section 2.4, 4 (kluczowa decyzja)
+ * key decision in implementing timestamp node to support legacy MM:SS format
  */
 
 import { Node, mergeAttributes } from '@tiptap/core';

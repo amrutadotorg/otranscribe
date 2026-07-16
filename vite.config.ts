@@ -11,7 +11,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        // Exclude HTML from SW cache — SSO middleware must run (PLAN.md R4)
+        // Exclude HTML from SW cache — SSO middleware must run
         navigateFallbackDenylist: [/^\//],
         runtimeCaching: [
           {

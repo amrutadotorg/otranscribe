@@ -2,7 +2,6 @@
  * storageKeys.ts — Constants for localStorage/IndexedDB keys
  *
  * Mirrors the original localStorageManager key scheme for backwards compatibility.
- * See PLAN.md section 1.2 Table E
  */
 
 const LSM_PREFIX = 'localStorageManager_';

@@ -2,7 +2,6 @@
  * index.ts — Express server entry point
  *
  * Serves the Vite-built SPA with SSO middleware and Vimeo proxy.
- * See PLAN.md sections 1.3, 2.7
  */
 
 import 'dotenv/config';

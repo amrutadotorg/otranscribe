@@ -3,7 +3,6 @@
  *
  * Saves editor HTML to localStorage 1 second after the last content change.
  * Uses debounce to avoid unnecessary writes on every keystroke.
- * See PLAN.md section 5
  */
 
 import { STORAGE_KEYS } from './storageKeys';

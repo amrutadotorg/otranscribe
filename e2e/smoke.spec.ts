@@ -2,7 +2,6 @@
  * smoke.spec.ts — Smoke tests for oTranscribe
  *
  * Tests the Start screen and basic navigation.
- * See PLAN.md Faza 9
  *
  * Prerequisites:
  *   npm run dev (background)

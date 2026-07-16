@@ -2,7 +2,6 @@
  * otrFormat.test.ts — Regression tests for .otr format parsing
  *
  * Covers all fixtures from test-fixtures/otr/
- * See PLAN.md section 4.3
  */
 
 import { describe, it, expect } from 'vitest';
