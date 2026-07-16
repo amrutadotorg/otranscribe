@@ -1,11 +1,11 @@
-FROM node:24-slim AS build
+FROM node:24.18.0-slim AS build
 
 WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
 RUN npm install -g npm@12.0.1
-RUN npm ci --legacy-peer-deps
+RUN npm ci
 
 # Copy source and build the Vite app
 COPY . .
@@ -16,14 +16,14 @@ RUN npm run build:server
 
 # ─── Production stage ──────────────────────────────────────────
 
-FROM node:24-slim
+FROM node:24.18.0-slim
 
 WORKDIR /app
 
 # Only production dependencies
 COPY package.json package-lock.json ./
 RUN npm install -g npm@12.0.1
-RUN npm ci --omit=dev --legacy-peer-deps
+RUN npm ci --omit=dev
 
 # Copy built frontend
 COPY --from=build /app/dist ./dist
