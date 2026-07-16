@@ -18,7 +18,6 @@ const PUBLIC_PATHS = new Set([
   '/manifest.json',
   '/manifest.webmanifest',
   '/service-worker.js',
-  '/data.ini',
   '/favicon.ico',
   '/favicon.svg',
   '/favicon.png',
@@ -27,6 +26,14 @@ const PUBLIC_PATHS = new Set([
   '/transcribe-screenshot-1024.jpg',
   '/transcribe-screenshot-org-3600.jpg',
 ]);
+
+/**
+ * Per-language locale files (public/locales/{code}.ini) and the language
+ * manifest live under this prefix. There's one file per language rather
+ * than a single combined data.ini, so we allow the whole directory
+ * instead of listing every language code here individually.
+ */
+const PUBLIC_PATH_PREFIXES = ['/locales/'];
 
 function hexToBytes(hex: string): ArrayBuffer {
   const bytes = new Uint8Array(hex.length / 2);
@@ -74,7 +81,10 @@ export async function ssoMiddleware(
     return;
   }
 
-  if (PUBLIC_PATHS.has(req.path)) {
+  if (
+    PUBLIC_PATHS.has(req.path) ||
+    PUBLIC_PATH_PREFIXES.some((prefix) => req.path.startsWith(prefix))
+  ) {
     next();
     return;
   }

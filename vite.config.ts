@@ -15,7 +15,17 @@ export default defineConfig({
         navigateFallbackDenylist: [/^\//],
         runtimeCaching: [
           {
+            // Matches per-language files, e.g. /locales/pl.ini
             urlPattern: /\.ini$/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'l10n-cache',
+            },
+          },
+          {
+            // The language list at /locales/manifest.json doesn't end in
+            // .ini, so it needs its own rule to land in the same cache.
+            urlPattern: /\/locales\/manifest\.json$/,
             handler: 'NetworkFirst',
             options: {
               cacheName: 'l10n-cache',

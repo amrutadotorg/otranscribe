@@ -39,7 +39,7 @@ npm run test:ui      # Vitest with browser UI
 npm run test:e2e     # Playwright end-to-end tests
 npm run test:e2e:ui  # Playwright with browser UI
 npm run lint         # ESLint on src/ (.ts, .tsx)
-npm run build:locale # Merge .ini locale files → public/data.ini
+npm run build:locale # Build per-language locale files → public/locales/{code}.ini + manifest.json
 npm run build:server # Compile Express server → dist-server/
 npm run server       # Run production server (requires build:server first)
 npm run dev:server   # Run server in development mode
@@ -192,7 +192,9 @@ The `.env` file is gitignored — never commit it.
 ├── scripts/                        # Build scripts
 │   └── build-locale.mjs            # Locale file builder
 ├── public/
-│   └── data.ini                    # Combined locale file (generated, do not edit directly)
+│   └── locales/                    # Per-language locale files (generated, do not edit directly)
+│       ├── {code}.ini              # One file per language (e.g. pl.ini, de.ini)
+│       └── manifest.json           # List of available language codes
 ├── vite.config.ts                  # Vite config (PWA, proxy, aliases)
 ├── tsconfig.json                   # TS config (references app + node)
 ├── tsconfig.app.json               # TS config for app source
@@ -300,7 +302,9 @@ export default function StatusBadge({ status, label, settings }: Props) {
 
 The app uses a custom INI-based translation system (replaces the legacy `webl10n` library).
 
-### Locale file format (`public/data.ini`)
+### Locale file format (`public/locales/{code}.ini`)
+
+Each language lives in its own file (e.g. `public/locales/pl.ini`). The default language (en-US) is inlined into the JS bundle at build time.
 
 ```ini
 [en-US]
@@ -310,28 +314,22 @@ start-loading       = Loading...
 choose-file         = Choose audio (or video) file
 wordcount           = {{n}} words
 export-markdown     = Markdown (.md)
-
-[de]
-help                = Hilfe
-start-loading       = Laden...
-choose-file         = Audio- (oder Video-) Datei wählen
-wordcount           = {{n}} Wörter
 ```
 
 **Rules:**
 
-- Sections are BCP-47 language codes: `[en-US]`, `[de]`, `[pl]`, etc.
+- Section header is a BCP-47 language code: `[en-US]`, `[de]`, `[pl]`, etc.
 - Keys are lowercase, hyphen-separated: `error-youtube-url`, `settings-title`
 - Variable interpolation: `{{n}}`, `{{name}}` — replaced at runtime
 - HTML values: suffix key with `.innerHTML` (e.g., `start-description.innerHTML = <b>Bold</b>`)
-- Fallback: if a key is missing in the target language, `[en-US]` value is used
+- Fallback: if a key is missing in the target language, en-US value is used (inlined in JS bundle)
 
 ### Editing translations
 
 1. **Source locale files** live in `src/l10n/` (referenced via `scripts/build-locale.mjs`)
 2. **Edit** the `.ini` files in that directory (or add new keys to `_english.ini`)
-3. **Run** `npm run build:locale` to regenerate `public/data.ini`
-4. **Never edit `public/data.ini` directly** — it will be overwritten on next build
+3. **Run** `npm run build:locale` to regenerate `public/locales/{code}.ini` + `manifest.json` + `src/l10n/generated/defaultLocale.ts`
+4. **Never edit `public/locales/` directly** — it will be overwritten on next build
 
 ### Usage in code
 
@@ -369,7 +367,8 @@ Phases 0-5 of the phonetic input feature are implemented and deployed. The featu
 - `src/modules/settings/defaults.ts` — Default: `enabled: false`, `lang: 'sa-t-i0-und'` (Sanskrit)
 - `src/components/SettingsPanel.tsx:299-337` — Settings UI: checkbox to enable + language select dropdown
 - `src/l10n/_english.ini` — 30 i18n keys (1 toggle label + 29 language names)
-- `public/data.ini` — Generated combined locale file
+- `public/locales/{code}.ini` — Per-language locale files (e.g. `public/locales/pl.ini`)
+- `public/locales/manifest.json` — List of available language codes
 
 **Settings persistence:** `phoneticInput` is part of `AppSettings`, stored in localStorage via `useSettings` hook.
 

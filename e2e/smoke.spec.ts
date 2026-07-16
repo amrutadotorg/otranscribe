@@ -148,18 +148,40 @@ test.describe('PWA requirements', () => {
 });
 
 test.describe('Locale data', () => {
-  test('data.ini is served with 28 languages', async ({ page }) => {
-    const res = await page.goto('/data.ini');
+  test('locale manifest is served and lists at least 28 languages', async ({
+    page,
+  }) => {
+    const res = await page.goto('/locales/manifest.json');
     expect(res?.status()).toBe(200);
+    const languages = (await res?.json()) as string[];
+    expect(languages).toContain('en-US');
+    expect(languages).toContain('fr');
+    expect(languages).toContain('de');
+    expect(languages).toContain('ja');
+    expect(languages).toContain('pl');
+    expect(languages.length).toBeGreaterThanOrEqual(28);
+  });
+
+  test('individual per-language locale files are served', async ({
+    page,
+  }) => {
+    for (const lang of ['en-US', 'pl', 'ja']) {
+      const res = await page.goto(`/locales/${lang}.ini`);
+      expect(res?.status()).toBe(200);
+      const body = (await res?.text()) ?? '';
+      expect(body).toContain(`[${lang}]`);
+    }
+  });
+
+  test('locale files are small (no combined 300KB+ payload)', async ({
+    page,
+  }) => {
+    const res = await page.goto('/locales/pl.ini');
     const body = (await res?.text()) ?? '';
-    expect(body).toContain('[en-US]');
-    expect(body).toContain('[fr]');
-    expect(body).toContain('[de]');
-    expect(body).toContain('[ja]');
-    expect(body).toContain('[pl]');
-    // Count sections
-    const sections = body.match(/^\[[\w-]+\]/gm) ?? [];
-    expect(sections.length).toBeGreaterThanOrEqual(28);
+    // A single language file should be a small fraction of the old
+    // ~300KB combined data.ini — this guards against accidentally
+    // reintroducing a merged file.
+    expect(body.length).toBeLessThan(20_000);
   });
 });
 
