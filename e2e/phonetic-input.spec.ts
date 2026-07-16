@@ -3,11 +3,18 @@
  *
  * Mocks /api/transliterate via Playwright route interception — tests do not
  * depend on the live Google API or a running Express server.
+ *
+ * Tests load a tiny WAV fixture to transition from StartView → TranscribeView
+ * (where TopBar with #btn-settings lives).
  */
 
+import { fileURLToPath } from 'url';
+import path from 'path';
 import { test, expect } from '@playwright/test';
 
-// Helper to load the app and wait for React to hydrate
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const WAV_FIXTURE = path.resolve(__dirname, '../test-fixtures/silence.wav');
+
 async function loadApp(
   page: Parameters<typeof test>[1] extends (arg: infer T) => unknown
     ? T
@@ -17,28 +24,28 @@ async function loadApp(
   await page.waitForSelector('button', { state: 'visible', timeout: 15000 });
 }
 
+/** Navigate from StartView to TranscribeView by loading a dummy audio file. */
+async function goToTranscribeView(page: Parameters<typeof test>[1]) {
+  await loadApp(page);
+  await page.locator('#media-file-input').setInputFiles(WAV_FIXTURE);
+  await expect(page.locator('#btn-settings')).toBeVisible({ timeout: 15000 });
+}
+
 test.describe('Phonetic input (transliteration)', () => {
   test('settings panel shows phonetic input toggle', async ({ page }) => {
-    await loadApp(page);
+    await goToTranscribeView(page);
 
-    // Open settings (the gear/settings button in TopBar)
-    const settingsBtn = page.locator('#btn-settings');
-    await expect(settingsBtn).toBeVisible({ timeout: 10000 });
-    await settingsBtn.click();
+    await page.locator('#btn-settings').click();
+    await expect(page.locator('#settings-panel')).toBeVisible();
 
-    const panel = page.locator('#settings-panel');
-    await expect(panel).toBeVisible();
-
-    // The phonetic input checkbox should be present
     await expect(page.locator('#setting-phonetic-input-enabled')).toBeVisible();
   });
 
   test('language select appears when phonetic input is enabled', async ({
     page,
   }) => {
-    await loadApp(page);
+    await goToTranscribeView(page);
 
-    // Open settings
     await page.locator('#btn-settings').click();
     await expect(page.locator('#settings-panel')).toBeVisible();
 
@@ -62,10 +69,9 @@ test.describe('Phonetic input (transliteration)', () => {
       route.fulfill({ json: { candidates: ['नमस्ते'] } }),
     );
 
-    await loadApp(page);
+    await goToTranscribeView(page);
 
-    // Navigate to the transcribe view by simulating a file load
-    // We open settings, enable phonetic input, then check for it
+    // Open settings, enable phonetic input
     await page.locator('#btn-settings').click();
     await expect(page.locator('#settings-panel')).toBeVisible();
     await page.locator('#setting-phonetic-input-enabled').check();
