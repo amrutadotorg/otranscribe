@@ -372,7 +372,7 @@ export default function StartView({
 
       <div className="start-card">
         <h1>
-          o<span>Transcribe</span>
+          Transcribe for Amruta.org
         </h1>
         <p dangerouslySetInnerHTML={{ __html: tHtml('start-description')! }} />
 

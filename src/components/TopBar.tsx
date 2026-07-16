@@ -98,7 +98,7 @@ export default function TopBar({
           style={{ cursor: 'pointer' }}
           aria-label={t('aria-home')}
         >
-          o<span>Transcribe</span>
+          Transcribe for Amruta.org
         </div>
       </Tooltip>
 
