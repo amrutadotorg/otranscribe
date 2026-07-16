@@ -57,6 +57,31 @@ docker compose up -d --force-recreate transcribe   # Deploy (recreate container)
 
 The image is `transcribe:prod`. The app runs on the host port defined in `docker-compose.yml`. After deploying, users must hard-refresh (Ctrl+Shift+R) or unregister the service worker to see changes, since VitePWA caches JS bundles.
 
+## Dependency Updates (Dependabot)
+
+Dependabot is configured via `.github/dependabot.yml` with two ecosystems:
+
+- **npm** — weekly PRs grouped by patch/minor (major gets separate PR)
+- **docker** — weekly PRs for base image updates (`node:24.18.0-slim`)
+
+### Deployment workflow after Dependabot PR merge
+
+```bash
+# 1. Pull latest main (with merged Dependabot PR)
+git pull origin main
+
+# 2. Reinstall dependencies (matches what Dockerfile does)
+nvm use && npm ci
+
+# 3. Rebuild Docker image
+docker compose --progress=plain build transcribe
+
+# 4. Deploy
+docker compose up -d --force-recreate transcribe
+```
+
+CI runs lint, test, build, **and** `docker build` on every Dependabot PR — green CI means the update is safe to merge. After merge, the steps above deploy the updated image.
+
 ## Verification Workflow
 
 Before considering any task complete, run ALL of the following:
