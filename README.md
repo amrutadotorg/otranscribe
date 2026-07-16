@@ -1,4 +1,4 @@
-# oTranscribe
+# Transcribe for Amruta.org
 
 A free, open-source web application for transcription, inspired by [otranscribe.com](https://otranscribe.com/) and rewritten from scratch on a modern stack.
 

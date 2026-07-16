@@ -2,7 +2,7 @@
 
 ## Overview
 
-**oTranscribe** is a free, open-source web application for transcription. It allows users to load audio/video files (local, YouTube, Vimeo) and transcribe them with a rich text editor that supports inline timestamps. The app runs as a PWA with offline support and includes a lightweight Express server for SSO/Vimeo proxying.
+**Transcribe for Amruta.org** is a free, open-source web application for transcription. It allows users to load audio/video files (local, YouTube, Vimeo) and transcribe them with a rich text editor that supports inline timestamps. The app runs as a PWA with offline support and includes a lightweight Express server for SSO/Vimeo proxying.
 
 ## GitHub Repository
 

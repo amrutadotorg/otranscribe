@@ -42,8 +42,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'oTranscribe',
-        short_name: 'oTranscribe',
+        name: 'Transcribe for Amruta.org',
+        short_name: 'Transcribe',
         description: 'A free tool to make transcription easier',
         display: 'standalone',
         background_color: '#ffffff',

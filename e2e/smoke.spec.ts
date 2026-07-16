@@ -1,5 +1,5 @@
 /**
- * smoke.spec.ts — Smoke tests for oTranscribe
+ * smoke.spec.ts — Smoke tests for Transcribe for Amruta.org
  *
  * Tests the Start screen and basic navigation.
  *
@@ -26,10 +26,10 @@ async function loadApp(
 test.describe('Start screen', () => {
   test('loads with correct title', async ({ page }) => {
     await page.goto('/');
-    await expect(page).toHaveTitle('oTranscribe');
+    await expect(page).toHaveTitle('Transcribe for Amruta.org');
   });
 
-  test('shows oTranscribe heading', async ({ page }) => {
+  test('shows Transcribe heading', async ({ page }) => {
     await loadApp(page);
     await expect(page.locator('h1')).toBeVisible({ timeout: 10000 });
     await expect(page.locator('h1')).toContainText('Transcribe');
@@ -126,7 +126,7 @@ test.describe('PWA requirements', () => {
     const res = await page.goto('/manifest.webmanifest');
     expect(res?.status()).toBe(200);
     const body = await res?.text();
-    expect(body).toContain('oTranscribe');
+    expect(body).toContain('Transcribe for Amruta.org');
   });
 
   test('favicon SVG is served', async ({ page }) => {

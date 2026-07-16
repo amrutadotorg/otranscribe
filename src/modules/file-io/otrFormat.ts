@@ -77,7 +77,7 @@ export function parseOtrFile(
     throw new Error(
       t
         ? t('error-invalid-otr')
-        : 'Not a valid oTranscribe format (.otr) file.',
+        : 'Not a valid Transcribe (.otr) file.',
     );
   }
 

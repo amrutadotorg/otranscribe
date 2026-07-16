@@ -135,7 +135,7 @@ describe('parseOtrFile — multilang.otr', () => {
 
 describe('parseOtrFile — error handling', () => {
   it('throws on invalid JSON', () => {
-    expect(() => parseOtrFile('not json')).toThrow('valid oTranscribe format');
+    expect(() => parseOtrFile('not json')).toThrow('valid Transcribe');
   });
 
   it('throws on missing text field', () => {

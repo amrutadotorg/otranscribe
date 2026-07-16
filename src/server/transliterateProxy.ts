@@ -158,7 +158,7 @@ export async function transliterateHandler(
 
   const url =
     `${GOOGLE_INPUTTOOLS_URL}?text=${encodeURIComponent(text)}` +
-    `&itc=${lang}&num=${maxResult}&cp=0&cs=1&ie=utf-8&oe=utf-8&app=otranscribe`;
+    `&itc=${lang}&num=${maxResult}&cp=0&cs=1&ie=utf-8&oe=utf-8&app=transcribe`;
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);

@@ -36,5 +36,5 @@ app.get('*', (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`oTranscribe server running on port ${PORT}`);
+  console.log(`Transcribe for Amruta.org server running on port ${PORT}`);
 });
