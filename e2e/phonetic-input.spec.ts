@@ -8,11 +8,10 @@
  * (where TopBar with #btn-settings lives).
  */
 
-import { fileURLToPath } from 'url';
 import path from 'path';
 import { test, expect } from '@playwright/test';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 const WAV_FIXTURE = path.resolve(__dirname, '../test-fixtures/silence.wav');
 
 async function loadApp(

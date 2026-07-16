@@ -17,9 +17,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = import.meta.dirname;
 const L10N_DIR = path.resolve(__dirname, '../src/l10n');
 const OUT_DIR = path.resolve(__dirname, '../public/locales');
 const GENERATED_DIR = path.resolve(__dirname, '../src/l10n/generated');

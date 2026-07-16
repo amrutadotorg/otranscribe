@@ -4,15 +4,22 @@
  * Serves the Vite-built SPA with SSO middleware and Vimeo proxy.
  */
 
-import 'dotenv/config';
 import express from 'express';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { ssoMiddleware } from './sso.js';
 import { vimeoDownloadHandler } from './vimeoProxy.js';
 import { transliterateHandler } from './transliterateProxy.js';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+// Load .env if present. Unlike dotenv/config, loadEnvFile throws when the
+// file doesn't exist — that's fine in environments where env vars are
+// injected directly by the container/host instead of a .env file.
+try {
+  process.loadEnvFile();
+} catch {
+  // No .env file — assume env vars are already set in the environment.
+}
+
+const __dirname = import.meta.dirname;
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
