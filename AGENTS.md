@@ -21,7 +21,7 @@
 | State Management | React Context API (`PlayerContext`, `I18nContext`), custom hooks (`useSettings`) |
 | Routing          | Manual view state (`AppView` type), no React Router                              |
 | Testing          | Vitest (unit), Playwright (e2e)                                                  |
-| Linting          | ESLint + typescript-eslint + Prettier                                             |
+| Linting          | ESLint + typescript-eslint + Prettier                                            |
 | Server           | Express 5 (Node.js)                                                              |
 | PWA              | vite-plugin-pwa (Workbox)                                                        |
 | i18n             | Custom INI-based translation system                                              |
