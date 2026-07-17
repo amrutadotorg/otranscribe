@@ -21,8 +21,8 @@
 | State Management | React Context API (`PlayerContext`, `I18nContext`), custom hooks (`useSettings`) |
 | Routing          | Manual view state (`AppView` type), no React Router                              |
 | Testing          | Vitest (unit), Playwright (e2e)                                                  |
-| Linting          | ESLint + typescript-eslint + Prettier, oxlint                                    |
-| Server           | Express 4 (Node.js)                                                              |
+| Linting          | ESLint + typescript-eslint + Prettier                                             |
+| Server           | Express 5 (Node.js)                                                              |
 | PWA              | vite-plugin-pwa (Workbox)                                                        |
 | i18n             | Custom INI-based translation system                                              |
 | Path Alias       | `@` → `./src`                                                                    |
@@ -212,7 +212,8 @@ The `.env` file is gitignored — never commit it.
 │       ├── player.d.ts             # Player state/driver types
 │       └── settings.d.ts           # AppSettings interface
 ├── e2e/                            # Playwright end-to-end tests
-│   └── smoke.spec.ts               # Basic smoke test
+│   ├── smoke.spec.ts               # Basic smoke test
+│   └── phonetic-input.spec.ts      # Phonetic input E2E tests
 ├── test-fixtures/                  # Test data files (.otr fixtures)
 ├── scripts/                        # Build scripts
 │   └── build-locale.mjs            # Locale file builder
@@ -302,6 +303,7 @@ export default function StatusBadge({ status, label, settings }: Props) {
 - **Path alias**: `@/` resolves to `src/` — use it for all internal imports
 - **Import order**: React → third-party → local modules → types → styles
 - **Type-only imports**: always use `import type { Foo } from '...'`
+- **Node.js built-in modules**: always use `node:` prefix (e.g. `import path from 'node:path'`)
 
 ### Testing
 
@@ -314,7 +316,7 @@ export default function StatusBadge({ status, label, settings }: Props) {
 
 - **Separate TypeScript project** (`tsconfig.node.json`) — compiled to `dist-server/`
 - **Express** with modular route handlers in `src/server/`
-- **Environment variables** via `dotenv`
+- **Environment variables** via `process.loadEnvFile()` (Node.js native)
 
 ## Dependencies
 
