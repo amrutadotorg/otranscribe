@@ -262,7 +262,7 @@ export default function StartView({
         style={{
           position: 'absolute',
           top: 'var(--space-4)',
-          right: 'var(--space-4)',
+          insetInlineEnd: 'var(--space-4)',
           display: 'flex',
           gap: 'var(--space-2)',
         }}
@@ -334,7 +334,7 @@ export default function StartView({
                         ? 'var(--color-on-accent)'
                         : 'var(--color-text)',
                     border: 'none',
-                    borderRight:
+                    borderInlineEnd:
                       value !== 'dark'
                         ? '1px solid var(--color-border)'
                         : 'none',
@@ -616,7 +616,7 @@ export default function StartView({
                   style={{
                     display: 'inline-block',
                     animation: 'spin 1s linear infinite',
-                    marginRight: 'var(--space-2)',
+                    marginInlineEnd: 'var(--space-2)',
                   }}
                 >
                   ⏳

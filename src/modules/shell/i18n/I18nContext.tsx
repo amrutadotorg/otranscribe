@@ -37,6 +37,12 @@ import {
   DEFAULT_LOCALE_INI,
 } from '../../../l10n/generated/defaultLocale';
 
+const RTL_LANGUAGES = new Set(['ar', 'he', 'fa', 'ur']);
+
+function isRtl(lang: string): boolean {
+  return RTL_LANGUAGES.has(lang);
+}
+
 interface I18nContextValue {
   /** Get a plain text translation */
   t: (key: string, vars?: Record<string, string | number>) => string;
@@ -153,10 +159,19 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     void fetchManifest().then(setAvailableLanguages);
   }, []);
 
+  // Set dir attribute on mount based on saved language
+  useEffect(() => {
+    document.documentElement.setAttribute('dir', isRtl(lang) ? 'rtl' : 'ltr');
+  }, []);
+
   const setLang = useCallback((newLang: string) => {
     setLangState(newLang);
     localStorage.setItem(STORAGE_KEYS.LANGUAGE, newLang);
     document.documentElement.setAttribute('lang', newLang);
+    document.documentElement.setAttribute(
+      'dir',
+      isRtl(newLang) ? 'rtl' : 'ltr',
+    );
   }, []);
 
   const t = useCallback(

@@ -257,7 +257,7 @@ export default function TopBar({
               style={{
                 position: 'absolute',
                 top: 'calc(100% + 6px)',
-                right: 0,
+                insetInlineEnd: 0,
                 background: 'var(--color-surface)',
                 border: '1px solid var(--color-border)',
                 borderRadius: 'var(--radius-md)',
@@ -295,7 +295,7 @@ export default function TopBar({
                     padding: 'var(--space-2) var(--space-3)',
                     background: 'none',
                     border: 'none',
-                    textAlign: 'left',
+                    textAlign: 'start',
                     cursor: 'pointer',
                     fontSize: 'var(--font-size-sm)',
                     color: 'var(--color-text)',

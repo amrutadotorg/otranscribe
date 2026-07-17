@@ -94,6 +94,7 @@ export default function Editor({
       attributes: {
         class: 'editor-content',
         id: 'textbox',
+        dir: 'auto',
         'aria-label': t('aria-editor'),
         'aria-multiline': 'true',
         role: 'textbox',
