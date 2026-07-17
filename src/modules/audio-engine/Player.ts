@@ -127,6 +127,12 @@ export class Player {
     this._driver!.setTime(Math.max(0, seconds));
   }
 
+  /** Fast seek — uses fastSeek() when available (nearest I-frame). Use during scrubbing. */
+  setTimeFast(seconds: number): void {
+    if (!this._hasDriver()) return;
+    this._driver!.setTime(Math.max(0, seconds), true);
+  }
+
   skip(direction: 'forwards' | 'backwards'): void {
     const current = this.getTime();
     const next =

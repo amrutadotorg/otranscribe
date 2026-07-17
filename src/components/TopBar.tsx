@@ -5,7 +5,7 @@
  * Keyboard shortcuts handled globally (Faza 6).
  */
 
-import { useCallback } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type React from 'react';
 import {
   IconPlayerTrackPrev,
@@ -64,14 +64,68 @@ export default function TopBar({
   onExportFormat,
 }: Props) {
   const { t } = useTranslation();
-  const { playerState, play, pause, skip, skipTo, speedUp, speedDown } =
-    usePlayer();
+  const {
+    playerState,
+    play,
+    pause,
+    skip,
+    skipTo,
+    skipToFast,
+    speedUp,
+    speedDown,
+  } = usePlayer();
 
   const { isPlaying, currentTime, duration, speed, isReady } = playerState;
 
   const progressPercent = duration > 0 ? (currentTime / duration) * 100 : 0;
   const timeDisplay = formatTime(currentTime);
   const speedDisplay = `${speed.toFixed(2).replace(/\.?0+$/, '')}×`;
+
+  // --- Drag-scrubbing state ---
+  const [isScrubbing, setIsScrubbing] = useState(false);
+  const rafPending = useRef(false);
+  const scrubBarRef = useRef<HTMLDivElement>(null);
+
+  /** Compute seek ratio from pointer X within the bar */
+  const getRatio = useCallback((clientX: number): number => {
+    const rect = scrubBarRef.current?.getBoundingClientRect();
+    if (!rect) return 0;
+    return Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+  }, []);
+
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isReady || duration === 0) return;
+      e.currentTarget.setPointerCapture(e.pointerId);
+      setIsScrubbing(true);
+      skipToFast(getRatio(e.clientX) * duration);
+    },
+    [isReady, duration, skipToFast, getRatio],
+  );
+
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isScrubbing || duration === 0) return;
+      // Throttle to one seek per animation frame
+      if (rafPending.current) return;
+      rafPending.current = true;
+      requestAnimationFrame(() => {
+        rafPending.current = false;
+        skipToFast(getRatio(e.clientX) * duration);
+      });
+    },
+    [isScrubbing, duration, skipToFast, getRatio],
+  );
+
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!isScrubbing) return;
+      setIsScrubbing(false);
+      // Final seek: precise (currentTime, not fastSeek)
+      skipTo(getRatio(e.clientX) * duration);
+    },
+    [isScrubbing, duration, skipTo, getRatio],
+  );
 
   const handleProgressClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -195,6 +249,7 @@ export default function TopBar({
 
         {/* Progress bar */}
         <div
+          ref={scrubBarRef}
           className="progress-bar-container"
           id="progress-bar"
           role="slider"
@@ -203,7 +258,14 @@ export default function TopBar({
           aria-valuemax={100}
           aria-label={t('aria-media-progress')}
           onClick={handleProgressClick}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
           tabIndex={isReady ? 0 : -1}
+          style={{
+            cursor: isScrubbing ? 'grabbing' : isReady ? 'pointer' : 'default',
+          }}
         >
           <div
             className="progress-bar-fill"

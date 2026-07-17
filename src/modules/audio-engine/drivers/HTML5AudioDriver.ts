@@ -43,8 +43,16 @@ export class HTML5AudioDriver implements PlayerDriver {
     return this.element.currentTime;
   }
 
-  setTime(seconds: number): void {
-    this.element.currentTime = Math.max(0, seconds);
+  setTime(seconds: number, fast = false): void {
+    const t = Math.max(0, seconds);
+    if (
+      fast &&
+      typeof (this.element as HTMLVideoElement).fastSeek === 'function'
+    ) {
+      (this.element as HTMLVideoElement).fastSeek(t);
+    } else {
+      this.element.currentTime = t;
+    }
   }
 
   getStatus(): 'playing' | 'paused' | 'inactive' {
@@ -59,7 +67,7 @@ export class HTML5AudioDriver implements PlayerDriver {
     return (
       !this._destroyed &&
       !isNaN(this.element.duration) &&
-      this.element.readyState === 4
+      this.element.readyState >= 2
     );
   }
 

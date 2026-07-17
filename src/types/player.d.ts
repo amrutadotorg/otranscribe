@@ -3,7 +3,7 @@ export interface PlayerDriver {
   play(): void;
   pause(): void;
   getTime(): number;
-  setTime(seconds: number): void;
+  setTime(seconds: number, fast?: boolean): void;
   getStatus(): 'playing' | 'paused' | 'inactive';
   getLength(): number;
   isReady(): boolean;

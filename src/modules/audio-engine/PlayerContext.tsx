@@ -29,6 +29,7 @@ interface PlayerContextValue {
   togglePlayPause: () => void;
   skip: (direction: 'forwards' | 'backwards') => void;
   skipTo: (seconds: number) => void;
+  skipToFast: (seconds: number) => void;
   speedUp: () => void;
   speedDown: () => void;
   setSpeed: (speed: number) => void;
@@ -173,6 +174,10 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     (seconds: number) => playerRef.current?.setTime(seconds),
     [],
   );
+  const skipToFast = useCallback(
+    (seconds: number) => playerRef.current?.setTimeFast(seconds),
+    [],
+  );
   const speedUp = useCallback(() => playerRef.current?.speedUp(), []);
   const speedDown = useCallback(() => playerRef.current?.speedDown(), []);
   const setSpeed = useCallback(
@@ -199,6 +204,7 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         togglePlayPause,
         skip,
         skipTo,
+        skipToFast,
         speedUp,
         speedDown,
         setSpeed,
