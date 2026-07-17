@@ -131,11 +131,11 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       gap: 'var(--space-2)',
                     }}
                   >
-                    <div>
+                    <div style={{ minWidth: 0, overflow: 'hidden' }}>
                       <div
                         style={{
                           fontSize: 'var(--font-size-sm)',
@@ -148,13 +148,23 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                         style={{
                           fontSize: 'var(--font-size-sm)',
                           color: 'var(--color-text-muted)',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
                         }}
+                        title={entry.media || t('backup-no-media')}
                       >
                         {entry.media || t('backup-no-media')} ·{' '}
                         {t('wordcount', { n: wordCount(entry.text) })}
                       </div>
                     </div>
-                    <div style={{ display: 'flex', gap: 'var(--space-1)' }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        gap: 'var(--space-1)',
+                        flexShrink: 0,
+                      }}
+                    >
                       <button
                         className="btn btn-primary"
                         style={{
