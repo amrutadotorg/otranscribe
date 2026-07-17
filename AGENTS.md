@@ -87,6 +87,7 @@ CI runs lint, test, build, **and** `docker build` on every Dependabot PR — gre
 Before considering any task complete, run ALL of the following:
 
 ```bash
+npm run format:check # 0. Formatting — must pass with zero warnings
 npm run lint         # 1. Lint — must pass with zero errors
 tsc --noEmit         # 2. Typecheck — must compile with zero errors
 npm run test         # 3. Unit tests — all must pass
@@ -101,6 +102,7 @@ If any step fails, fix the issue before proceeding. Never commit code that doesn
 After completing a task and passing all verification steps, commit and push the changes:
 
 ```bash
+npm run format       # Auto-fix formatting before commit
 git add -A
 git commit -m "<type>: <short description>"
 git push
