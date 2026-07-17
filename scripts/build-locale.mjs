@@ -15,8 +15,8 @@
  * Run: node scripts/build-locale.mjs
  */
 
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const __dirname = import.meta.dirname;
 const L10N_DIR = path.resolve(__dirname, '../src/l10n');

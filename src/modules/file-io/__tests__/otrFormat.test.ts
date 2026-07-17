@@ -5,8 +5,8 @@
  */
 
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import {
   convertTimestampToSeconds,
   normaliseTimestamp,

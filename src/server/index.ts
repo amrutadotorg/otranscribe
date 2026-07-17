@@ -5,7 +5,7 @@
  */
 
 import express from 'express';
-import path from 'path';
+import path from 'node:path';
 import { ssoMiddleware } from './sso.js';
 import { vimeoDownloadHandler } from './vimeoProxy.js';
 import { transliterateHandler } from './transliterateProxy.js';
