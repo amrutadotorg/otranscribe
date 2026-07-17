@@ -9,6 +9,7 @@
  * which are handled by the editor itself.
  */
 
+import { IconBold, IconItalic, IconUnderline } from '@tabler/icons-react';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 import Tooltip from './Tooltip';
 
@@ -24,20 +25,25 @@ export default function FormatToolbar({ onFormat, activeFormats }: Props) {
 
   const formatBtns: Array<{
     format: 'bold' | 'italic' | 'underline';
-    label: string;
+    icon: React.ReactNode;
     titleKey: string;
     shortcut: string;
   }> = [
-    { format: 'bold', label: 'B', titleKey: 'title-bold', shortcut: 'Mod+B' },
+    {
+      format: 'bold',
+      icon: <IconBold size={18} />,
+      titleKey: 'title-bold',
+      shortcut: 'Mod+B',
+    },
     {
       format: 'italic',
-      label: 'I',
+      icon: <IconItalic size={18} />,
       titleKey: 'title-italic',
       shortcut: 'Mod+I',
     },
     {
       format: 'underline',
-      label: 'U',
+      icon: <IconUnderline size={18} />,
       titleKey: 'title-underline',
       shortcut: 'Mod+U',
     },
@@ -50,7 +56,7 @@ export default function FormatToolbar({ onFormat, activeFormats }: Props) {
       aria-label={t('aria-format-toolbar')}
       id="format-toolbar"
     >
-      {formatBtns.map(({ format, label, titleKey, shortcut }) => {
+      {formatBtns.map(({ format, icon, titleKey, shortcut }) => {
         const titleText = t(titleKey);
         return (
           <Tooltip key={format} content={`${titleText} (${shortcut})`}>
@@ -60,15 +66,8 @@ export default function FormatToolbar({ onFormat, activeFormats }: Props) {
               aria-label={titleText}
               aria-pressed={activeFormats.has(format)}
               id={`format-btn-${format}`}
-              style={{ fontStyle: format === 'italic' ? 'italic' : 'normal' }}
             >
-              {format === 'bold' ? (
-                <b>{label}</b>
-              ) : format === 'underline' ? (
-                <u>{label}</u>
-              ) : (
-                label
-              )}
+              {icon}
             </button>
           </Tooltip>
         );

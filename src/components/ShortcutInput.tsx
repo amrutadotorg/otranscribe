@@ -8,6 +8,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { IconX } from '@tabler/icons-react';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 import { formatShortcutDisplay } from '../modules/platform/detectPlatform';
 
@@ -123,7 +124,7 @@ export default function ShortcutInput({ value, onChange, id }: Props) {
             }}
             aria-label={`Remove ${shortcut}`}
           >
-            ✕
+            <IconX size={18} />
           </button>
         </span>
       ))}

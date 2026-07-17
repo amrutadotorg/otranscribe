@@ -9,6 +9,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
+import { IconX, IconTrash } from '@tabler/icons-react';
 import {
   getAllBackups,
   restoreBackup,
@@ -84,7 +85,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
           aria-label={t('cancel')}
           id="close-backup-btn"
         >
-          ✕
+          <IconX size={18} />
         </button>
       </div>
 
@@ -181,7 +182,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                         }}
                         aria-label={t('aria-delete-backup')}
                       >
-                        🗑
+                        <IconTrash size={18} />
                       </button>
                     </div>
                   </div>

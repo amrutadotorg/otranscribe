@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react';
+import { IconX } from '@tabler/icons-react';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 
 interface Props {
@@ -100,7 +101,7 @@ export default function UrlInputModal({
             aria-label={t('aria-cancel')}
             id="url-modal-cancel-btn"
           >
-            ✕
+            <IconX size={18} />
           </button>
         </div>
 

@@ -232,7 +232,6 @@ a:hover {
     background var(--transition-fast),
     color var(--transition-fast),
     transform var(--transition-fast);
-  font-size: 16px;
 }
 
 .player-btn:hover {
@@ -251,7 +250,6 @@ a:hover {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  font-size: 18px;
 }
 
 .player-btn.primary:hover {
@@ -347,7 +345,6 @@ a:hover {
   transition:
     background var(--transition-fast),
     color var(--transition-fast);
-  font-size: 18px;
 }
 
 .icon-btn:hover {
@@ -450,8 +447,10 @@ a:hover {
 }
 
 .start-option-btn .option-icon {
-  font-size: 24px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .start-option-btn .option-text {
@@ -710,6 +709,10 @@ a:hover {
   to {
     transform: rotate(360deg);
   }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
 }
 
 @keyframes indeterminate-bar {

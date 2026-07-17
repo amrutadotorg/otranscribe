@@ -8,6 +8,16 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import type { AppView } from '../App';
 import type { AppSettings } from '../types/settings';
 import type { OtrDocument } from '../types/otr';
+import {
+  IconMusic,
+  IconBrandYoutube,
+  IconBrandVimeo,
+  IconFileImport,
+  IconLoader2,
+  IconDeviceDesktop,
+  IconSun,
+  IconMoon,
+} from '@tabler/icons-react';
 import { usePlayer } from '../modules/audio-engine/PlayerContext';
 import { downloadAndCacheVimeo } from '../modules/storage/vimeoCache';
 import { importOtrFile } from '../modules/file-io/importFile';
@@ -315,9 +325,21 @@ export default function StartView({
           >
             {(
               [
-                { value: 'system', icon: '💻', key: 'theme-system' },
-                { value: 'light', icon: '☀️', key: 'theme-light' },
-                { value: 'dark', icon: '🌙', key: 'theme-dark' },
+                {
+                  value: 'system',
+                  icon: <IconDeviceDesktop size={14} />,
+                  key: 'theme-system',
+                },
+                {
+                  value: 'light',
+                  icon: <IconSun size={14} />,
+                  key: 'theme-light',
+                },
+                {
+                  value: 'dark',
+                  icon: <IconMoon size={14} />,
+                  key: 'theme-dark',
+                },
               ] as const
             ).map(({ value, icon, key }) => (
               <Tooltip key={value} content={t(key)}>
@@ -473,7 +495,9 @@ export default function StartView({
             id="load-local-file-btn"
             disabled={loading}
           >
-            <span className="option-icon">🎵</span>
+            <span className="option-icon">
+              <IconMusic size={24} />
+            </span>
             <span className="option-text">
               <span className="option-title">{t('choose-file')}</span>
               <span className="option-desc">{t('choose-file-desc')}</span>
@@ -490,7 +514,9 @@ export default function StartView({
             id="load-youtube-btn"
             disabled={loading}
           >
-            <span className="option-icon">▶️</span>
+            <span className="option-icon">
+              <IconBrandYoutube size={24} />
+            </span>
             <span className="option-text">
               <span className="option-title">{t('choose-youtube')}</span>
               <span className="option-desc">{t('choose-youtube-desc')}</span>
@@ -507,7 +533,9 @@ export default function StartView({
             id="load-vimeo-btn"
             disabled={loading}
           >
-            <span className="option-icon">🎬</span>
+            <span className="option-icon">
+              <IconBrandVimeo size={24} />
+            </span>
             <span className="option-text">
               <span className="option-title">{t('choose-vimeo')}</span>
               <span className="option-desc">{t('choose-vimeo-desc')}</span>
@@ -524,7 +552,9 @@ export default function StartView({
             id="import-otr-btn"
             disabled={loading}
           >
-            <span className="option-icon">📄</span>
+            <span className="option-icon">
+              <IconFileImport size={24} />
+            </span>
             <span className="option-text">
               <span className="option-title">{t('import-button')} .otr</span>
               <span className="option-desc">{t('import-otr-desc')}</span>
@@ -615,11 +645,11 @@ export default function StartView({
                 <span
                   style={{
                     display: 'inline-block',
-                    animation: 'spin 1s linear infinite',
                     marginInlineEnd: 'var(--space-2)',
                   }}
+                  className="spin"
                 >
-                  ⏳
+                  <IconLoader2 size={18} />
                 </span>
                 {t('start-loading')}
               </>

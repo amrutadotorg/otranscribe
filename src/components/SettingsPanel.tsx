@@ -10,6 +10,7 @@
  */
 
 import type { AppSettings } from '../types/settings';
+import { IconX } from '@tabler/icons-react';
 import { DEFAULT_SETTINGS } from '../modules/settings/defaults';
 import { formatShortcutDisplay } from '../modules/platform/detectPlatform';
 import Tooltip from './Tooltip';
@@ -124,7 +125,7 @@ export default function SettingsPanel({
           aria-label={t('cancel')}
           id="close-settings-btn"
         >
-          ✕
+          <IconX size={18} />
         </button>
       </div>
 

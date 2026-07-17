@@ -7,6 +7,23 @@
 
 import { useCallback } from 'react';
 import type React from 'react';
+import {
+  IconPlayerTrackPrev,
+  IconPlayerSkipBack,
+  IconPlayerPlay,
+  IconPlayerPause,
+  IconPlayerSkipForward,
+  IconTrendingDown,
+  IconTrendingUp,
+  IconHistory,
+  IconFileExport,
+  IconHelp,
+  IconSettings,
+  IconHome,
+  IconFileText,
+  IconMarkdown,
+  IconDeviceFloppy,
+} from '@tabler/icons-react';
 import { usePlayer } from '../modules/audio-engine/PlayerContext';
 import { formatTime } from '../modules/editor/TimestampExtension';
 import FormatToolbar from './FormatToolbar';
@@ -112,7 +129,7 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-return-start"
           >
-            ⏮
+            <IconPlayerTrackPrev size={16} />
           </button>
         </Tooltip>
 
@@ -125,7 +142,7 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-rewind"
           >
-            ◀◀
+            <IconPlayerSkipBack size={16} />
           </button>
         </Tooltip>
 
@@ -138,7 +155,11 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-play-pause"
           >
-            {isPlaying ? '⏸' : '▶'}
+            {isPlaying ? (
+              <IconPlayerPause size={18} />
+            ) : (
+              <IconPlayerPlay size={18} />
+            )}
           </button>
         </Tooltip>
 
@@ -151,7 +172,7 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-forward"
           >
-            ▶▶
+            <IconPlayerSkipForward size={16} />
           </button>
         </Tooltip>
 
@@ -199,7 +220,7 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-speed-down"
           >
-            🐢
+            <IconTrendingDown size={16} />
           </button>
         </Tooltip>
         <div
@@ -217,7 +238,7 @@ export default function TopBar({
             disabled={!isReady}
             id="btn-speed-up"
           >
-            🐇
+            <IconTrendingUp size={16} />
           </button>
         </Tooltip>
 
@@ -233,7 +254,7 @@ export default function TopBar({
             onClick={onOpenBackup}
             id="btn-backup-history"
           >
-            🕐
+            <IconHistory size={18} />
           </button>
         </Tooltip>
         <div style={{ position: 'relative' }} ref={exportMenuRef}>
@@ -247,7 +268,7 @@ export default function TopBar({
               aria-expanded={exportMenuOpen}
               aria-haspopup="menu"
             >
-              ↗
+              <IconFileExport size={18} />
             </button>
           </Tooltip>
           {exportMenuOpen && (
@@ -270,27 +291,32 @@ export default function TopBar({
               {[
                 {
                   format: 'txt' as const,
-                  label: `📄 ${t('export-text')}`,
+                  icon: <IconFileText size={16} />,
+                  label: t('export-text'),
                   id: 'export-txt',
                 },
                 {
                   format: 'md' as const,
-                  label: `📝 ${t('export-markdown')}`,
+                  icon: <IconMarkdown size={16} />,
+                  label: t('export-markdown'),
                   id: 'export-md',
                 },
                 {
                   format: 'otr' as const,
-                  label: `💾 ${t('export-otr')}`,
+                  icon: <IconDeviceFloppy size={16} />,
+                  label: t('export-otr'),
                   id: 'export-otr',
                 },
-              ].map(({ format, label, id }) => (
+              ].map(({ format, icon, label, id }) => (
                 <button
                   key={format}
                   role="menuitem"
                   id={id}
                   onClick={() => onExportFormat(format)}
                   style={{
-                    display: 'block',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
                     width: '100%',
                     padding: 'var(--space-2) var(--space-3)',
                     background: 'none',
@@ -310,6 +336,7 @@ export default function TopBar({
                       'none';
                   }}
                 >
+                  {icon}
                   {label}
                 </button>
               ))}
@@ -323,7 +350,7 @@ export default function TopBar({
             onClick={onOpenHelp}
             id="btn-help"
           >
-            ?
+            <IconHelp size={18} />
           </button>
         </Tooltip>
         <Tooltip content={t('settings')}>
@@ -333,7 +360,7 @@ export default function TopBar({
             onClick={onOpenSettings}
             id="btn-settings"
           >
-            ⚙
+            <IconSettings size={18} />
           </button>
         </Tooltip>
         <Tooltip content={t('title-home-new')}>
@@ -343,7 +370,7 @@ export default function TopBar({
             onClick={onGoHome}
             id="btn-home"
           >
-            ⌂
+            <IconHome size={18} />
           </button>
         </Tooltip>
       </div>

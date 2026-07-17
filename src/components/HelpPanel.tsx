@@ -3,6 +3,7 @@
  */
 
 import { useEffect } from 'react';
+import { IconX } from '@tabler/icons-react';
 import { useTranslation } from '../modules/shell/i18n/I18nContext';
 
 interface Props {
@@ -69,7 +70,7 @@ export default function HelpPanel({ open, onClose }: Props) {
           aria-label={t('cancel')}
           id="close-help-btn"
         >
-          ✕
+          <IconX size={18} />
         </button>
       </div>
 
