@@ -109,7 +109,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocale] = useState<ParsedLocale>(
     () => parsedLocaleCache.get(lang) ?? defaultLocale,
   );
-  const [ready, setReady] = useState<boolean>(() => parsedLocaleCache.has(lang));
+  const [ready, setReady] = useState<boolean>(() =>
+    parsedLocaleCache.has(lang),
+  );
   const [availableLanguages, setAvailableLanguages] = useState<string[]>([
     DEFAULT_LANG,
   ]);
@@ -136,10 +138,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
       setLocale(parsed);
       setReady(true);
     } catch (err) {
-      console.warn(
-        '[i18n] Failed to load locale, falling back to en-US:',
-        err,
-      );
+      console.warn('[i18n] Failed to load locale, falling back to en-US:', err);
       if (latestRequestedLang.current !== targetLang) return;
       setLocale(defaultLocale);
       setReady(true);

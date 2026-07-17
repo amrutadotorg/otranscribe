@@ -371,9 +371,7 @@ export default function StartView({
       />
 
       <div className="start-card">
-        <h1>
-          Transcribe for Amruta.org
-        </h1>
+        <h1>Transcribe for Amruta.org</h1>
         <p dangerouslySetInnerHTML={{ __html: tHtml('start-description')! }} />
 
         {/* Autosave recovery banner */}

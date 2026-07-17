@@ -98,4 +98,3 @@ export function getHtmlTranslation(
 ): string | null {
   return locale.html[key] ?? null;
 }
-

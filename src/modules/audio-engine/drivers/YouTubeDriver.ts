@@ -152,10 +152,10 @@ export class YouTubeDriver implements PlayerDriver {
   ): void {
     if (this._isDestroyed) return;
 
-      this._duration = this._ytEl?.getDuration?.() ?? 0;
+    this._duration = this._ytEl?.getDuration?.() ?? 0;
 
-      // Kickstart YouTube (play→pause trick to fix focus stealing)
-      const t1 = setTimeout(              () => {
+    // Kickstart YouTube (play→pause trick to fix focus stealing)
+    const t1 = setTimeout(() => {
       if (this._isDestroyed) return;
       this.play();
       const t2 = setTimeout(() => {

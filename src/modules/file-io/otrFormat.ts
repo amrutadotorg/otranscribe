@@ -75,9 +75,7 @@ export function parseOtrFile(
     parsed = JSON.parse(raw) as OtrFileV1;
   } catch {
     throw new Error(
-      t
-        ? t('error-invalid-otr')
-        : 'Not a valid Transcribe (.otr) file.',
+      t ? t('error-invalid-otr') : 'Not a valid Transcribe (.otr) file.',
     );
   }
 

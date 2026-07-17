@@ -161,9 +161,7 @@ test.describe('Locale data', () => {
     expect(languages.length).toBeGreaterThanOrEqual(28);
   });
 
-  test('individual per-language locale files are served', async ({
-    page,
-  }) => {
+  test('individual per-language locale files are served', async ({ page }) => {
     for (const lang of ['en-US', 'pl', 'ja']) {
       const res = await page.goto(`/locales/${lang}.ini`);
       expect(res?.status()).toBe(200);
