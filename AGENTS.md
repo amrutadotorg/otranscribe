@@ -53,6 +53,7 @@ npx knip             # Find unused deps, exports, types (via knip.json config)
 ```bash
 docker compose --progress=plain build transcribe   # Build production image
 docker compose up -d --force-recreate transcribe   # Deploy (recreate container)
+uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org  # Purge CF cache
 ```
 
 The image is `transcribe:prod`. The app runs on the host port defined in `docker-compose.yml`. After deploying, users must hard-refresh (Ctrl+Shift+R) or unregister the service worker to see changes, since VitePWA caches JS bundles.
@@ -78,6 +79,9 @@ docker compose --progress=plain build transcribe
 
 # 4. Deploy
 docker compose up -d --force-recreate transcribe
+
+# 5. Purge Cloudflare cache
+uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org
 ```
 
 CI runs lint, test, build, **and** `docker build` on every Dependabot PR — green CI means the update is safe to merge. After merge, the steps above deploy the updated image.
@@ -426,6 +430,11 @@ We attempted to use the official Vimeo JavaScript Player SDK (`@vimeo/player`) f
 ### Legacy .otr format compatibility
 
 The `.otr` file parser (`otrFormat.ts`) handles both legacy MM:SS timestamps (string `"2:03"`) and modern numeric timestamps (`123.45`). Tests cover both formats. When modifying the parser, run the full test suite to ensure backwards compatibility.
+
+## Nginx Configuration
+
+- **Config file**: `~/containers/nginx/sites/transcribe.amruta.org.conf`
+- **Reload nginx**: `docker restart nginx`
 
 ## Key Files
 
