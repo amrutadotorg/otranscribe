@@ -33,13 +33,41 @@ app.get('/api/vimeo/download', vimeoDownloadHandler);
 // Transliteration proxy (phonetic input)
 app.get('/api/transliterate', transliterateHandler);
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../dist')));
+const distDir = path.join(__dirname, '../dist');
+
+// 1. Hashed assets — serve with long-lived immutable cache
+app.use(
+  '/assets',
+  express.static(path.join(distDir, 'assets'), {
+    maxAge: '1y',
+    immutable: true,
+  }),
+);
+
+// 2. Locale files (no hash in name, must always be fresh)
+app.use(
+  '/locales',
+  express.static(path.join(distDir, 'locales'), {
+    setHeaders: (res) => {
+      res.setHeader('Cache-Control', 'no-cache');
+    },
+  }),
+);
+
+// 3. All other static files (HTML, SW, webmanifest, favicons, icons)
+app.use(
+  express.static(distDir, {
+    setHeaders: (res) => {
+      res.setHeader('Cache-Control', 'no-cache');
+    },
+  }),
+);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
 app.get('/{*splat}', (_req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+  res.setHeader('Cache-Control', 'no-cache');
+  res.sendFile(path.join(distDir, 'index.html'));
 });
 
 app.listen(PORT, () => {
