@@ -81,14 +81,6 @@ setInterval(() => {
   }
 }, 5 * 60_000).unref();
 
-function getClientIp(req: Request): string {
-  return (
-    (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() ??
-    req.socket.remoteAddress ??
-    'unknown'
-  );
-}
-
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const entry = rateHits.get(ip);
@@ -128,7 +120,7 @@ export async function transliterateHandler(
   }
 
   // Rate limit: per-IP sliding window
-  const clientIp = getClientIp(req);
+  const clientIp = req.ip || 'unknown';
   if (!checkRateLimit(clientIp)) {
     res.status(429).json({
       error: 'rate_limited',
