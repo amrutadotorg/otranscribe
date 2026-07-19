@@ -9,7 +9,7 @@ import type { AppSettings } from '../../types/settings';
 import { DEFAULT_SETTINGS } from './defaults';
 import { STORAGE_KEYS } from '../storage/storageKeys';
 
-function loadSettings(): AppSettings {
+export function loadSettings(): AppSettings {
   try {
     const raw = localStorage.getItem(STORAGE_KEYS.SETTINGS);
     if (!raw) return DEFAULT_SETTINGS;
@@ -24,12 +24,16 @@ function loadSettings(): AppSettings {
   }
 }
 
-function deepMerge(
+export function deepMerge(
   defaults: Record<string, unknown>,
   overrides: Record<string, unknown>,
 ): Record<string, unknown> {
   const result = { ...defaults };
   for (const key of Object.keys(overrides)) {
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      continue;
+    }
+
     if (
       typeof overrides[key] === 'object' &&
       overrides[key] !== null &&
