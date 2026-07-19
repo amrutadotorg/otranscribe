@@ -33,5 +33,11 @@ jobs:
 
       - run: npx knip
 
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
+
       - name: Build Docker image
         run: docker build -t transcribe:ci .
