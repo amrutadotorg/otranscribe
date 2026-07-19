@@ -887,3 +887,259 @@ a:hover {
   color: var(--color-text-muted);
   line-height: 1.5;
 }
+
+/* ─────────────────────────────────────────────────────────
+ * StartView & SettingsPanel Styles (Task 10)
+ * ───────────────────────────────────────────────────────── */
+
+/* StartView Controls */
+.start-top-controls {
+  position: absolute;
+  top: var(--space-4);
+  inset-inline-end: var(--space-4);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.theme-group {
+  display: flex;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.theme-btn {
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  border: none;
+  border-inline-end: 1px solid var(--color-border);
+  padding: 4px 9px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  transition: background 0.15s;
+}
+
+.theme-btn:last-child {
+  border-inline-end: none;
+}
+
+.theme-btn[aria-pressed="true"] {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+/* Autosave Banner */
+.autosave-banner {
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.autosave-banner-text {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.autosave-actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.btn-restore {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.btn-discard {
+  background: none;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: opacity 0.15s;
+}
+
+.load-error-msg {
+  background: var(--color-danger-light);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-danger);
+}
+
+/* Vimeo Loading Progress */
+.loading-container {
+  text-align: center;
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.vimeo-progress-wrapper {
+  width: 100%;
+}
+
+.vimeo-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.vimeo-progress-title {
+  font-weight: 500;
+}
+
+.vimeo-cancel-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.progress-track {
+  height: 8px;
+  background: var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--color-accent);
+  border-radius: 4px;
+  transition: width 0.2s ease;
+}
+
+.progress-fill.indeterminate {
+  animation: indeterminate-bar 1.5s ease-in-out infinite;
+}
+
+.vimeo-progress-hint {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-xs);
+  opacity: 0.7;
+}
+
+/* Settings Panel Components */
+.settings-section {
+  margin-bottom: var(--space-5);
+}
+
+.settings-section-title {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.settings-row-label {
+  font-size: var(--font-size-sm);
+}
+
+.settings-select {
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.settings-select.medium {
+  max-width: 140px;
+}
+
+.settings-select.large {
+  max-width: 160px;
+}
+
+.settings-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.settings-input {
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+}
+
+.settings-input.small {
+  width: 60px;
+}
+
+.settings-input.medium {
+  width: 80px;
+}
+
+.settings-input-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.settings-input-suffix {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.settings-btn-reset {
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--space-2);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.settings-shortcuts-footer {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.settings-shortcuts-instrux {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
+}

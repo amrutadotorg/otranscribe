@@ -47,17 +47,8 @@ function LabelRow({
   children: React.ReactNode;
 }) {
   return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 'var(--space-3)',
-        padding: 'var(--space-2) 0',
-        borderBottom: '1px solid var(--color-border)',
-      }}
-    >
-      <span style={{ fontSize: 'var(--font-size-sm)' }}>{label}</span>
+    <div className="settings-row">
+      <span className="settings-row-label">{label}</span>
       {children}
     </div>
   );
@@ -71,17 +62,8 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div style={{ marginBottom: 'var(--space-5)' }}>
-      <h3
-        style={{
-          fontSize: 'var(--font-size-sm)',
-          fontWeight: 600,
-          color: 'var(--color-text-muted)',
-          marginBottom: 'var(--space-2)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.05em',
-        }}
-      >
+    <div className="settings-section">
+      <h3 className="settings-section-title">
         {title}
       </h3>
       {children}
@@ -136,15 +118,7 @@ export default function SettingsPanel({
             <select
               value={lang}
               onChange={(e) => setLang(e.target.value)}
-              style={{
-                fontSize: 'var(--font-size-sm)',
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--color-border)',
-                background: 'var(--color-surface-2)',
-                color: 'var(--color-text)',
-                maxWidth: 140,
-              }}
+              className="settings-select medium"
               id="setting-language"
             >
               {availableLanguages.map((l) => {
@@ -174,14 +148,7 @@ export default function SettingsPanel({
               onChange={(e) =>
                 onUpdate({ theme: e.target.value as AppSettings['theme'] })
               }
-              style={{
-                fontSize: 'var(--font-size-sm)',
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--color-border)',
-                background: 'var(--color-surface-2)',
-                color: 'var(--color-text)',
-              }}
+              className="settings-select"
               id="setting-theme"
             >
               <option value="system">{t('theme-system')}</option>
@@ -201,7 +168,7 @@ export default function SettingsPanel({
                 onUpdate({ timestampMilliseconds: e.target.checked })
               }
               id="setting-timestamp-ms"
-              style={{ width: 16, height: 16, cursor: 'pointer' }}
+              className="settings-checkbox"
             />
           </LabelRow>
           <LabelRow label={t('timestampOffset')}>
@@ -212,15 +179,7 @@ export default function SettingsPanel({
                 onChange={(e) => onUpdate({ timestampOffset: e.target.value })}
                 placeholder={t('timestamp-offset-placeholder')}
                 id="setting-timestamp-offset"
-                style={{
-                  width: 80,
-                  fontSize: 'var(--font-size-sm)',
-                  padding: '4px 8px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--color-border)',
-                  background: 'var(--color-surface-2)',
-                  color: 'var(--color-text)',
-                }}
+                className="settings-input medium"
               />
             </Tooltip>
           </LabelRow>
@@ -229,7 +188,7 @@ export default function SettingsPanel({
         {/* Backup */}
         <Section title={t('backup-settings-title')}>
           <LabelRow label={t('backup-interval')}>
-            <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span className="settings-input-group">
               <input
                 type="number"
                 min={1}
@@ -239,22 +198,9 @@ export default function SettingsPanel({
                   onUpdate({ backupIntervalMinutes: Number(e.target.value) })
                 }
                 id="setting-backup-interval"
-                style={{
-                  width: 60,
-                  fontSize: 'var(--font-size-sm)',
-                  padding: '4px 8px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--color-border)',
-                  background: 'var(--color-surface-2)',
-                  color: 'var(--color-text)',
-                }}
+                className="settings-input small"
               />
-              <span
-                style={{
-                  fontSize: 'var(--font-size-sm)',
-                  color: 'var(--color-text-muted)',
-                }}
-              >
+              <span className="settings-input-suffix">
                 {t('minutes')}
               </span>
             </span>
@@ -269,15 +215,7 @@ export default function SettingsPanel({
                 onUpdate({ backupsPerFile: Number(e.target.value) })
               }
               id="setting-backups-per-file"
-              style={{
-                width: 60,
-                fontSize: 'var(--font-size-sm)',
-                padding: '4px 8px',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--color-border)',
-                background: 'var(--color-surface-2)',
-                color: 'var(--color-text)',
-              }}
+              className="settings-input small"
             />
           </LabelRow>
         </Section>
@@ -291,7 +229,7 @@ export default function SettingsPanel({
                 checked={settings.pauseOnTyping}
                 onChange={(e) => onUpdate({ pauseOnTyping: e.target.checked })}
                 id="setting-pause-on-typing"
-                style={{ width: 16, height: 16, cursor: 'pointer' }}
+                className="settings-checkbox"
               />
             </Tooltip>
           </LabelRow>
@@ -308,7 +246,7 @@ export default function SettingsPanel({
                 })
               }
               id="setting-phonetic-input-enabled"
-              style={{ width: 16, height: 16, cursor: 'pointer' }}
+              className="settings-checkbox"
             />
           </LabelRow>
           {settings.phoneticInput.enabled && (
@@ -324,15 +262,7 @@ export default function SettingsPanel({
                   })
                 }
                 id="setting-phonetic-input-lang"
-                style={{
-                  fontSize: 'var(--font-size-sm)',
-                  padding: '4px 8px',
-                  borderRadius: 'var(--radius-sm)',
-                  border: '1px solid var(--color-border)',
-                  background: 'var(--color-surface-2)',
-                  color: 'var(--color-text)',
-                  maxWidth: 160,
-                }}
+                className="settings-select large"
               >
                 {TRANSLITERATION_LANGUAGES.map(({ code, i18nKey }) => (
                   <option key={code} value={code}>
@@ -348,11 +278,7 @@ export default function SettingsPanel({
         <Section title={t('keyboard-shortcuts')}>
           {tHtml('shortcuts-instrux') && (
             <p
-              style={{
-                fontSize: 'var(--font-size-xs)',
-                color: 'var(--color-text-muted)',
-                marginBottom: 'var(--space-2)',
-              }}
+              className="settings-shortcuts-instrux"
               dangerouslySetInnerHTML={{ __html: tHtml('shortcuts-instrux')! }}
             />
           )}
@@ -372,14 +298,7 @@ export default function SettingsPanel({
 
         {/* Reset */}
         <button
-          className="btn"
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            marginTop: 'var(--space-2)',
-            color: 'var(--color-danger)',
-            borderColor: 'var(--color-danger)',
-          }}
+          className="btn settings-btn-reset"
           onClick={() => {
             if (window.confirm(t('dialog-reset-settings'))) onReset();
           }}
@@ -388,14 +307,7 @@ export default function SettingsPanel({
           {t('restore-shortcuts')}
         </button>
 
-        <div
-          style={{
-            marginTop: 'var(--space-3)',
-            fontSize: 'var(--font-size-xs)',
-            color: 'var(--color-text-muted)',
-            textAlign: 'center',
-          }}
-        >
+        <div className="settings-shortcuts-footer">
           {t('settings-default-shortcuts')}
           {Object.values(DEFAULT_SETTINGS.keyboardShortcuts.shortcuts)
             .flat()
