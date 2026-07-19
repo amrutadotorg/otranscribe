@@ -265,16 +265,16 @@ Lokalizacja: patrz sekcja 3 — powtórzone tu jako wpływ na DX, nie duplikat p
 
 Posortowane według kombinacji priorytetu i nakładu (szybkie, wysokoprocentowe poprawki najpierw):
 
-1. **[Wysoki / S]** Napraw obejście rate limitera przez spoofing `X-Forwarded-For` — ustaw `trust proxy` i użyj `req.ip` w `transliterateProxy.ts`.
-2. **[Średni / S]** Dodaj rate limiting do `/api/vimeo/download` (ten sam wzorzec co w `transliterateProxy.ts`).
-3. **[Średni / S]** Zabezpiecz `deepMerge` w `useSettings.ts` przed kluczami `__proto__`/`constructor`/`prototype`.
-4. **[Niski / S]** Posprzątaj drobne rozjazdy dokumentacja↔rzeczywistość: usuń martwy wpis w `knip.json`, usuń wzmiankę o `App.css` z `AGENTS.md`, dodaj `.env.example`, dodaj skrypt `typecheck`.
-5. **[Wysoki / M]** Włącz testy Playwright (`test:e2e`) do CI — testy już istnieją i są wartościowe, brakuje tylko kroku w `ci.yml`.
-6. **[Niski / S]** Dodaj endpoint `/healthz` (przed middleware SSO) i ujednolić prefiksy logów na serwerze.
-7. **[Wysoki / L]** Rozszerz pokrycie testami jednostkowymi w kolejności ryzyka: `sso.ts` → proxy serwerowe → `useSettings`/`deepMerge` → `PlayerContext`/`Player.ts`.
-8. **[Średni / M]** Wprowadź code-splitting (zacznij od `YouTubeDriver` jako dynamicznego `import()`), a dopiero potem usuń sztucznie podniesiony `chunkSizeWarningLimit`.
-9. **[Średni / M]** Rozbij `StartView.tsx` na hooki per źródło mediów (lokalny plik / YouTube / Vimeo / import `.otr`) + cienki komponent prezentacyjny.
-10. **[Średni / M]** Zastąp systemowe inline `style={{...}}` klasami CSS zgodnie z konwencją z `AGENTS.md`, zaczynając od `StartView.tsx` i `SettingsPanel.tsx`.
+1. ~~**[Wysoki / S]** Napraw obejście rate limitera przez spoofing `X-Forwarded-For` — ustaw `trust proxy` i użyj `req.ip` w `transliterateProxy.ts`.~~ (Zrobione)
+2. ~~**[Średni / S]** Dodaj rate limiting do `/api/vimeo/download` (ten sam wzorzec co w `transliterateProxy.ts`).~~ (Zrobione)
+3. ~~**[Średni / S]** Zabezpiecz `deepMerge` w `useSettings.ts` przed kluczami `__proto__`/`constructor`/`prototype`.~~ (Zrobione)
+4. ~~**[Niski / S]** Posprzątaj drobne rozjazdy dokumentacja↔rzeczywistość: usuń martwy wpis w `knip.json`, usuń wzmiankę o `App.css` z `AGENTS.md`, dodaj `.env.example`, dodaj skrypt `typecheck`.~~ (Zrobione)
+5. ~~**[Wysoki / M]** Włącz testy Playwright (`test:e2e`) do CI — testy już istnieją i są wartościowe, brakuje tylko kroku w `ci.yml`.~~ (Zrobione)
+6. ~~**[Niski / S]** Dodaj endpoint `/health` (przed middleware SSO) i ujednolić prefiksy logów na serwerze.~~ (Zrobione)
+7. ~~**[Wysoki / L]** Rozszerz pokrycie testami jednostkowymi w kolejności ryzyka: `sso.ts` → proxy serwerowe → `useSettings`/`deepMerge` → `PlayerContext`/`Player.ts`.~~ (Zrobione)
+8. ~~**[Średni / M]** Wprowadź code-splitting (zacznij od `YouTubeDriver` jako dynamicznego `import()`), a dopiero potem usuń sztucznie podniesiony `chunkSizeWarningLimit`.~~ (Zrobione)
+9. ~~**[Średni / M]** Rozbij `StartView.tsx` na hooki per źródło mediów (lokalny plik / YouTube / Vimeo / import `.otr`) + cienki komponent prezentacyjny.~~ (Zrobione)
+10. ~~**[Średni / M]** Zastąp systemowe inline `style={{...}}` klasami CSS zgodnie z konwencją z `AGENTS.md`, zaczynając od `StartView.tsx` i `SettingsPanel.tsx`.~~ (Zrobione)
 
 ---
 
