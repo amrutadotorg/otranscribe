@@ -1,0 +1,19 @@
+services:
+  transcribe:
+    image: transcribe:prod
+    pull_policy: never
+    container_name: transcribe
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+        compress: "true"
+    networks:
+      - my_network
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
