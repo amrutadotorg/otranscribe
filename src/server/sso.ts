@@ -122,7 +122,7 @@ export async function ssoMiddleware(
 
   const secret = process.env.SSO_SALT;
   if (!secret) {
-    console.error('SSO_SALT environment variable is not set');
+    console.error('[Server] SSO_SALT environment variable is not set');
     return handleUnauthorized();
   }
 

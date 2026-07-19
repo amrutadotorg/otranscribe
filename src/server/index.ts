@@ -24,6 +24,15 @@ const __dirname = import.meta.dirname;
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
 
+// Trust first proxy (Cloudflare → nginx → Express)
+// Required for X-Forwarded-For to reflect the real client IP in rate limiters.
+app.set('trust proxy', 1);
+
+// Health check (must be before SSO so load balancers can reach it)
+app.get('/health', (_req, res) => {
+  res.status(200).json({ status: 'ok' });
+});
+
 // SSO middleware — applied to all routes
 app.use(ssoMiddleware);
 
@@ -71,5 +80,5 @@ app.get('/{*splat}', (_req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Transcribe for Amruta.org server running on port ${PORT}`);
+  console.log(`[Server] Transcribe for Amruta.org running on port ${PORT}`);
 });
