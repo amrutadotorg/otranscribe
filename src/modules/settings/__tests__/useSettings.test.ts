@@ -61,11 +61,11 @@ describe('loadSettings', () => {
   it('loads and deep merges settings from localStorage', () => {
     localStorage.setItem(
       STORAGE_KEYS.SETTINGS,
-      JSON.stringify({ autoScroll: false, editorFormat: 'markdown' }),
+      JSON.stringify({ timestampMilliseconds: true, pauseOnTyping: false }),
     );
     const settings = loadSettings();
-    expect(settings.autoScroll).toBe(false);
-    expect(settings.editorFormat).toBe('markdown');
+    expect(settings.timestampMilliseconds).toBe(true);
+    expect(settings.pauseOnTyping).toBe(false);
     // Ensure unspecified defaults are preserved
     expect(settings.backupIntervalMinutes).toBe(
       DEFAULT_SETTINGS.backupIntervalMinutes,

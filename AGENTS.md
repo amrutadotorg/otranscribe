@@ -51,6 +51,7 @@ npx knip             # Find unused deps, exports, types (via knip.json config)
 ## Docker Deployment
 
 ```bash
+# Run from ~/containers/ using the main compose.yml which includes transcribe
 docker compose --progress=plain build transcribe   # Build production image
 docker compose up -d --force-recreate transcribe   # Deploy (recreate container)
 uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org  # Purge CF cache

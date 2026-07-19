@@ -63,9 +63,7 @@ function Section({
 }) {
   return (
     <div className="settings-section">
-      <h3 className="settings-section-title">
-        {title}
-      </h3>
+      <h3 className="settings-section-title">{title}</h3>
       {children}
     </div>
   );
@@ -200,9 +198,7 @@ export default function SettingsPanel({
                 id="setting-backup-interval"
                 className="settings-input small"
               />
-              <span className="settings-input-suffix">
-                {t('minutes')}
-              </span>
+              <span className="settings-input-suffix">{t('minutes')}</span>
             </span>
           </LabelRow>
           <LabelRow label={t('backup-keep')}>

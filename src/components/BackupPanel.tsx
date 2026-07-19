@@ -91,12 +91,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
 
       <div className="side-panel-body">
         {backups.length === 0 ? (
-          <p
-            style={{
-              color: 'var(--color-text-muted)',
-              fontSize: 'var(--font-size-sm)',
-            }}
-          >
+          <p className="backup-empty">
             {t('no-backups')}
             <br />
             <br />
@@ -104,73 +99,29 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
           </p>
         ) : (
           <>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 'var(--space-2)',
-              }}
-            >
+            <div className="backup-list">
               {paginated.map(({ key, entry }) => (
                 <div
                   key={key}
-                  style={{
-                    border: '1px solid var(--color-border)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: 'var(--space-3)',
-                    background:
-                      previewKey === key
-                        ? 'var(--color-primary-light)'
-                        : 'var(--color-surface-2)',
-                    cursor: 'pointer',
-                    transition: 'background var(--transition-fast)',
-                  }}
+                  className={`backup-item ${previewKey === key ? 'active' : ''}`}
                   onClick={() => setPreviewKey(previewKey === key ? null : key)}
                 >
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'flex-start',
-                      gap: 'var(--space-2)',
-                    }}
-                  >
-                    <div style={{ minWidth: 0, overflow: 'hidden' }}>
-                      <div
-                        style={{
-                          fontSize: 'var(--font-size-sm)',
-                          fontWeight: 600,
-                        }}
-                      >
+                  <div className="backup-item-header">
+                    <div className="backup-item-meta">
+                      <div className="backup-item-title">
                         {formatDate(entry.timestamp)}
                       </div>
                       <div
-                        style={{
-                          fontSize: 'var(--font-size-sm)',
-                          color: 'var(--color-text-muted)',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
+                        className="backup-item-desc"
                         title={entry.media || t('backup-no-media')}
                       >
                         {entry.media || t('backup-no-media')} ·{' '}
                         {t('wordcount', { n: wordCount(entry.text) })}
                       </div>
                     </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        gap: 'var(--space-1)',
-                        flexShrink: 0,
-                      }}
-                    >
+                    <div className="backup-item-actions">
                       <button
-                        className="btn btn-primary"
-                        style={{
-                          padding: '4px 10px',
-                          fontSize: 'var(--font-size-xs)',
-                        }}
+                        className="btn btn-primary backup-action-btn"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleRestore(key);
@@ -180,12 +131,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                         {t('restore-button')}
                       </button>
                       <button
-                        className="btn"
-                        style={{
-                          padding: '4px 8px',
-                          fontSize: 'var(--font-size-xs)',
-                          color: 'var(--color-danger)',
-                        }}
+                        className="btn backup-delete-btn"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleDelete(key);
@@ -200,14 +146,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                   {/* Preview */}
                   {previewKey === key && (
                     <div
-                      style={{
-                        marginTop: 'var(--space-2)',
-                        fontSize: 'var(--font-size-sm)',
-                        color: 'var(--color-text-muted)',
-                        maxHeight: 120,
-                        overflow: 'hidden',
-                        lineHeight: 1.5,
-                      }}
+                      className="backup-preview"
                       dangerouslySetInnerHTML={{
                         __html: entry.text.substring(0, 400) + '…',
                       }}
@@ -219,14 +158,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: 'var(--space-2)',
-                  marginTop: 'var(--space-4)',
-                }}
-              >
+              <div className="backup-pagination">
                 <button
                   className="btn"
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -234,13 +166,7 @@ export default function BackupPanel({ open, onClose, onRestore }: Props) {
                 >
                   {t('prev-page')}
                 </button>
-                <span
-                  style={{
-                    alignSelf: 'center',
-                    fontSize: 'var(--font-size-sm)',
-                    color: 'var(--color-text-muted)',
-                  }}
-                >
+                <span className="backup-pagination-info">
                   {page + 1} / {totalPages}
                 </span>
                 <button

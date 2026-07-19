@@ -30,7 +30,7 @@ export interface PlayerOptions {
 }
 
 export class Player {
-  private _driver: PlayerDriver | null;
+  private _driver: PlayerDriver | null = null;
   private _destroyed = false;
   private _name: string;
   private _onPlayPauseCallback?: (

@@ -5,11 +5,11 @@ services:
     container_name: transcribe
     restart: unless-stopped
     logging:
-      driver: "json-file"
+      driver: 'json-file'
       options:
-        max-size: "20m"
-        max-file: "5"
-        compress: "true"
+        max-size: '20m'
+        max-file: '5'
+        compress: 'true'
     networks:
       - my_network
     env_file:

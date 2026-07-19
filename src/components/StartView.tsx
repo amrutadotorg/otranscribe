@@ -251,11 +251,7 @@ export default function StartView({
         )}
 
         {loadError && (
-          <div
-            className="load-error-msg"
-            role="alert"
-            id="load-error-msg"
-          >
+          <div className="load-error-msg" role="alert" id="load-error-msg">
             {loadError}
           </div>
         )}

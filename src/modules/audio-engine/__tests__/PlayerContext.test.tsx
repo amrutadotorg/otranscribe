@@ -20,7 +20,7 @@ function TestComponent({
 
 describe('PlayerContext', () => {
   it('provides default state and methods', async () => {
-    let ctxValue: ReturnType<typeof usePlayer> | null = null;
+    let ctxValue!: ReturnType<typeof usePlayer>;
 
     const container = document.createElement('div');
     document.body.appendChild(container);

@@ -1,7 +1,7 @@
 /**
  * vimeoProxy.ts — Vimeo video download proxy
  *
- * Fetches highest-quality download link from Vimeo API and streams to client.
+ * Fetches lowest-quality download link from Vimeo API (to save bandwidth) and streams to client.
  * Token is kept server-side (never exposed to browser).
  */
 
