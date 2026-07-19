@@ -93,7 +93,7 @@ Before considering any task complete, run ALL of the following:
 ```bash
 npm run format:check # 0. Formatting — must pass with zero warnings
 npm run lint         # 1. Lint — must pass with zero errors
-tsc --noEmit         # 2. Typecheck — must compile with zero errors
+npx tsc --noEmit         # 2. Typecheck — must compile with zero errors
 npm run test         # 3. Unit tests — all must pass
 npm run test:e2e     # 4. E2E tests — all must pass (if changed UI or player logic)
 npx knip             # 5. Dead code — must report zero unused files/exports
@@ -153,7 +153,7 @@ The `.env` file is gitignored — never commit it.
 ├── src/
 │   ├── main.tsx                    # Entry point, mounts <App />
 │   ├── App.tsx                     # Root component, view routing, theme
-│   ├── App.css                     # (Legacy styles, mostly moved to index.css)
+
 │   ├── index.css                   # Global CSS: design tokens, layout, components
 │   ├── assets/                     # Static assets (images, icons)
 │   ├── components/                 # UI components (one per file)
