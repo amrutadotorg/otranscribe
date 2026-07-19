@@ -9,7 +9,7 @@ import type { Request, Response } from 'express';
 
 const VIMEO_API_BASE = 'https://api.vimeo.com';
 
-function extractVideoId(url: string): string | null {
+export function extractVideoId(url: string): string | null {
   const patterns = [
     /vimeo\.com\/(\d+)(?:\/\S*)?$/,
     /player\.vimeo\.com\/video\/(\d+)/,
@@ -76,7 +76,9 @@ export async function vimeoDownloadHandler(
     const meta = (await metaRes.json()) as VimeoVideoMeta;
     const files = meta.download ?? [];
 
-    const sorted = [...files].sort((a, b) => (b.width ?? 0) - (a.width ?? 0));
+    const sorted = [...files].sort(
+      (a, b) => (a.width ?? 99999) - (b.width ?? 99999),
+    );
     const file = sorted[0];
 
     if (!file?.link) {
