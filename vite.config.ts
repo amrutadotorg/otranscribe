@@ -63,8 +63,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false,
-    // Silence chunk size warning — TipTap is large but loaded once
-    chunkSizeWarningLimit: 1000,
   },
   // Tell Vite these Node.js modules are never used in browser code
   // They come from indirect deps like source-map-js inside sanitize-html

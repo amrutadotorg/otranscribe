@@ -11,7 +11,6 @@
 import type { PlayerDriver, PlayerDriverType } from '../../types/player';
 import { HTML5AudioDriver } from './drivers/HTML5AudioDriver';
 import { HTML5VideoDriver } from './drivers/HTML5VideoDriver';
-import { YouTubeDriver } from './drivers/YouTubeDriver';
 
 const SKIP_TIME = 1.5; // seconds per skip
 const SPEED_STEP = 0.125; // playback rate increment
@@ -47,10 +46,27 @@ export class Player {
     this._onSpeedChangeCallback = opts.onSpeedChange;
     this._onTimeUpdateCallback = opts.onTimeUpdate;
 
-    const DriverClass = this._resolveDriver(opts.driver);
-    this._driver = new DriverClass(opts.source, (status) => {
-      this._onPlayPauseCallback?.(status as 'playing' | 'paused' | 'inactive');
-    });
+    const driverClassOrPromise = this._resolveDriver(opts.driver);
+    if (driverClassOrPromise instanceof Promise) {
+      driverClassOrPromise
+        .then((DriverClass) => {
+          if (this._destroyed) return;
+          this._driver = new DriverClass(opts.source, (status) => {
+            this._onPlayPauseCallback?.(
+              status as 'playing' | 'paused' | 'inactive',
+            );
+          });
+        })
+        .catch((err) => {
+          console.error('[Player] Failed to load driver:', err);
+        });
+    } else {
+      this._driver = new driverClassOrPromise(opts.source, (status) => {
+        this._onPlayPauseCallback?.(
+          status as 'playing' | 'paused' | 'inactive',
+        );
+      });
+    }
 
     if (opts.onReady) {
       this._waitForReady(opts.onReady);
@@ -66,17 +82,22 @@ export class Player {
 
   private _resolveDriver(
     type: PlayerDriverType,
-  ): new (source: string, cb?: (s: string) => void) => PlayerDriver {
+  ):
+    | (new (source: string, cb?: (s: string) => void) => PlayerDriver)
+    | Promise<new (source: string, cb?: (s: string) => void) => PlayerDriver> {
     switch (type) {
       case 'HTML5_AUDIO':
         return HTML5AudioDriver;
       case 'HTML5_VIDEO':
         return HTML5VideoDriver;
       case 'YOUTUBE':
-        return YouTubeDriver as unknown as new (
-          source: string,
-          cb?: (s: string) => void,
-        ) => PlayerDriver;
+        return import('./drivers/YouTubeDriver').then(
+          (m) =>
+            m.YouTubeDriver as unknown as new (
+              source: string,
+              cb?: (s: string) => void,
+            ) => PlayerDriver,
+        );
     }
   }
 
