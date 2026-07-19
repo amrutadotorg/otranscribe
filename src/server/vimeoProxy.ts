@@ -9,6 +9,31 @@ import type { Request, Response } from 'express';
 
 const VIMEO_API_BASE = 'https://api.vimeo.com';
 
+// Rate limiter: per-IP sliding window. Prevents abuse.
+const RATE_LIMIT = 30; // max requests per window
+const RATE_WINDOW_MS = 60_000; // 1 minute
+const rateHits = new Map<string, { count: number; resetAt: number }>();
+
+// Periodic cleanup: remove expired entries every 5 minutes to prevent
+// unbounded Map growth from many unique IPs.
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, entry] of rateHits) {
+    if (now > entry.resetAt) rateHits.delete(ip);
+  }
+}, 5 * 60_000).unref();
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateHits.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateHits.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS });
+    return true;
+  }
+  entry.count++;
+  return entry.count <= RATE_LIMIT;
+}
+
 export function extractVideoId(url: string): string | null {
   const patterns = [
     /vimeo\.com\/(\d+)(?:\/\S*)?$/,
@@ -39,6 +64,16 @@ export async function vimeoDownloadHandler(
   const token = process.env.VIMEO_ACCESS_TOKEN;
   if (!token) {
     res.status(500).json({ error: 'Vimeo token not configured' });
+    return;
+  }
+
+  // Rate limit: per-IP sliding window
+  const clientIp = req.ip || 'unknown';
+  if (!checkRateLimit(clientIp)) {
+    res.status(429).json({
+      error: 'rate_limited',
+      retryAfter: Math.ceil(RATE_WINDOW_MS / 1000),
+    });
     return;
   }
 
@@ -115,7 +150,7 @@ export async function vimeoDownloadHandler(
     };
     pump().catch(() => res.end());
   } catch (err) {
-    console.error('Vimeo proxy error:', err);
+    console.error('[Server] Vimeo proxy error:', err);
     if (!res.headersSent) {
       res.status(500).json({ error: 'Internal server error' });
     }

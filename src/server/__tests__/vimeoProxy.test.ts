@@ -254,4 +254,40 @@ describe('vimeoDownloadHandler', () => {
       expect.objectContaining({ error: 'vimeo' }),
     );
   });
+
+  it('rate limits after 30 requests from same IP', async () => {
+    // Mock fetch to succeed
+    const metaRes = {
+      ok: true,
+      json: async () => ({
+        name: 'Test',
+        download: [{ link: 'http://test', width: 100 }],
+      }),
+    };
+    const downloadRes = {
+      ok: true,
+      headers: { get: () => '3' },
+      body: { getReader: () => ({ read: async () => ({ done: true }) }) },
+    };
+    globalThis.fetch = mockFetchSequence(metaRes, downloadRes);
+
+    const req = mockReq({ url: `https://vimeo.com/${VIDEO_ID}` });
+    Object.defineProperty(req, 'ip', { value: '10.0.0.2', writable: true });
+
+    // Make 30 valid requests
+    for (let i = 0; i < 30; i++) {
+      globalThis.fetch = mockFetchSequence(metaRes, downloadRes);
+      const loopRes = mockRes();
+      await vimeoDownloadHandler(req, loopRes);
+      expect(loopRes.status).not.toHaveBeenCalledWith(429);
+    }
+
+    // 31st request should be rate limited
+    const limitRes = mockRes();
+    await vimeoDownloadHandler(req, limitRes);
+    expect(limitRes.status).toHaveBeenCalledWith(429);
+    expect(limitRes.json).toHaveBeenCalledWith(
+      expect.objectContaining({ error: 'rate_limited' }),
+    );
+  });
 });
