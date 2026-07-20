@@ -901,6 +901,16 @@ a:hover {
   gap: var(--space-2);
 }
 
+.lang-select {
+  font-size: var(--font-size-sm);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-2);
+  color: var(--color-text);
+  cursor: pointer;
+}
+
 .theme-group {
   display: flex;
   border: 1px solid var(--color-border);
