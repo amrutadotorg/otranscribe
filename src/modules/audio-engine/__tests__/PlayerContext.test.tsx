@@ -18,15 +18,19 @@ function TestComponent({
   return <div data-testid="test-comp">Ready</div>;
 }
 
+// React 19 testing environment setup
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
 describe('PlayerContext', () => {
   it('provides default state and methods', async () => {
     let ctxValue!: ReturnType<typeof usePlayer>;
 
     const container = document.createElement('div');
     document.body.appendChild(container);
+    let root: ReturnType<typeof createRoot>;
 
     await act(async () => {
-      const root = createRoot(container);
+      root = createRoot(container);
       root.render(
         <PlayerProvider>
           <TestComponent
@@ -44,6 +48,9 @@ describe('PlayerContext', () => {
     expect(typeof ctxValue?.play).toBe('function');
     expect(typeof ctxValue?.loadLocalFile).toBe('function');
 
+    await act(async () => {
+      root.unmount();
+    });
     document.body.removeChild(container);
   });
 });

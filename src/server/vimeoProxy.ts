@@ -150,7 +150,7 @@ export async function vimeoDownloadHandler(
     };
     pump().catch(() => res.end());
   } catch (err) {
-    console.error('[Server] Vimeo proxy error:', err);
+    console.error('[vimeo-proxy] Vimeo proxy error:', err);
     if (!res.headersSent) {
       res.status(500).json({ error: 'Internal server error' });
     }
