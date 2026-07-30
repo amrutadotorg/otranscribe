@@ -19,7 +19,6 @@ import {
 } from './Player';
 import type { PlayerDriverType, PlayerState } from '../../types/player';
 import type { MediaDetails } from '../../types/otr';
-import { downloadAndCacheVimeo } from '../storage/vimeoCache';
 
 interface PlayerContextValue {
   playerState: PlayerState;
@@ -36,10 +35,6 @@ interface PlayerContextValue {
   loadLocalFile: (file: File) => Promise<void>;
   loadYouTube: (url: string) => Promise<void>;
   loadVimeoFile: (file: File, name: string) => Promise<void>;
-  loadVimeoUrl: (
-    url: string,
-    onProgress?: (loaded: number, total: number) => void,
-  ) => Promise<void>;
   unloadPlayer: () => void;
 }
 
@@ -145,21 +140,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
     [loadDriver],
   );
 
-  const loadVimeoUrl = useCallback(
-    async (
-      url: string,
-      onProgress?: (loaded: number, total: number) => void,
-    ): Promise<void> => {
-      const { file, name } = await downloadAndCacheVimeo(url, onProgress);
-      const objectUrl = URL.createObjectURL(file);
-      await loadDriver(
-        { driver: 'HTML5_VIDEO', source: objectUrl, name },
-        { name },
-      );
-    },
-    [loadDriver],
-  );
-
   const play = useCallback(() => playerRef.current?.play(), []);
   const pause = useCallback(() => playerRef.current?.pause(), []);
   const togglePlayPause = useCallback(
@@ -211,7 +191,6 @@ export function PlayerProvider({ children }: { children: ReactNode }) {
         loadLocalFile,
         loadYouTube,
         loadVimeoFile,
-        loadVimeoUrl,
         unloadPlayer,
       }}
     >

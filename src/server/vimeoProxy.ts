@@ -34,6 +34,7 @@ function checkRateLimit(ip: string): boolean {
   return entry.count <= RATE_LIMIT;
 }
 
+// extractVideoId — mirrors client-side parseVimeoId in src/modules/vimeo/vimeoUrl.ts
 export function extractVideoId(url: string): string | null {
   const patterns = [
     /vimeo\.com\/(\d+)(?:\/\S*)?$/,

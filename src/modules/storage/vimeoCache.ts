@@ -6,6 +6,7 @@
  */
 
 import { VIMEO_DB_NAME, VIMEO_STORE_NAME } from './storageKeys';
+import { parseVimeoId } from '../vimeo/vimeoUrl';
 
 function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -49,18 +50,6 @@ async function getCachedVimeoFile(videoId: string): Promise<File | null> {
   });
 }
 
-function extractVimeoId(url: string): string | null {
-  const patterns = [
-    /vimeo\.com\/(\d+)(?:\/\S*)?$/,
-    /player\.vimeo\.com\/video\/(\d+)/,
-  ];
-  for (const pattern of patterns) {
-    const match = url.match(pattern);
-    if (match) return match[1];
-  }
-  return null;
-}
-
 /**
  * Download a Vimeo video via the server proxy and cache it.
  * Returns a File object ready for the player.
@@ -72,7 +61,7 @@ export async function downloadAndCacheVimeo(
   signal?: AbortSignal,
   t?: (key: string, vars?: Record<string, string | number>) => string,
 ): Promise<{ file: File; videoId: string; name: string }> {
-  const videoId = extractVimeoId(vimeoUrl);
+  const videoId = parseVimeoId(vimeoUrl);
   if (!videoId)
     throw new Error(
       t ? t('error-vimeo-id') : 'Could not extract Vimeo video ID',

@@ -19,10 +19,11 @@ import {
   IconMoon,
 } from '@tabler/icons-react';
 import { usePlayer } from '../modules/audio-engine/PlayerContext';
-import { useLocalMedia } from './start-view/useLocalMedia';
-import { useOtrImport } from './start-view/useOtrImport';
-import { useYouTube, validateYouTubeUrl } from './start-view/useYouTube';
-import { useVimeo, validateVimeoUrl } from './start-view/useVimeo';
+import {
+  useMediaLoader,
+  validateYouTubeUrl,
+} from './start-view/useMediaLoader';
+import { validateVimeoUrl } from '../modules/vimeo/vimeoUrl';
 import { clearAutosave } from '../modules/storage/autosave';
 import UrlInputModal from './UrlInputModal';
 import Tooltip from './Tooltip';
@@ -60,13 +61,30 @@ export default function StartView({
   const { loadLocalFile, loadYouTube, loadVimeoFile } = usePlayer();
 
   const [modalMode, setModalMode] = useState<ModalMode>('none');
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  // Whether the autosave recovery banner is visible
   const [showRecoveryBanner, setShowRecoveryBanner] = useState<boolean>(
     () => typeof autosaveHtml === 'string' && autosaveHtml.trim().length > 0,
   );
+
+  const {
+    loading,
+    error,
+    vimeoProgress,
+    loadLocal,
+    loadYouTubeUrl,
+    loadVimeoUrl,
+    loadOtr,
+    cancelVimeo,
+  } = useMediaLoader({
+    onNavigate,
+    loadLocalFile,
+    loadYouTube: (url: string) => loadYouTube(url),
+    loadVimeoFile,
+    onOtrLoaded,
+    t,
+    pendingYouTubeUrl,
+    onYouTubePendingConsumed,
+  });
 
   // ─── Autosave recovery handlers ─────────────────────────────────
 
@@ -87,43 +105,36 @@ export default function StartView({
     setShowRecoveryBanner(false);
     onAutosaveDismissed?.();
   };
+
   // ─── Media Handlers ─────────────────────────────────────────────
 
-  const { handleMediaFileChange } = useLocalMedia({
-    onNavigate,
-    setLoadError,
-    setLoading,
-    loadLocalFile,
-    t,
-  });
+  const handleMediaFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    await loadLocal(file);
+  };
 
-  const { handleOtrFileChange } = useOtrImport({
-    onOtrLoaded,
-    setLoadError,
-    setLoading,
-    t,
-  });
+  const handleOtrFileChange = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    await loadOtr(file);
+  };
 
-  const { handleYouTubeConfirm } = useYouTube({
-    onNavigate,
-    setLoadError,
-    setLoading,
-    setModalMode,
-    loadYouTube,
-    t,
-    pendingYouTubeUrl,
-    onYouTubePendingConsumed,
-  });
+  const handleYouTubeConfirm = (url: string) => {
+    setModalMode('none');
+    loadYouTubeUrl(url);
+  };
 
-  const { handleVimeoConfirm, handleCancelVimeo, vimeoProgress } = useVimeo({
-    onNavigate,
-    setLoadError,
-    setLoading,
-    setModalMode,
-    loadVimeoFile,
-    loading,
-    t,
-  });
+  const handleVimeoConfirm = (url: string) => {
+    setModalMode('none');
+    loadVimeoUrl(url);
+  };
 
   // ─── Render ─────────────────────────────────────────────────────
 
@@ -250,9 +261,9 @@ export default function StartView({
           </div>
         )}
 
-        {loadError && (
+        {error && (
           <div className="load-error-msg" role="alert" id="load-error-msg">
-            {loadError}
+            {error}
           </div>
         )}
 
@@ -261,7 +272,6 @@ export default function StartView({
           <button
             className="start-option-btn"
             onClick={() => {
-              setLoadError(null);
               mediaFileRef.current?.click();
             }}
             id="load-local-file-btn"
@@ -280,7 +290,6 @@ export default function StartView({
           <button
             className="start-option-btn"
             onClick={() => {
-              setLoadError(null);
               setModalMode('youtube');
             }}
             id="load-youtube-btn"
@@ -299,7 +308,6 @@ export default function StartView({
           <button
             className="start-option-btn"
             onClick={() => {
-              setLoadError(null);
               setModalMode('vimeo');
             }}
             id="load-vimeo-btn"
@@ -318,7 +326,6 @@ export default function StartView({
           <button
             className="start-option-btn"
             onClick={() => {
-              setLoadError(null);
               otrFileRef.current?.click();
             }}
             id="import-otr-btn"
@@ -347,7 +354,7 @@ export default function StartView({
                   </span>
                   <Tooltip content={t('title-cancel-download')}>
                     <button
-                      onClick={handleCancelVimeo}
+                      onClick={cancelVimeo}
                       className="vimeo-cancel-btn"
                       id="btn-cancel-vimeo"
                     >
