@@ -19,7 +19,9 @@ function TestComponent({
 }
 
 // React 19 testing environment setup
-(globalThis as any).IS_REACT_ACT_ENVIRONMENT = true;
+(
+  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 describe('PlayerContext', () => {
   it('provides default state and methods', async () => {
