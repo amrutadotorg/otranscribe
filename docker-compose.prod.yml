@@ -3,6 +3,7 @@ services:
     image: transcribe:prod
     pull_policy: never
     container_name: transcribe
+    mem_limit: 1g
     restart: unless-stopped
     logging:
       driver: 'json-file'
