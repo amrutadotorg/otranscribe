@@ -15,6 +15,8 @@ services:
       - my_network
     env_file:
       - .env
+    labels:
+      diun.enable: "false"
     build:
       context: .
       dockerfile: Dockerfile
