@@ -16,7 +16,7 @@ services:
     env_file:
       - .env
     labels:
-      diun.enable: "false"
+      diun.enable: 'false'
     build:
       context: .
       dockerfile: Dockerfile
