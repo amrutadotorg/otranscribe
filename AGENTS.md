@@ -52,10 +52,16 @@ npx knip             # Find unused deps, exports, types (via knip.json config)
 
 ```bash
 # Run from ~/containers/ using the main compose.yml which includes transcribe
+cd ~/containers
+docker compose config -q                           # validate merged config (run from ~/containers!)
 docker compose --progress=plain build transcribe   # Build production image
 docker compose up -d --force-recreate transcribe   # Deploy (recreate container)
 uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org  # Purge CF cache
 ```
+
+**Why root compose?** `my_network` is defined only in `~/containers/compose.yml`, which includes this repo's `docker-compose.prod.yml` via `include:`. The child file standalone fails with "refers to undefined network my_network". Details: `~/containers/AGENTS.md`.
+
+> **CI note:** CI runs `prettier --check .`, which covers yaml files. Before pushing changes to `docker-compose.prod.yml`, run `npx prettier --check docker-compose.prod.yml` (prettier normalizes quoting, e.g. `'false'` not `"false"`).
 
 The image is `transcribe:prod`. The app runs on the host port defined in `docker-compose.yml`. After deploying, users must hard-refresh (Ctrl+Shift+R) or unregister the service worker to see changes, since VitePWA caches JS bundles.
 
