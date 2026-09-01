@@ -1,4 +1,4 @@
-FROM node:24.18.0-slim AS build
+FROM node:26.8.1-slim AS build
 
 WORKDIR /app
 
@@ -16,7 +16,7 @@ RUN npm run build:server
 
 # ─── Production stage ──────────────────────────────────────────
 
-FROM node:24.18.0-slim
+FROM node:26.8.1-slim
 
 WORKDIR /app
 
