@@ -70,7 +70,7 @@ The image is `transcribe:prod`. The app runs on the host port defined in `docker
 Dependabot is configured via `.github/dependabot.yml` with two ecosystems:
 
 - **npm** — weekly PRs grouped by patch/minor (major gets separate PR)
-- **docker** — weekly PRs for base image updates (`node:24-alpine`)
+- **docker** — weekly PRs for base image updates (`node:24.22.1-alpine`)
 
 ### Deployment workflow after Dependabot PR merge
 
@@ -413,9 +413,15 @@ advisory is withdrawn.
 
 Node.js bundled a vulnerable Brotli decoder (OOB write → potential RCE, nicknamed
 "Node2Shell" / "Broccoli2Shell") through **24.22.0**; fixed in **24.22.1**. This repo's
-Dockerfile was pinned to `node:24.18.0-slim`, so the base image was switched to
-`node:24-alpine` (both stages, 2026-10-28), matching subtitle-editor. The floating
-`node:24-alpine` tag currently resolves to **v24.22.1**; keep it at >= 24.22.1.
+Dockerfile was pinned to `node:24.18.0-slim`, so the base image was switched to Alpine
+and pinned to **`node:24.22.1-alpine`** (both stages, 2026-10-28). Keep it at >= 24.22.1.
+
+The tag is pinned (not floating) so Dependabot's monthly `docker` updates open a PR for
+each new Node patch/minor. A floating tag would not produce Dependabot PRs because the
+tag string never changes. To still get a notification when upstream rebuilds the Node
+24.x image, DIUN watches the floating `node:24-alpine` tag via
+`~/containers/diun/custom-images.yml` (File provider) — the transcribe container itself
+is `diun.enable: "false"` because it runs a locally built image.
 
 The Express server here only exposes GET routes and does not call
 `express.json()` / `bodyParser`, so request-body Brotli decompression is not reachable.
