@@ -391,6 +391,24 @@ function MyComponent() {
 
 ## Known Issues / Gotchas
 
+### Accepted risk: `deepmerge` npm audit low (2026-10-28)
+
+`npm audit` reports 4 lows that all trace to one advisory in `deepmerge`:
+
+- [GHSA-gcqx-w48m-w2h4](https://github.com/advisories/GHSA-gcqx-w48m-w2h4) (CVE-2026-93753) —
+  prototype-poisoning guard bypass in `mergeObject()` (`deepmerge >=4.2.0 <=4.3.1`),
+  **no patched versions**. GitHub scores it **Low (2.7)**.
+- Chain: `deepmerge` → `@rollup/plugin-node-resolve` → `workbox-build` → `vite-plugin-pwa`.
+
+Upstream has **declined to fix** ([TehShrike/deepmerge#273](https://github.com/TehShrike/deepmerge/issues/273),
+closed). `latest` is still `4.3.1`, and `npm audit fix --force` only offers a breaking
+downgrade to `vite-plugin-pwa@0.2.1`. The chain is **build-time only** (Workbox generates
+the service worker during `vite build`); the merge inputs are local plugin options, never
+untrusted request data, so there is no reachable attack path.
+
+Accept documented 2026-10-28. Revisit if `deepmerge` publishes a release > 4.3.1 or the
+advisory is withdrawn.
+
 ### Phonetic input (transliteration) — Phases 0-5 implemented
 
 Phases 0-5 of the phonetic input feature are implemented and deployed. The feature adds optional Latin → script transliteration (e.g. Devanagari, Arabic, Cyrillic) to the TipTap editor, using Google's `inputtools.google.com` API via a server-side proxy.
