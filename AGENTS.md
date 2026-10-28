@@ -70,7 +70,7 @@ The image is `transcribe:prod`. The app runs on the host port defined in `docker
 Dependabot is configured via `.github/dependabot.yml` with two ecosystems:
 
 - **npm** — weekly PRs grouped by patch/minor (major gets separate PR)
-- **docker** — weekly PRs for base image updates (`node:24.18.0-slim`)
+- **docker** — weekly PRs for base image updates (`node:24.22.1-slim`)
 
 ### Deployment workflow after Dependabot PR merge
 
@@ -408,6 +408,19 @@ untrusted request data, so there is no reachable attack path.
 
 Accept documented 2026-10-28. Revisit if `deepmerge` publishes a release > 4.3.1 or the
 advisory is withdrawn.
+
+### Resolved: Brotli decoder RCE CVE-2026-111497 (2026-10-28)
+
+Node.js bundled a vulnerable Brotli decoder (OOB write → potential RCE, nicknamed
+"Node2Shell" / "Broccoli2Shell") through **24.22.0**; fixed in **24.22.1**. This repo's
+Dockerfile was pinned to `node:24.18.0-slim`, so both stages were bumped to
+`node:24.22.1-slim` (2026-10-28). Keep the base image at >= 24.22.1.
+
+The Express server here only exposes GET routes and does not call
+`express.json()` / `bodyParser`, so request-body Brotli decompression is not reachable.
+The residual (low) exposure is outbound `fetch()` of Brotli-compressed responses from
+upstreams (Vimeo, Google), which undici may decompress via `node:zlib`. No Python
+`brotli`/`brotlicffi` is used anywhere in this project.
 
 ### Phonetic input (transliteration) — Phases 0-5 implemented
 
