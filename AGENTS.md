@@ -70,7 +70,7 @@ The image is `transcribe:prod`. The app runs on the host port defined in `docker
 Dependabot is configured via `.github/dependabot.yml` with two ecosystems:
 
 - **npm** — weekly PRs grouped by patch/minor (major gets separate PR)
-- **docker** — weekly PRs for base image updates (`node:24.22.1-alpine`)
+- **docker** — weekly PRs for base image updates (`node:24.22.2-alpine`)
 
 ### Deployment workflow after Dependabot PR merge
 
@@ -414,7 +414,8 @@ advisory is withdrawn.
 Node.js bundled a vulnerable Brotli decoder (OOB write → potential RCE, nicknamed
 "Node2Shell" / "Broccoli2Shell") through **24.22.0**; fixed in **24.22.1**. This repo's
 Dockerfile was pinned to `node:24.18.0-slim`, so the base image was switched to Alpine
-and pinned to **`node:24.22.1-alpine`** (both stages, 2026-10-28). Keep it at >= 24.22.1.
+and pinned to **`node:24.22.2-alpine`** (both stages, 2026-10-28, bumped to 24.22.2
+on 2026-10-29 — V8 backports + stream fix, no advisory). Keep it at >= 24.22.1.
 
 The tag is pinned (not floating) so Dependabot's monthly `docker` updates open a PR for
 each new Node patch/minor. A floating tag would not produce Dependabot PRs because the
