@@ -391,6 +391,36 @@ function MyComponent() {
 
 ## Known Issues / Gotchas
 
+### Resolved: `minimatch` DoS CVE-2026-118764 (2026-10-31)
+
+[minimatch <11.0.1](https://github.com/advisories/GHSA-g3hv-75wg-m249) (Moderate 6.9)
+amplifies attacker-supplied glob patterns inside `firstPhasePreProcess()` when
+`optimizationLevel >= 2` (the `**/../` rewrite clones a globparts entry into the same
+array inside a fixpoint loop), then processes the expanded array quadratically — CPU and
+memory exhaustion.
+
+There is **no 10.x patch**, and every dependent still declares `minimatch: ^10`
+(`eslint`, `@eslint/config-array`, `typescript-eslint`,
+`@typescript-eslint/typescript-estree`, `workbox-build`), so `npm audit fix` cannot
+resolve it without `--force`. Fixed with npm overrides:
+
+```json
+"overrides": {
+  "minimatch": "^11.0.3",
+  "glob": "^14.0.3"
+}
+```
+
+`glob` is overridden too because it carried its own advisory
+([GHSA-3g3m-2fjr-6pw4](https://github.com/advisories/GHSA-3g3m-2fjr-6pw4)) and 14.0.3
+is the version that requires `minimatch ^11`. Both packages ship CommonJS builds, and
+the whole chain is dev/build-time only: after the override `eslint`, `tsc -b`,
+`vite build` (Workbox SW generation), `vitest` (108 tests) and `prettier --check` all
+pass, and `npm audit` reports 0 moderate+ (4 lows documented elsewhere).
+
+Revisit when `eslint`/`typescript-eslint`/`workbox-build` stop pinning `minimatch ^10` —
+drop the override then.
+
 ### Accepted risk: `deepmerge` npm audit low (2026-10-28)
 
 `npm audit` reports 4 lows that all trace to one advisory in `deepmerge`:
