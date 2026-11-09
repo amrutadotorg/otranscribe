@@ -93,6 +93,76 @@ uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.or
 
 CI runs lint, test, build, **and** `docker build` on every Dependabot PR — green CI means the update is safe to merge. After merge, the steps above deploy the updated image.
 
+## Node runtime upgrades
+
+Node is pinned in several places and they must move together. CI resolves its own
+version from `.nvmrc`, so a mismatch only surfaces as a confusing build failure.
+
+| File                            | What it holds                                                   | When                                       |
+| ------------------------------- | --------------------------------------------------------------- | ------------------------------------------ |
+| `.nvmrc`                        | `26.13.0` — also what CI uses (`node-version-file`)             | every bump                                 |
+| `package.json` → `engines.node` | `>=26`                                                          | major only                                 |
+| `Dockerfile`                    | `FROM node:26.13.0-alpine` in **both** stages (build + runtime) | every bump                                 |
+| `Dockerfile`                    | `RUN npm install -g npm@12.0.1`                                 | only if the bundled npm must be overridden |
+| `package.json` → `@types/node`  | `^26.6.6`                                                       | major only (patch/minor via Dependabot)    |
+
+Note: npm is pinned **exactly** here (`npm@12.0.1`), while subtitle-editor floats
+`npm@12` — an intentional difference, but it is a third version to keep in mind. The
+line is redundant today (the `node:26.13.0-alpine` image ships npm 12.0.1); dropping
+it would make the base image the single source of truth.
+
+### Two different signals, two different actions
+
+**Dependabot PR (`docker` ecosystem)** — the tag _string_ in the Dockerfile changed
+(e.g. `26.13.0-alpine` → `26.14.0-alpine`). Merge it, then run the deploy workflow above.
+
+**DIUN notification for `node:26-alpine`** — this only says the **digest** of the
+floating tag changed. It fires both for a new Node release _and_ for an upstream
+rebuild of the same version (Alpine base patch, bundled npm). Check which it is:
+
+```bash
+curl -s "https://hub.docker.com/v2/repositories/library/node/tags?page_size=100&name=26." \
+  | python3 -c "import sys,json;print('\n'.join(t['name'] for t in json.load(sys.stdin)['results']))"
+```
+
+- **Newer version exists** → bump the pins above, merge, deploy.
+- **Same version** → **no file changes, nothing to commit**; just rebuild so the image
+  picks up the refreshed base. This is what the 2026-11-09 notification was: still
+  `26.13.0`, but the base moved from Alpine `3.24.3` to `3.24.4`.
+
+```bash
+cd ~/containers
+docker compose --progress=plain build --pull transcribe   # --pull is REQUIRED
+docker compose up -d --force-recreate transcribe
+docker exec nginx nginx -t && docker exec nginx nginx -s reload
+uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org
+```
+
+⚠️ **`--pull` is not optional.** BuildKit resolves `node:26.13.0-alpine` to whatever
+digest it has cached; without `--pull` the rebuild silently reuses the old base and
+still reports success. Verify the base actually moved _before_ deploying:
+
+```bash
+docker history --format '{{.CreatedBy}}' transcribe:prod | grep -o 'alpine-minirootfs-[0-9.]*-aarch64'
+docker run --rm --entrypoint node transcribe:prod -v   # expect the pinned version
+```
+
+### Node major upgrade (e.g. 26 → 28)
+
+Same pins, plus one file **outside this repo**: DIUN watches the floating tag, so
+`~/containers/diun/custom-images.yml` has to follow, otherwise DIUN keeps watching an
+EOL tag and silently stops reporting anything.
+
+```bash
+cd ~/containers/diun && git pull
+sed -i 's/node:26-alpine/node:28-alpine/' custom-images.yml && git commit -am 'chore: watch node:28-alpine'
+git push
+cd ~/containers && docker compose up -d diun
+```
+
+Node majors land roughly every 6 months (24 → 26 in October 2026). Patch/minor bumps
+never touch `custom-images.yml`.
+
 ## Verification Workflow
 
 Before considering any task complete, run ALL of the following:
