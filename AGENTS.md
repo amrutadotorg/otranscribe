@@ -70,7 +70,7 @@ The image is `transcribe:prod`. The app runs on the host port defined in `docker
 Dependabot is configured via `.github/dependabot.yml` with two ecosystems:
 
 - **npm** — weekly PRs grouped by patch/minor (major gets separate PR)
-- **docker** — weekly PRs for base image updates (`node:26.13.0-alpine`)
+- **docker** — weekly PRs for base image updates (`node:26.13.1-alpine`)
 
 ### Deployment workflow after Dependabot PR merge
 
@@ -100,16 +100,17 @@ version from `.nvmrc`, so a mismatch only surfaces as a confusing build failure.
 
 | File                            | What it holds                                                   | When                                       |
 | ------------------------------- | --------------------------------------------------------------- | ------------------------------------------ |
-| `.nvmrc`                        | `26.13.0` — also what CI uses (`node-version-file`)             | every bump                                 |
+| `.nvmrc`                        | `26.13.1` — also what CI uses (`node-version-file`)             | every bump                                 |
 | `package.json` → `engines.node` | `>=26`                                                          | major only                                 |
-| `Dockerfile`                    | `FROM node:26.13.0-alpine` in **both** stages (build + runtime) | every bump                                 |
+| `Dockerfile`                    | `FROM node:26.13.1-alpine` in **both** stages (build + runtime) | every bump                                 |
 | `Dockerfile`                    | `RUN npm install -g npm@12.0.1`                                 | only if the bundled npm must be overridden |
 | `package.json` → `@types/node`  | `^26.6.6`                                                       | major only (patch/minor via Dependabot)    |
 
-Note: npm is pinned **exactly** here (`npm@12.0.1`), while subtitle-editor floats
-`npm@12` — an intentional difference, but it is a third version to keep in mind. The
-line is redundant today (the `node:26.13.0-alpine` image ships npm 12.0.1); dropping
-it would make the base image the single source of truth.
+Note: npm is pinned **exactly** here (`npm@12.0.1`) and in **both** stages, so the
+runtime really does run 12.0.1 — the base image itself ships an older npm (11.20.0 on
+`node:26.13.1-alpine`, checked 2026-11-14). subtitle-editor floats `npm@12` and only in
+the builder stage, so its runtime keeps the bundled npm. That asymmetry is easy to
+misread; dropping the line here would make the base image the single source of truth.
 
 ### Two different signals, two different actions
 
@@ -138,7 +139,7 @@ docker exec nginx nginx -t && docker exec nginx nginx -s reload
 uv run --project ~/SCRIPTS/py_amr -m waf.purge_cache --host transcribe.amruta.org
 ```
 
-⚠️ **`--pull` is not optional.** BuildKit resolves `node:26.13.0-alpine` to whatever
+⚠️ **`--pull` is not optional.** BuildKit resolves `node:26.13.1-alpine` to whatever
 digest it has cached; without `--pull` the rebuild silently reuses the old base and
 still reports success. Verify the base actually moved _before_ deploying:
 
@@ -517,7 +518,7 @@ Dockerfile was pinned to `node:24.18.0-slim`, so the base image was switched to 
 and pinned to **`node:24.22.2-alpine`** (both stages, 2026-10-28, bumped to 24.22.2
 on 2026-10-29 — V8 backports + stream fix, no advisory). On 2026-11-01 the base image
 moved to **`node:26.13.0-alpine`** when Node 26 became the current LTS (2026-10-28);
-`.nvmrc`, `engines`, the Dockerfiles and CI all track 26.13.0.
+`.nvmrc`, the Dockerfiles and CI now track **26.13.1** (security release, 2026-11-11).
 
 The tag is pinned (not floating) so Dependabot's monthly `docker` updates open a PR for
 each new Node patch/minor. A floating tag would not produce Dependabot PRs because the
